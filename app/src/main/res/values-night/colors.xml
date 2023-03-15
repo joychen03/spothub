@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#292B2F</color>
+    <color name="section">#40444B</color>
+    <color name="primary_btn">#FF0266</color>
+    <color name="secondary_btn">#EBA0FE</color>
+    <color name="primary_txt">#FAFAFC</color>
+    <color name="secondary_txt">#7B7B7B</color>
+</resources>

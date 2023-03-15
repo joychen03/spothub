@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/authFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.AuthFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_auth" />
+</navigation>

@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
     id 'io.realm.kotlin' version '1.6.0'
+    id 'androidx.navigation.safeargs'
     id 'kotlin-kapt'
 }
 
@@ -61,6 +62,13 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.15.0'
+
+    //Navigation component
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+
+    //Splash API
+    implementation 'androidx.core:core-splashscreen:1.0.0'
 
 }
 
