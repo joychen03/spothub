@@ -86,6 +86,7 @@
 
             <TextView
                 android:id="@+id/textView"
+                android:textFontWeight="800"
                 android:layout_width="wrap_content"
                 android:textColor="@color/primary_txt"
                 android:layout_height="wrap_content"
