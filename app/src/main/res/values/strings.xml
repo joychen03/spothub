@@ -6,4 +6,6 @@
     <string name="auth_sign_in_btn">SIGN IN</string>
     <string name="auth_sign_in_hint">First time? Register</string>
     <string name="auth_sign_in_hint_here">HERE</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

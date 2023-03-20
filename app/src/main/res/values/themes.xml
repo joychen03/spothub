@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <!--  LIGHT MODE  -->
-    <style name="Theme.Spothub" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.Spothub" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>

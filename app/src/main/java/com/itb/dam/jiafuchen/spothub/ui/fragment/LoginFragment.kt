@@ -6,19 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentAuthBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentHomeBinding
+import com.itb.dam.jiafuchen.spothub.databinding.FragmentLoginBinding
 
 
-class AuthFragment : Fragment(R.layout.fragment_auth) {
+class LoginFragment : Fragment(R.layout.fragment_login) {
 
-    lateinit var binding : FragmentAuthBinding
+    lateinit var binding : FragmentLoginBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentAuthBinding.inflate(inflater, container, false)
+    ): View {
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
