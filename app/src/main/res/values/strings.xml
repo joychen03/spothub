@@ -8,4 +8,6 @@
     <string name="auth_sign_in_hint_here">HERE</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="auth_sign_up_btn">SIGN UP</string>
+    <string name="auth_sign_up_hint">Already has an account? Login</string>
 </resources>

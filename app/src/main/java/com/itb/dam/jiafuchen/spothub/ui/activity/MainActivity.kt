@@ -1,30 +1,22 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
-import android.content.Context
-import android.content.res.ColorStateList
-import android.content.res.Resources
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.ColorStateListDrawable
-import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
+import MapFragment
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.children
-import androidx.core.view.get
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.TAG
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
+import com.itb.dam.jiafuchen.spothub.ui.fragment.HomeFragment
+import com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileFragment
+import com.itb.dam.jiafuchen.spothub.ui.fragment.SearchFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -35,7 +27,41 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.background = null
         binding.bottomNav.menu.getItem(2).isEnabled = false
-        //menuItem.icon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(th.is, R.color.primary_btn)))
 
+        binding.bottomNav.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_home -> {
+                    replaceFragment(HomeFragment())
+                }
+                R.id.nav_search -> {
+                    replaceFragment(SearchFragment())
+                }
+                R.id.nav_map -> {
+                    replaceFragment(MapFragment())
+                }
+                R.id.nav_profile -> {
+                    replaceFragment(ProfileFragment())
+                }
+
+                else -> {
+
+                }
+            }
+            true
+        }
+        //menuItem.icon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(th.is, R.color.primary_btn)))
     }
+
+
+    private fun replaceFragment(fragment : Fragment){
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.mainFragment, fragment)
+        fragmentTransaction.commit()
+    }
+    fun setBottomNavigationVisibility(visible: Boolean) {
+        binding.bottomAppBar.isVisible = visible
+        binding.floatingActionButton.isVisible = visible
+    }
+
 }
