@@ -1,13 +1,17 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
 import MapFragment
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
+import com.itb.dam.jiafuchen.spothub.ui.fragment.AddPostFragment
 import com.itb.dam.jiafuchen.spothub.ui.fragment.HomeFragment
 import com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileFragment
 import com.itb.dam.jiafuchen.spothub.ui.fragment.SearchFragment
@@ -27,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.background = null
         binding.bottomNav.menu.getItem(2).isEnabled = false
+
+
 
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId){
@@ -48,6 +54,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+
+        binding.floatingActionButton.setOnClickListener {
+            replaceFragment(AddPostFragment())
         }
         //menuItem.icon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(th.is, R.color.primary_btn)))
     }
