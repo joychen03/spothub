@@ -1,14 +1,15 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
-import MapFragment
-import android.content.Context
+import android.app.Activity
+import com.itb.dam.jiafuchen.spothub.ui.fragment.MapFragment
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
 import com.itb.dam.jiafuchen.spothub.ui.fragment.AddPostFragment
@@ -31,22 +32,24 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.background = null
         binding.bottomNav.menu.getItem(2).isEnabled = false
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainFragment) as NavHostFragment
+        val navController = navHostFragment.navController
 
 
 
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.nav_home -> {
-                    replaceFragment(HomeFragment())
+                    navController.navigate(R.id.toHome)
                 }
                 R.id.nav_search -> {
-                    replaceFragment(SearchFragment())
+                    navController.navigate(R.id.toSearch)
                 }
                 R.id.nav_map -> {
-                    replaceFragment(MapFragment())
+                    navController.navigate(R.id.toMap)
                 }
                 R.id.nav_profile -> {
-                    replaceFragment(ProfileFragment())
+                    navController.navigate(R.id.toProfile)
                 }
 
                 else -> {
@@ -57,18 +60,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.floatingActionButton.setOnClickListener {
-            replaceFragment(AddPostFragment())
+            if(navController.currentDestination?.id != 1 ){
+                println(navController.currentDestination?.label)
+                navController.navigate(R.id.toAddPost)
+            }
+
         }
         //menuItem.icon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(th.is, R.color.primary_btn)))
     }
 
-
-    private fun replaceFragment(fragment : Fragment){
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.mainFragment, fragment)
-        fragmentTransaction.commit()
-    }
     fun setBottomNavigationVisibility(visible: Boolean) {
         binding.bottomAppBar.isVisible = visible
         binding.floatingActionButton.isVisible = visible
