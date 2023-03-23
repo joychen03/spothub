@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.itb.dam.jiafuchen.spothub.R
@@ -33,12 +34,9 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
-        //hide keyboard when click outside of the edit text
-
         binding.root.setOnClickListener {
             Utils.hideSoftKeyboard(requireActivity())
         }
-
 
         val editText = binding.desc
         editText.setOnEditorActionListener { _, actionId, _ ->
@@ -52,6 +50,10 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             }
         }
 
+        binding.imgContainer.setOnClickListener {
+            val direction = AddPostFragmentDirections.actionAddPostFragmentToCameraFragment()
+            findNavController().navigate(direction)
+        }
 
         return binding.root
     }

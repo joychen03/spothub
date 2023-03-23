@@ -23,9 +23,15 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
+    private var hideBottomNavFragments = listOf(
+        R.id.addPostFragment,
+        R.id.loginFragment,
+        R.id.registerFragment,
+        R.id.cameraFragment,
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-//        setTheme(R.style.Theme_Spothub);
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -35,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainFragment) as NavHostFragment
         val navController = navHostFragment.navController
 
+        //list of fragment that hides the bottom navigation bar
 
 
         binding.bottomNav.setOnItemSelectedListener {
@@ -61,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if(destination.id == R.id.addPostFragment){
+            if(destination.id in hideBottomNavFragments){
                 setBottomNavigationVisibility(false)
             }else{
                 setBottomNavigationVisibility(true)

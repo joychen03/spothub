@@ -13,23 +13,24 @@
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.AddPostFragment"
         android:label="fragment_add_post"
-        tools:layout="@layout/fragment_add_post" />
+        tools:layout="@layout/fragment_add_post" >
+        <action
+            android:id="@+id/action_addPostFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" >
         <action
-            android:id="@+id/action_cameraFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_cameraFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

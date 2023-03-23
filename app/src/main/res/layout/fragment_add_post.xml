@@ -164,7 +164,7 @@
                     android:background="@drawable/custom_edit_text"
                     android:gravity="top"
                     android:hint="@string/add_post_desc"
-                    android:inputType="textMultiLine|textNoSuggestions|textCapSentences|textAutoCorrect|textAutoComplete"
+                    android:inputType="textMultiLine"
                     android:minLines="5"
                     android:padding="10dp"
                     android:textColor="@color/primary_txt"
