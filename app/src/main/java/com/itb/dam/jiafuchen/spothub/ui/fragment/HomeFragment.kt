@@ -72,6 +72,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
 
+
         binding.button4.setOnClickListener {
             val dd = HomeFragmentDirections.actionHomeFragmentToCameraFragment()
             findNavController().navigate(dd)

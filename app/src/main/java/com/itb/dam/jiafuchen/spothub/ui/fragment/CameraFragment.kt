@@ -13,6 +13,7 @@ import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentAddPostBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentCameraBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentLoginBinding
+import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +32,23 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).setSupportActionBar(binding.toolbar)
+
+        val navController = view.findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+
+        (activity as MainActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        //add custom save button on the right side of the toolbar layout and set its click listener
+
+
+
+
+
     }
+
 
 }

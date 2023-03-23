@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+
+    <!-- white background bold dashed border a little rounded -->
+
+    <solid android:color="@color/background" />
+    <stroke
+        android:width="5dp"
+        android:color="@color/secondary_txt"
+        android:dashWidth="20dp"
+        android:dashGap="10dp" />
+    <corners android:radius="10dp" />
+</shape>

@@ -59,19 +59,33 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if(destination.id == R.id.addPostFragment){
+                setBottomNavigationVisibility(false)
+            }else{
+                setBottomNavigationVisibility(true)
+            }
+        }
+
+
         binding.floatingActionButton.setOnClickListener {
-            if(navController.currentDestination?.id != 1 ){
-                println(navController.currentDestination?.label)
+            val currentFragment = navHostFragment.childFragmentManager.fragments[0]
+            if(currentFragment !is AddPostFragment){
                 navController.navigate(R.id.toAddPost)
             }
-
         }
         //menuItem.icon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(th.is, R.color.primary_btn)))
     }
 
     fun setBottomNavigationVisibility(visible: Boolean) {
         binding.bottomAppBar.isVisible = visible
-        binding.floatingActionButton.isVisible = visible
+
+        if(visible){
+            binding.floatingActionButton.show()
+        }else{
+            binding.floatingActionButton.hide()
+        }
     }
 
 }
