@@ -1,13 +1,11 @@
-package com.itb.dam.jiafuchen.spothub.ui.util
+package com.itb.dam.jiafuchen.spothub.utils
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.icu.text.CaseMap.Title
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 
 class Utils {
     companion object{

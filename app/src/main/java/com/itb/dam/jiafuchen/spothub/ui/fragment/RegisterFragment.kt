@@ -10,10 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentLoginBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentRegisterBinding
-import com.itb.dam.jiafuchen.spothub.ui.util.Utils
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.LoginViewModel
+import com.itb.dam.jiafuchen.spothub.utils.Utils
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.RegisterViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 

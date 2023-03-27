@@ -1,7 +1,5 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
-import android.app.Activity
-import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +8,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -19,7 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentAddPostBinding
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
-import com.itb.dam.jiafuchen.spothub.ui.util.Utils
+import com.itb.dam.jiafuchen.spothub.utils.Utils
 
 
 class AddPostFragment : Fragment(R.layout.fragment_add_post) {

@@ -14,4 +14,10 @@
     <string name="add_post_longitude">Longitude</string>
     <string name="add_post_title">Title</string>
     <string name="add_post_desc">Description...</string>
+    <string name="side_nav_preferences">Preferences</string>
+    <string name="side_nav_logout">Logout</string>
+    <string name="setting_dark_theme_title">Dark Theme</string>
+    <string name="setting_dark_theme_summary">Enable dark theme</string>
+    <string name="setting_language_title">Language</string>
+    <string name="setting_language_summary">Select your preferred language</string>
 </resources>

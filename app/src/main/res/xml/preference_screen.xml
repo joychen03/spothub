@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory>
+
+        <SwitchPreference
+            android:background="@color/black"
+            android:id="@+id/dark_theme_preference"
+            android:key="dark_theme_preference"
+            android:title="@string/setting_dark_theme_title"
+            android:summary="@string/setting_dark_theme_summary"
+            android:defaultValue="false" />
+
+        <ListPreference
+            android:key="language_preference"
+            android:title="@string/setting_language_title"
+            android:summary="@string/setting_language_summary"
+            android:entries="@array/setting_language_entries"
+            android:entryValues="@array/setting_language_entry_values"
+            android:defaultValue="en" />
+    </PreferenceCategory>
+
+
+</androidx.preference.PreferenceScreen>

@@ -86,4 +86,9 @@
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" /><action android:id="@+id/action_global_settingFragment" app:destination="@id/settingFragment"/>
 </navigation>

@@ -1,9 +1,10 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
 import android.app.Activity
-import com.itb.dam.jiafuchen.spothub.ui.fragment.MapFragment
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,10 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
-import com.itb.dam.jiafuchen.spothub.ui.fragment.AddPostFragment
-import com.itb.dam.jiafuchen.spothub.ui.fragment.HomeFragment
-import com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileFragment
-import com.itb.dam.jiafuchen.spothub.ui.fragment.SearchFragment
+import com.itb.dam.jiafuchen.spothub.ui.fragment.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         R.id.loginFragment,
         R.id.registerFragment,
         R.id.cameraFragment,
+        R.id.settingFragment
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -77,10 +76,22 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.floatingActionButton.setOnClickListener {
-            val currentFragment = navHostFragment.childFragmentManager.fragments[0]
-            if(currentFragment !is AddPostFragment){
-                navController.navigate(R.id.toAddPost)
-            }
+//            val currentFragment = navHostFragment.childFragmentManager.fragments[0]
+//            if(currentFragment !is AddPostFragment){
+//                navController.navigate(R.id.toAddPost)
+//            }
+
+//            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+//                Configuration.UI_MODE_NIGHT_NO -> {
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                }
+//                Configuration.UI_MODE_NIGHT_YES -> {
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                }
+//            }
+
+            navController.navigate(R.id.action_global_settingFragment)
+
         }
         //menuItem.icon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(th.is, R.color.primary_btn)))
     }

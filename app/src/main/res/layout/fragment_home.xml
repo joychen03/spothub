@@ -38,7 +38,7 @@
                     android:id="@+id/toolbarLogo"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/logo_name_black"
+                    style="@style/ToolBarLogo"
                     app:layout_constraintBottom_toBottomOf="@+id/toolbar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

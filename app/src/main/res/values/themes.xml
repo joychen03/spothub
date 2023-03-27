@@ -20,7 +20,7 @@
 
 
     <style name="AuthBackground">
-        <item name="android:src">@drawable/auth_background</item>
+        <item name="android:background">@drawable/auth_background</item>
     </style>
 
     <style name="AuthLogo">
@@ -30,6 +30,16 @@
     <style name="ToolBarLogo">
         <item name="android:src">@drawable/logo_name_black</item>
     </style>
+
+    <style name="SettingTheme" parent="PreferenceThemeOverlay">
+        <item name="android:background">@color/background</item>
+        <item name="android:textColor">@color/primary_txt</item>
+        <item name="android:textColorSecondary">@color/secondary_txt</item>
+        <item name="android:thumbTint">@color/primary_btn</item>
+        <item name="android:trackTint">@color/black</item>
+    </style>
+
+
 
 
 </resources>
