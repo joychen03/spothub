@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         R.id.cameraFragment,
         R.id.settingFragment
     )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
@@ -93,6 +94,8 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_settingFragment)
 
         }
+
+
         //menuItem.icon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(th.is, R.color.primary_btn)))
     }
 

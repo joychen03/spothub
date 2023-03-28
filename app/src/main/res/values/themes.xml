@@ -16,8 +16,14 @@
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/sfpro_display</item>
 
+        <item name="preferenceTheme">@style/SettingTheme</item>
+
     </style>
 
+
+    <style name="homeBackground">
+        <item name="android:background">@color/section</item>
+    </style>
 
     <style name="AuthBackground">
         <item name="android:background">@drawable/auth_background</item>
@@ -32,12 +38,15 @@
     </style>
 
     <style name="SettingTheme" parent="PreferenceThemeOverlay">
-        <item name="android:background">@color/background</item>
         <item name="android:textColor">@color/primary_txt</item>
         <item name="android:textColorSecondary">@color/secondary_txt</item>
         <item name="android:thumbTint">@color/primary_btn</item>
         <item name="android:trackTint">@color/black</item>
     </style>
+
+
+
+
 
 
 
