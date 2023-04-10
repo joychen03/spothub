@@ -16,10 +16,6 @@
         <item name="preferenceTheme">@style/SettingTheme</item>
     </style>
 
-    <style name="homeBackground">
-        <item name="android:background">@color/background</item>
-    </style>
-
     <style name="AuthBackground">
         <item name="android:background">@drawable/auth_background_dark</item>
     </style>
@@ -30,6 +26,14 @@
 
     <style name="ToolBarLogo">
         <item name="android:src">@drawable/logo_name_white</item>
+    </style>
+
+    <style name="navHeaderBackground">
+        <item name="android:src">@drawable/nav_header_brackground_dark</item>
+    </style>
+
+    <style name="CustomMapSearchBar" parent="Theme.AppCompat.Light">
+        <item name="android:textColor">@color/primary_txt</item>
     </style>
 
     <style name="SettingTheme" parent="PreferenceThemeOverlay">

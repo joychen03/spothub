@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        style="@style/navHeaderBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+    </ImageView>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/nav_avatar"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="4dp"
+        android:padding="10dp"
+        android:src="@drawable/c13"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.643"
+        app:shapeAppearanceOverlay="@style/Circular"
+        app:strokeColor="@color/background"
+        app:strokeWidth="10dp" />
+
+    <TextView
+        android:id="@+id/nav_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Juan Perezsdasdasdas"
+        android:textColor="@color/primary_btn"
+        android:textFontWeight="800"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nav_avatar" />
+
+    <TextView
+        android:id="@+id/nav_followers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="100"
+        android:textColor="@color/primary_txt"
+        android:textFontWeight="800"
+        android:textSize="15dp"
+        app:layout_constraintStart_toEndOf="@+id/nav_avatar"
+        app:layout_constraintTop_toTopOf="@+id/nav_avatar" />
+
+    <TextView
+        android:id="@+id/nav_following"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10.000"
+        android:textColor="@color/primary_txt"
+        android:textFontWeight="800"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/nav_followers"
+        app:layout_constraintTop_toTopOf="@+id/nav_followers" />
+
+    <TextView
+        android:id="@+id/nav_label2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Following"
+        android:textColor="@color/secondary_txt"
+        android:padding="0dp"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="@+id/nav_following"
+        app:layout_constraintStart_toStartOf="@+id/nav_following"
+        app:layout_constraintTop_toBottomOf="@+id/nav_following" />
+
+    <TextView
+        android:id="@+id/nav_label1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Followers"
+        android:textColor="@color/secondary_txt"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="@+id/nav_followers"
+        app:layout_constraintStart_toStartOf="@+id/nav_followers"
+        app:layout_constraintTop_toBottomOf="@+id/nav_followers" />
+
+    <TextView
+        android:id="@+id/nav_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="cjf110120130@gmail.com"
+        android:textColor="@color/primary_txt"
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nav_nickname" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

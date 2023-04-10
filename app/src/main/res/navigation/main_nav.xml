@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"
@@ -22,6 +25,9 @@
         <action
             android:id="@+id/action_addPostFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_addPostFragment_to_mapLocatingFragment"
+            app:destination="@id/mapLocatingFragment" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -36,7 +42,14 @@
         android:id="@+id/profileFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.RegisterFragment"
@@ -53,7 +66,11 @@
         android:id="@+id/searchFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.LoginFragment"
@@ -85,10 +102,40 @@
         android:id="@+id/mapFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.MapFragment"
         android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.SettingFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" /><action android:id="@+id/action_global_settingFragment" app:destination="@id/settingFragment"/>
+        tools:layout="@layout/fragment_setting" /><action android:id="@+id/toSetting" app:destination="@id/settingFragment"/>
+    <action android:id="@+id/toLogin" app:destination="@id/loginFragment" />
+    <fragment
+        android:id="@+id/editPostFragment2"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.EditPostFragment"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" >
+        <action
+            android:id="@+id/action_editPostFragment2_to_mapLocatingFragment"
+            app:destination="@id/mapLocatingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.PostDetailFragment"
+        android:label="fragment_post_detail"
+        tools:layout="@layout/fragment_post_detail" />
+    <fragment
+        android:id="@+id/mapLocatingFragment"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.MapLocatingFragment"
+        android:label="fragment_map_locating"
+        tools:layout="@layout/fragment_map_locating" />
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileEditFragment"
+        android:label="fragment_profile_edit"
+        tools:layout="@layout/fragment_profile_edit" />
+
 </navigation>

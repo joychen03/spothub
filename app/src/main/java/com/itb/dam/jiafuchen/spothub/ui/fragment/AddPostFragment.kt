@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -47,8 +48,13 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             }
         }
 
-        binding.imgContainer.setOnClickListener {
+        binding.photoButton.setOnClickListener {
             val direction = AddPostFragmentDirections.actionAddPostFragmentToCameraFragment()
+            findNavController().navigate(direction)
+        }
+
+        binding.mapButton.setOnClickListener {
+            val direction = AddPostFragmentDirections.actionAddPostFragmentToMapLocatingFragment()
             findNavController().navigate(direction)
         }
 
@@ -68,6 +74,8 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         (activity as MainActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+
+
     }
 
 }

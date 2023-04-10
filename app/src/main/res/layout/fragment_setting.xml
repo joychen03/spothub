@@ -44,10 +44,64 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <FrameLayout
-        android:id="@+id/settings_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:background="@color/darkBackground"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:padding="20dp"
+            android:background="@color/lightSection"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/darkModeSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textFontWeight="800"
+                android:minHeight="48dp"
+                android:text="@string/setting_dark_theme_title"
+                android:textColor="@color/primary_txt"
+                android:textSize="20sp"
+                android:thumbTint="@color/primary_btn"
+                android:trackTint="@color/secondary_txt" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:padding="20dp"
+            android:background="@color/lightSection"
+            android:orientation="vertical">
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textFontWeight="800"
+                android:text="@string/setting_language_title"
+                android:textColor="@color/primary_txt"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/LanguageSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary_btn"
+                android:entries="@array/setting_language_entries"
+                android:minHeight="48dp"
+                android:spinnerMode="dropdown" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <com.google.android.material.appbar.AppBarLayout
@@ -31,6 +31,7 @@
 
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbar"
+                        app:title=""
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/background"
@@ -166,7 +167,7 @@
                     android:gravity="top"
                     android:hint="@string/add_post_desc"
                     android:inputType="textMultiLine"
-                    android:minLines="5"
+                    android:minLines="8"
                     android:padding="10dp"
                     android:textColor="@color/primary_txt"
                     android:textColorHint="@color/secondary_txt"

@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">spothub</string>
+    <string name="auth_email_input_hint">Email</string>
+    <string name="auth_passwd_input_hint">Password</string>
+    <string name="auth_confirm_passwd_input_hint">Confirm password</string>
+    <string name="auth_sign_in_btn">SIGN IN</string>
+    <string name="auth_sign_in_hint">First time? Register</string>
+    <string name="auth_sign_in_hint_here">HERE</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="auth_sign_up_btn">SIGN UP</string>
+    <string name="auth_sign_up_hint">Already has an account? Login</string>
+    <string name="add_post_latitude">Latitude</string>
+    <string name="add_post_longitude">Longitude</string>
+    <string name="add_post_title">Title</string>
+    <string name="add_post_desc">Description...</string>
+    <string name="side_nav_preferences">Preferences</string>
+    <string name="side_nav_logout">Logout</string>
+    <string name="setting_dark_theme_title">Dark Theme</string>
+    <string name="setting_dark_theme_summary">Enable dark theme</string>
+    <string name="setting_language_title">Language</string>
+    <string name="setting_language_summary">Select your preferred language</string>
+
+</resources>

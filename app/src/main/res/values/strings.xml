@@ -6,7 +6,6 @@
     <string name="auth_sign_in_btn">SIGN IN</string>
     <string name="auth_sign_in_hint">First time? Register</string>
     <string name="auth_sign_in_hint_here">HERE</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="auth_sign_up_btn">SIGN UP</string>
     <string name="auth_sign_up_hint">Already has an account? Login</string>
@@ -20,4 +19,6 @@
     <string name="setting_dark_theme_summary">Enable dark theme</string>
     <string name="setting_language_title">Language</string>
     <string name="setting_language_summary">Select your preferred language</string>
+    <string name="map_locating_confirm">Confirm</string>
+
 </resources>

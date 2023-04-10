@@ -1,13 +1,16 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.annotation.SuppressLint
+import android.app.UiModeManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,9 +24,15 @@ import com.itb.dam.jiafuchen.spothub.databinding.FragmentHomeBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentSettingBinding
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.*
 
-
-class SettingFragment : Fragment() {
+@AndroidEntryPoint
+class SettingFragment : Fragment(R.layout.fragment_setting) {
 
     lateinit var binding: FragmentSettingBinding
 
@@ -43,9 +52,28 @@ class SettingFragment : Fragment() {
 
         (activity as MainActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val fragment = MyPreferenceFragment()
-        childFragmentManager.beginTransaction().replace(R.id.settings_container, fragment).commit()
+        //switch UiModeManager.MODE_NIGHT_YES
 
+        binding.darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
+
+
+        //change app language when click on the language spinner
+        binding.LanguageSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                println("caca")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
 
     }
     override fun onCreateView(
@@ -57,28 +85,5 @@ class SettingFragment : Fragment() {
         return binding.root
     }
 
-
-}
-
-class MyPreferenceFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preference_screen, rootKey)
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val darkModeSwitch = findPreference<SwitchPreference>("dark_theme_preference")
-        darkModeSwitch?.setOnPreferenceChangeListener { _, newValue ->
-            val darkMode = newValue as Boolean
-            if (darkMode) {
-                (activity as MainActivity).delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                (activity as MainActivity).delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
-            }
-            true
-        }
-    }
 
 }

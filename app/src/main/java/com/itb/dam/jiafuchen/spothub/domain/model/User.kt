@@ -15,10 +15,8 @@ class User() : RealmObject {
 
     @Index
     var owner_id : String = ""
-
     var email : String = ""
     var username : String = ""
-    var nickname : String = ""
     var description : String = ""
     var createDateTime : RealmInstant = RealmInstant.now()
     var followers : RealmList<User> = realmListOf()

@@ -20,11 +20,6 @@
 
     </style>
 
-
-    <style name="homeBackground">
-        <item name="android:background">@color/section</item>
-    </style>
-
     <style name="AuthBackground">
         <item name="android:background">@drawable/auth_background</item>
     </style>
@@ -35,6 +30,10 @@
 
     <style name="ToolBarLogo">
         <item name="android:src">@drawable/logo_name_black</item>
+    </style>
+
+    <style name="navHeaderBackground">
+        <item name="android:src">@drawable/nav_header_background</item>
     </style>
 
     <style name="SettingTheme" parent="PreferenceThemeOverlay">

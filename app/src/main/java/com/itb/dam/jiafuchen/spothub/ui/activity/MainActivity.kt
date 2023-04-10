@@ -1,32 +1,54 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.AttributeSet
+import android.util.Log
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationBarItemView
+import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import com.itb.dam.jiafuchen.spothub.R
+import com.itb.dam.jiafuchen.spothub.TAG
+import com.itb.dam.jiafuchen.spothub.app
+import com.itb.dam.jiafuchen.spothub.data.mongodb.AuthRepository
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
 import com.itb.dam.jiafuchen.spothub.ui.fragment.*
 import dagger.hilt.android.AndroidEntryPoint
+import io.realm.kotlin.mongodb.ext.customDataAsBsonDocument
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
     lateinit var binding: ActivityMainBinding
+    lateinit var navHostFragment : NavHostFragment
+    lateinit var navController : NavController
 
     private var hideBottomNavFragments = listOf(
         R.id.addPostFragment,
         R.id.loginFragment,
         R.id.registerFragment,
         R.id.cameraFragment,
-        R.id.settingFragment
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,13 +58,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.bottomNav.background = null
-        binding.bottomNav.menu.getItem(2).isEnabled = false
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainFragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        init()
 
-        //list of fragment that hides the bottom navigation bar
-
+        binding.navigationView.setNavigationItemSelectedListener(this)
 
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId){
@@ -66,8 +84,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             if(destination.id in hideBottomNavFragments){
                 setBottomNavigationVisibility(false)
             }else{
@@ -75,28 +92,30 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         binding.floatingActionButton.setOnClickListener {
-//            val currentFragment = navHostFragment.childFragmentManager.fragments[0]
-//            if(currentFragment !is AddPostFragment){
-//                navController.navigate(R.id.toAddPost)
-//            }
-
-//            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-//                Configuration.UI_MODE_NIGHT_NO -> {
-//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//                }
-//                Configuration.UI_MODE_NIGHT_YES -> {
-//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//                }
-//            }
-
-            navController.navigate(R.id.action_global_settingFragment)
+            val currentFragment = navHostFragment.childFragmentManager.fragments[0]
+            if(currentFragment !is AddPostFragment){
+                navController.navigate(R.id.toAddPost)
+            }
 
         }
 
+    }
 
-        //menuItem.icon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(th.is, R.color.primary_btn)))
+    private fun init(){
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.mainFragment) as NavHostFragment
+        navController = navHostFragment.navController
+
+        binding.bottomNav.background = null
+        binding.bottomNav.menu.getItem(2).isEnabled = false
+
+        if(app.currentUser != null) {
+            //get user email
+
+            val emailText = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_email)
+            emailText.text = (app.currentUser?.customDataAsBsonDocument()?.getString("email") ?: "unknown") as CharSequence?
+           // app.currentUser?.provider?.name
+        }
     }
 
     fun setBottomNavigationVisibility(visible: Boolean) {
@@ -108,5 +127,38 @@ class MainActivity : AppCompatActivity() {
             binding.floatingActionButton.hide()
         }
     }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.nav_settings -> {
+                binding.drawerLayout.close()
+                val currentFragment = navHostFragment.childFragmentManager.fragments[0]
+                if(currentFragment !is SettingFragment){
+                    navController.navigate(R.id.toSetting)
+                }
+            }
+            R.id.nav_logout -> {
+                binding.drawerLayout.close()
+                CoroutineScope(Dispatchers.Main).launch {
+                    runCatching {
+                        app.currentUser?.logOut()
+                    }.onSuccess {
+                        val currentFragment = navHostFragment.childFragmentManager.fragments[0]
+                        if(currentFragment !is LoginFragment){
+                            navController.navigate(R.id.toLogin)
+                        }
+                    }.onFailure {
+                        it.message?.let { it1 -> Log.v("ERROR", it1) }
+                    }
+                }
+            }
+        }
+        return true
+    }
+
+    fun openDrawer(){
+        binding.drawerLayout.open()
+    }
+
 
 }

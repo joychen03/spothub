@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.navigation.NavigationBarItemView
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentHomeBinding
@@ -25,6 +27,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val sharedViewModel : SharedViewModel by activityViewModels()
     private val viewModel : HomeViewModel by viewModels()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this){
@@ -32,6 +36,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             intent.addCategory(Intent.CATEGORY_HOME)
             startActivity(intent)
         }
+
+
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +60,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             findNavController().navigate(directions)
         }
 
+        binding.navMenuBtn.setOnClickListener {
+            (requireActivity() as MainActivity).openDrawer()
+        }
 
 
     }

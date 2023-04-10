@@ -9,7 +9,9 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="background">#FFFFFF</color>
+    <color name="darkBackground">#F3F3F3</color>
     <color name="section">#F3F3F3</color>
+    <color name="lightSection">#FFFFFF</color>
     <color name="primary_btn">#FF0266</color>
     <color name="secondary_btn">#EBA0FE</color>
     <color name="primary_txt">#202225</color>
