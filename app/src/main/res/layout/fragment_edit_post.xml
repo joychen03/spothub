@@ -1,14 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:windowSoftInputMode="adjustResize"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".ui.fragment.EditPostFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/background"
+                android:backgroundTint="@color/background">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        app:title=""
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/background"
+                        android:minHeight="?attr/actionBarSize"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/editPostConfirmBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/custom_button"
+                        android:text="@string/edit_post_confirm"
+                        android:textColor="@color/white"
+                        android:textFontWeight="900"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/editPostDeleteBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/delete_icon"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/editPostConfirmBtn"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/red" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:id="@+id/imgContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="300dp"
+                        android:layout_height="300dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="20dp"
+
+                        tools:src="@tools:sample/avatars" />
+
+                    <ImageView
+                        android:id="@+id/editPostPhotoBtn"
+                        android:layout_width="300dp"
+                        android:layout_height="300dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/custom_add_post_camera"
+                        android:padding="100dp"
+                        android:src="@drawable/photo_camera_icon"
+                        app:tint="@color/primary_btn" />
+
+                </FrameLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/imgContainer"
+                    tools:layout_editor_absoluteX="0dp">
+
+                    <EditText
+                        android:id="@+id/editPostLatitude"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_edit_text"
+                        android:gravity="center_vertical"
+                        android:hint="@string/add_post_latitude"
+                        android:inputType="numberDecimal"
+                        android:padding="10dp"
+                        android:textColor="@color/primary_txt"
+                        android:textColorHint="@color/secondary_txt" />
+
+                    <EditText
+                        android:id="@+id/editPostLongitude"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_edit_text"
+                        android:gravity="center_vertical"
+                        android:hint="@string/add_post_longitude"
+                        android:inputType="numberDecimal"
+                        android:padding="10dp"
+                        android:textColor="@color/primary_txt"
+                        android:textColorHint="@color/secondary_txt" />
+
+                    <ImageView
+                        android:id="@+id/editPostMapBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/pin_drop_icon"
+                        app:tint="@color/primary_btn" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editPostTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/custom_edit_text"
+                    android:gravity="center_vertical"
+                    android:hint="@string/add_post_title"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:textColor="@color/primary_txt"
+                    android:textColorHint="@color/secondary_txt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+
+                <EditText
+
+                    android:id="@+id/editPostDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/custom_edit_text"
+                    android:gravity="top"
+                    android:hint="@string/add_post_desc"
+                    android:inputType="textMultiLine"
+                    android:minLines="8"
+                    android:padding="10dp"
+                    android:textColor="@color/primary_txt"
+                    android:textColorHint="@color/secondary_txt"
+                    android:textSize="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editPostTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

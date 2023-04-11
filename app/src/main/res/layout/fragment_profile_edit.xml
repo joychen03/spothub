@@ -1,14 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".ui.fragment.ProfileEditFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="60dp"
+        android:background="@color/background"
+        android:backgroundTint="@color/background">
 
-</FrameLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/profileEditConfirmBtn"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/custom_button"
+            android:text="@string/map_locating_confirm"
+            android:textColor="@color/white"
+            android:textFontWeight="900"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:minHeight="?attr/actionBarSize" />
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/takePhotoBtn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/custom_rounded_button"
+            android:padding="15dp"
+            android:src="@drawable/photo_camera_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/nav_avatar2"
+            app:layout_constraintEnd_toStartOf="@+id/nav_avatar2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nav_avatar2"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/galleryBtn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/custom_rounded_button"
+            android:padding="15dp"
+            android:src="@drawable/gallery_thumbnail_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/nav_avatar2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/nav_avatar2"
+            app:layout_constraintTop_toTopOf="@+id/nav_avatar2"
+            app:tint="@color/white" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/nav_avatar2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/c13"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/Circular" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nav_avatar2">
+
+            <EditText
+                android:id="@+id/profileEditUsername"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/custom_edit_text"
+                android:gravity="center_vertical"
+                android:hint="@string/profile_edit_username"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textColor="@color/primary_txt"
+                android:textColorHint="@color/secondary_txt" />
+
+            <EditText
+
+                android:id="@+id/profileEditDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_edit_text"
+                android:gravity="top"
+                android:hint="@string/profile_edit_desc"
+                android:inputType="textMultiLine"
+                android:minLines="8"
+                android:padding="10dp"
+                android:textColor="@color/primary_txt"
+                android:textColorHint="@color/secondary_txt"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

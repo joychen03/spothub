@@ -20,5 +20,8 @@
     <string name="setting_language_title">Language</string>
     <string name="setting_language_summary">Select your preferred language</string>
     <string name="map_locating_confirm">Confirm</string>
+    <string name="profile_edit_username">Username</string>
+    <string name="profile_edit_desc">About you...</string>
+    <string name="edit_post_confirm">Save</string>
 
 </resources>
