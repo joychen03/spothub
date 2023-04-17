@@ -23,5 +23,6 @@
     <string name="profile_edit_username">Username</string>
     <string name="profile_edit_desc">About you...</string>
     <string name="edit_post_confirm">Save</string>
+    <string name="add_post_open_gallery">Open gallery</string>
 
 </resources>

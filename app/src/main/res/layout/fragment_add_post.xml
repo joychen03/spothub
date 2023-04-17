@@ -73,24 +73,54 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="300dp"
-                        android:layout_height="300dp"
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="20dp"
-
-                        tools:src="@tools:sample/avatars" />
-
-                    <ImageView
-                        android:id="@+id/photoButton"
-                        android:layout_width="300dp"
-                        android:layout_height="300dp"
-                        android:layout_gravity="center"
                         android:background="@drawable/custom_add_post_camera"
-                        android:padding="100dp"
-                        android:src="@drawable/photo_camera_icon"
-                        app:tint="@color/primary_btn" />
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
+                            android:layout_gravity="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:src="@tools:sample/avatars" />
+
+                        <ImageView
+                            android:id="@+id/AddPostTakePhotoBtn"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:background="@drawable/custom_rounded_button"
+                            android:padding="20dp"
+                            android:src="@drawable/photo_camera_icon"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/AddPostopenGalleryButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:textFontWeight="800"
+                            android:paddingHorizontal="10dp"
+                            android:background="@drawable/custom_button"
+                            android:text="@string/add_post_open_gallery"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 </FrameLayout>
 

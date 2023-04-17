@@ -27,6 +27,7 @@
         android:layout_marginStart="4dp"
         android:padding="10dp"
         android:src="@drawable/c13"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent"

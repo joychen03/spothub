@@ -1,13 +1,19 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
+import android.app.Activity
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -23,6 +29,7 @@ import com.itb.dam.jiafuchen.spothub.utils.Utils
 class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
     lateinit var binding : FragmentAddPostBinding
+    private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,10 +55,18 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             }
         }
 
-        binding.photoButton.setOnClickListener {
-            val direction = AddPostFragmentDirections.actionAddPostFragmentToCameraFragment()
-            findNavController().navigate(direction)
+        binding.AddPostTakePhotoBtn.setOnClickListener {
+            //val direction = AddPostFragmentDirections.actionAddPostFragmentToCameraFragment()
+            //findNavController().navigate(direction)
+
+
         }
+
+        binding.AddPostopenGalleryButton.setOnClickListener {
+            pickImageFromGallery()
+        }
+
+
 
         binding.mapButton.setOnClickListener {
             val direction = AddPostFragmentDirections.actionAddPostFragmentToMapLocatingFragment()
@@ -59,6 +74,11 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         }
 
         return binding.root
+    }
+
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        imagePickerLauncher.launch(intent)
     }
 
 
@@ -75,7 +95,18 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
         (activity as MainActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val imageUri: Uri? = data?.data
+                imageUri?.let {
 
+                }
+            }
+        }
     }
 
+
+
 }
+

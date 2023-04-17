@@ -32,8 +32,7 @@ class SharedViewModel @Inject constructor(
         if(app.currentUser != null){
             viewModelScope.launch {
                 val user = RealmRepository.getMyUser()
-                println("CURRENT USER: $user")
-                println(user?.description)
+                println(user?.email)
                _currentUser.postValue(user)
             }
         }

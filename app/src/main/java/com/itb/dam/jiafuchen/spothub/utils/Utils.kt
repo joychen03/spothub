@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
@@ -48,6 +49,11 @@ class Utils {
         fun getRandomUsername() : String {
             val uuid = UUID.randomUUID().toString()
             return "User_$uuid"
+        }
+
+        fun byteArrayToImage(byteArray: ByteArray): Bitmap? {
+            val options = BitmapFactory.Options()
+            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
         }
 
         suspend fun getByteArrayFromDrawable(context: Context ,drawable: Int): ByteArray {

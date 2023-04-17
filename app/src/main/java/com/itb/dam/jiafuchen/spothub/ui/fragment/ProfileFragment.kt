@@ -2,6 +2,7 @@ package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Base64
@@ -23,6 +24,7 @@ import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.ProfileViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -81,22 +83,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             if (user != null) {
                 binding.ProfileUserName.text = user.username
                 binding.ProfileEmail.text = user.email
+                binding.ProfileAvatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
                 binding.ProfileDescription.text = user.description
                 binding.ProfileFollowers.text = user.followers.count().toString()
                 binding.ProfileFollowings.text = user.followings.count().toString()
             }
         }
-        GlobalScope.launch(Dispatchers.IO) {
-            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.c13)
-            val bitmap = (drawable as BitmapDrawable).bitmap
-            val outputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-            val byteArray = outputStream.toByteArray()
-            val base64String = Base64.encodeToString(byteArray, Base64.NO_WRAP)
-            println(base64String)
-            // Do something with the base64String
-        }
-
 
     }
 

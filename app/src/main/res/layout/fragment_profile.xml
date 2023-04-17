@@ -83,7 +83,8 @@
                         android:id="@+id/ProfileAvatar"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/c13"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/user_default_avatar"
                         app:shapeAppearanceOverlay="@style/Circular"
                         app:strokeColor="@color/background" />
 

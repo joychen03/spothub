@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -35,6 +36,7 @@ import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import com.itb.dam.jiafuchen.spothub.ui.fragment.*
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import io.realm.kotlin.mongodb.ext.customDataAsBsonDocument
 import kotlinx.coroutines.CoroutineScope
@@ -118,6 +120,9 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
                 val following = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_following)
                 following.text = user.followings.count().toString()
+
+                val avatar = binding.navigationView.getHeaderView(0).findViewById<ImageView>(R.id.nav_avatar)
+                avatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
             }
         }
     }

@@ -63,7 +63,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             if(loggedIn && app.currentUser != null){
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    val defaultAvatar = Utils.getByteArrayFromDrawable(requireContext(), R.drawable.c13)
+                    val defaultAvatar = Utils.getByteArrayFromDrawable(requireContext(), R.drawable.user_default_avatar)
 
                     val user = User().apply {
                         this.owner_id = app.currentUser!!.id
