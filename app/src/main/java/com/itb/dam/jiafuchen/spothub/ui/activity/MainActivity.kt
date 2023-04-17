@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -18,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -30,7 +32,9 @@ import com.itb.dam.jiafuchen.spothub.TAG
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.data.mongodb.AuthRepository
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
+import com.itb.dam.jiafuchen.spothub.domain.model.User
 import com.itb.dam.jiafuchen.spothub.ui.fragment.*
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.realm.kotlin.mongodb.ext.customDataAsBsonDocument
 import kotlinx.coroutines.CoroutineScope
@@ -43,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
     lateinit var binding: ActivityMainBinding
     lateinit var navHostFragment : NavHostFragment
     lateinit var navController : NavController
+    private val sharedViewModel : SharedViewModel by viewModels()
 
     private var hideBottomNavFragments = listOf(
         R.id.addPostFragment,
@@ -100,6 +105,21 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
         }
 
+        sharedViewModel.currentUser.observe(this) { user ->
+            if(user != null) {
+                val name = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_nickname)
+                name.text = user.username
+
+                val email = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_email)
+                email.text = user.email
+
+                val followers = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_followers)
+                followers.text = user.followers.count().toString()
+
+                val following = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_following)
+                following.text = user.followings.count().toString()
+            }
+        }
     }
 
     private fun init(){
@@ -109,14 +129,9 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.bottomNav.background = null
         binding.bottomNav.menu.getItem(2).isEnabled = false
 
-        if(app.currentUser != null) {
-            //get user email
-
-            val emailText = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_email)
-            emailText.text = (app.currentUser?.customDataAsBsonDocument()?.getString("email") ?: "unknown") as CharSequence?
-           // app.currentUser?.provider?.name
-        }
+        sharedViewModel.getCurrentUser()
     }
+
 
     fun setBottomNavigationVisibility(visible: Boolean) {
         binding.bottomAppBar.isVisible = visible
@@ -142,6 +157,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
                 CoroutineScope(Dispatchers.Main).launch {
                     runCatching {
                         app.currentUser?.logOut()
+                        app.currentUser?.remove()
                     }.onSuccess {
                         val currentFragment = navHostFragment.childFragmentManager.fragments[0]
                         if(currentFragment !is LoginFragment){

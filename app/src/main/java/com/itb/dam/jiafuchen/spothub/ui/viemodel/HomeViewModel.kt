@@ -11,7 +11,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel(){
 
-
+    init {
+        println("caca")
+    }
 
     fun getPosts() {
         //RealmRepository.getPosts()

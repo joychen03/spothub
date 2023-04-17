@@ -6,22 +6,11 @@
       <GradleProjectSettings>
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="/dades/jchen/M07_08/spothub" />
-        <option name="modules">
-          <set>
-            <option value="/dades/jchen/M07_08/spothub" />
-            <option value="/dades/jchen/M07_08/spothub/app" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="testRunner" value="GRADLE" />
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="/dades/jchen/M07_08/spothub" />
-            <option value="/dades/jchen/M07_08/spothub/app" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
       </GradleProjectSettings>

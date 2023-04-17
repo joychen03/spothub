@@ -1,13 +1,18 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -16,12 +21,20 @@ import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileBinding
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.ProfileViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.util.Locale.Category
 
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     lateinit var binding : FragmentProfileBinding
+    private val viewModel : ProfileViewModel by activityViewModels()
+    private val sharedViewModel : SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +76,28 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             val directions = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
             findNavController().navigate(directions)
         }
+
+        sharedViewModel.currentUser.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                binding.ProfileUserName.text = user.username
+                binding.ProfileEmail.text = user.email
+                binding.ProfileDescription.text = user.description
+                binding.ProfileFollowers.text = user.followers.count().toString()
+                binding.ProfileFollowings.text = user.followings.count().toString()
+            }
+        }
+        GlobalScope.launch(Dispatchers.IO) {
+            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.c13)
+            val bitmap = (drawable as BitmapDrawable).bitmap
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            val byteArray = outputStream.toByteArray()
+            val base64String = Base64.encodeToString(byteArray, Base64.NO_WRAP)
+            println(base64String)
+            // Do something with the base64String
+        }
+
+
     }
 
     private fun initTabLayout() {

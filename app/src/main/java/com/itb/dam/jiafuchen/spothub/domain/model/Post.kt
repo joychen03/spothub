@@ -16,7 +16,7 @@ class Post() : RealmObject {
 
     var title : String = ""
     var description : String = ""
-    var image : String = ""
+    var image : ByteArray = byteArrayOf()
     var longitude : Double = 0.0
     var latitude : Double = 0.0
     var likes : RealmList<User> = realmListOf()

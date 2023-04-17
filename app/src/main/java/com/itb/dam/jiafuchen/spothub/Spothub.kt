@@ -6,6 +6,7 @@ import dagger.hilt.android.HiltAndroidApp
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.AppConfiguration
 
+
 lateinit var app: App
 inline fun <reified T> T.TAG(): String = T::class.java.simpleName
 
@@ -18,7 +19,7 @@ class Spothub : Application(){
                 .baseUrl(getString(R.string.realm_base_url))
                 .build()
         )
-
+        
         Log.v(TAG(), "Initialized the App configuration for: ${app.configuration.appId}")
     }
 

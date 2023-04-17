@@ -80,7 +80,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/nav_avatar"
+                        android:id="@+id/ProfileAvatar"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:src="@drawable/c13"
@@ -107,7 +107,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/profileFollowers"
+                                    android:id="@+id/ProfileFollowers"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"

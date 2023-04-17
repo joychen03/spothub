@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.itb.dam.jiafuchen.spothub.R
+import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentLoginBinding
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.utils.Utils
@@ -22,6 +23,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     lateinit var binding : FragmentLoginBinding
     private val sharedViewModel : SharedViewModel by activityViewModels()
     private val viewModel : LoginViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,6 +52,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         viewModel.loggedIn.observe(viewLifecycleOwner, Observer { loggedIn ->
             if(loggedIn){
+                sharedViewModel.getCurrentUser()
                 val direction = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
                 findNavController().navigate(direction)
             }

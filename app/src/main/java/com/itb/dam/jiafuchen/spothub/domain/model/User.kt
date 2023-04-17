@@ -18,8 +18,10 @@ class User() : RealmObject {
     var email : String = ""
     var username : String = ""
     var description : String = ""
+    var avatar : ByteArray = byteArrayOf()
     var createDateTime : RealmInstant = RealmInstant.now()
     var followers : RealmList<User> = realmListOf()
+    var followings : RealmList<User> = realmListOf()
 
     constructor(ownerId: String = "") : this() {
         owner_id = ownerId

@@ -1,4 +1,4 @@
 <resources>
-  <string name="realm_app_id" translatable="false">spothub-guhsy</string>
+  <string name="realm_app_id" translatable="false">spothub-recst</string>
   <string name="realm_base_url" translatable="false">https://realm.mongodb.com</string>
 </resources>

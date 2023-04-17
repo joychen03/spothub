@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.itb.dam.jiafuchen.spothub.TAG
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.data.mongodb.AuthRepository
+import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,6 +29,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 AuthRepository.login(email,password)
+                RealmRepository.setup()
             }.onSuccess {
                 _loggedIn.postValue(true)
                 Log.v(TAG(),"Successfully logged in${app.currentUser?.id}")

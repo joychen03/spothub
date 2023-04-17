@@ -6,13 +6,17 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.interfaces.IRealmRepository
 import com.itb.dam.jiafuchen.spothub.data.mongodb.interfaces.USER_DEFAULT_LIMITS
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
+import io.realm.kotlin.mongodb.User as RealmUser
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.subscriptions
+import io.realm.kotlin.mongodb.sync.SyncClientResetStrategy
 
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
+import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.query.RealmQuery
+import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -21,21 +25,20 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 object RealmRepository : IRealmRepository {
-    private val currentUser = app.currentUser
+    private val currentUser : RealmUser get() = app.currentUser ?: throw IllegalStateException("User must be logged in")
     private lateinit var realm : Realm
 
     init {
-        requireNotNull(currentUser)
         setup()
     }
 
     override fun setup() {
-        if(currentUser != null){
             val config = SyncConfiguration.Builder(
                 currentUser,
                 setOf(User::class, Post::class)
             ).initialSubscriptions{ sub ->
                 add(query = sub.query<Post>())
+                add(query = sub.query<User>())
             }
                 .waitForInitialRemoteData()
                 .build()
@@ -43,26 +46,55 @@ object RealmRepository : IRealmRepository {
             realm = Realm.open(config)
             Log.v("Realm","Successfully opened realm: ${realm.configuration.name}")
 
-            CoroutineScope(Dispatchers.Main).launch {
-                realm.subscriptions.waitForSynchronization()
-            }
-        }
+//            CoroutineScope(Dispatchers.Main).launch {
+//                realm.subscriptions.waitForSynchronization()
+//            }
+
 
     }
 
     override fun getUsers(limit: Int): Flow<List<User>> {
-        TODO("Not yet implemented")
+
+        return realm.query<User>()
+            .sort(Pair("_id", Sort.DESCENDING))
+            .asFlow().map { it.list }
     }
 
-    override fun addUser(user: User) {
-        TODO("Not yet implemented")
+    override suspend fun addUser(user: User) : User? {
+        if(currentUser == null) return null
+
+        try{
+            println("HEY IM ADDING USERS")
+
+
+            val user = realm.write {
+                return@write copyToRealm(user)
+            }
+
+            return user
+        }catch (e: Exception){
+            Log.e("Realm", "Error adding user: ${e.message}")
+            return null
+        }
     }
 
-    override fun updateUser(user: User) {
-        TODO("Not yet implemented")
+    suspend fun getMyUser() : User? {
+        println("caca")
+        return realm.query<User>("owner_id == $0", currentUser.id).find().firstOrNull()
+    }
+    override suspend fun updateUser(user: User) {
+        if(currentUser == null) return
+
+        try {
+            realm.write {
+                copyToRealm(user)
+            }
+        }catch (e: Exception){
+            Log.e("Realm", "Error adding user: ${e.message}")
+        }
     }
 
-    override fun deleteUser(user: User) {
+    override suspend fun deleteUser(user: User) {
         TODO("Not yet implemented")
     }
 
@@ -90,15 +122,15 @@ object RealmRepository : IRealmRepository {
         TODO("Not yet implemented")
     }
 
-    override fun addPost(post: Post) {
+    override suspend fun addPost(post: Post) {
         TODO("Not yet implemented")
     }
 
-    override fun updatePost(post: Post) {
+    override suspend fun updatePost(post: Post) {
         TODO("Not yet implemented")
     }
 
-    override fun deletePost(post: Post) {
+    override suspend fun deletePost(post: Post) {
         TODO("Not yet implemented")
     }
 
