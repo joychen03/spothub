@@ -16,6 +16,7 @@ import androidx.navigation.NavDirections
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
+import com.itb.dam.jiafuchen.spothub.MainNavDirections
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
@@ -91,8 +92,8 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.floatingActionButton.setOnClickListener {
             val currentFragment = navHostFragment.childFragmentManager.fragments[0]
             if(currentFragment !is AddPostFragment){
-
-                navController.navigate(R.id.toAddPost, bundleOf("image" to null))
+                val direction = MainNavDirections.toAddPost(null)
+                navController.navigate(direction)
             }
 
         }

@@ -1,6 +1,8 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -18,7 +20,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentContainer
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -41,6 +46,10 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     val viewModel by viewModels<CameraViewModel>()
+
+    private val navigation: NavController by lazy {
+        findNavController()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +97,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
         binding.PostCameraTakePhotoBtn.setOnClickListener {
             takePhoto()
+
         }
 
         binding.PostCameraRefreshBtn.setOnClickListener {
@@ -109,14 +119,17 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         }
 
         binding.PostCameraConfirmBtn.setOnClickListener {
-            //val action = CameraFragmentDirections.actionCameraFragmentToAddPostFragment(viewModel.tookPhoto.value.toString())
-            //navigate back to add post fragment
 
-            val bundle = Bundle()
-            bundle.putString("image", viewModel.tookPhoto.value.toString())
-            parentFragmentManager.setFragmentResult("image", bundle)
-            navController.popBackStack()
+            val action = CameraFragmentDirections.actionCameraFragmentToAddPostFragment(viewModel.tookPhoto.value.toString())
+            findNavController().navigate(action, NavOptions.Builder().setPopUpTo(R.id.addPostFragment, true).build())
 
+            //val bundle = Bundle()
+            //bundle.putString("image", viewModel.tookPhoto.value.toString())
+            //parentFragmentManager.setFragmentResult("image", bundle)
+            //navController.popBackStack()
+
+            //findNavController().previousBackStackEntry?.savedStateHandle?.set("image", "JIAFU")
+            //navigation.popBackStack()
         }
 
     }

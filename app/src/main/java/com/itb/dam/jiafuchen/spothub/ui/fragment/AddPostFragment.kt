@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -47,7 +48,15 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.image = arguments?.getString("image")?.toUri() ?: Uri.EMPTY
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if(!args.image.isNullOrEmpty()){
+            viewModel.image = args.image!!.toUri()
+        }
     }
 
     override fun onCreateView(
@@ -80,6 +89,7 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             popupMenu.show()
         }
 
+
         popupMenu.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.add_post_nav_takePhoto -> {
@@ -89,8 +99,6 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
                 }
                 R.id.add_post_nav_openGallery -> {
                     pickImageFromGallery()
-                    println("JJEEEEEEY")
-                    println(viewModel.image)
                     true
                 }
                 else -> false
@@ -106,11 +114,9 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         return binding.root
     }
 
-
     override fun onDestroy() {
         viewModel.title = binding.title.text.toString()
         viewModel.description = binding.desc.text.toString()
-        viewModel.image = Uri.EMPTY
         viewModel.location = LatLng(binding.latitude.text.toString().toDouble(), binding.longitude.text.toString().toDouble())
         super.onDestroy()
     }
@@ -133,11 +139,13 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
                 val imageUri: Uri? = data?.data
                 imageUri?.let {
                     binding.AddPostImage.setImageURI(it)
+                    viewModel.image = it
                 }
             }
         }
 
         setup()
+
     }
 
     private fun pickImageFromGallery() {
