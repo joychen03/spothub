@@ -12,7 +12,6 @@ class AddPostViewModel @Inject constructor(): ViewModel() {
     var image : Uri? = null
     var location : LatLng = LatLng(0.0, 0.0)
 
-
     fun setup() {
         println("caca")
     }
