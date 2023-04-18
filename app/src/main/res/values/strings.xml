@@ -24,5 +24,7 @@
     <string name="profile_edit_desc">About you...</string>
     <string name="edit_post_confirm">Save</string>
     <string name="add_post_open_gallery">Open gallery</string>
+    <string name="add_post_context_menu_take_photo">Take photo</string>
+    <string name="add_post_context_menu_open_gallery">Open gallery</string>
 
 </resources>

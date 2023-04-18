@@ -37,6 +37,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/PostCameraConfirmBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/custom_button"
+                    android:text="@string/map_locating_confirm"
+                    android:textColor="@color/white"
+                    android:textFontWeight="900"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -45,30 +59,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/PostCameraTakePhotoBtn"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/custom_rounded_button"
-                android:padding="20dp"
                 android:src="@drawable/photo_camera_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-                app:tint="@color/white" />
+                app:tint="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-            <ImageView
-                android:id="@+id/PostCameraGalleryBtn"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/custom_button"
-                android:padding="10dp"
-                android:src="@drawable/gallery_thumbnail_icon"
-                app:layout_constraintBottom_toBottomOf="@+id/PostCameraTakePhotoBtn"
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/PostCameraRefreshBtn"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/custom_rounded_button"
+                android:padding="20dp"
+                android:src="@drawable/refresh_icon"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/PostCameraTakePhotoBtn"
-                app:layout_constraintTop_toTopOf="@+id/PostCameraTakePhotoBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
                 app:tint="@color/white" />
 
             <FrameLayout
@@ -79,14 +94,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <TextureView
-                    android:id="@+id/CameraCanva"
-                    android:layout_width="wrap_content"
-                    android:layout_height="400dp" />
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/viewFinder"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+
+                    />
 
                 <ImageView
                     android:id="@+id/PostCameraResultImage"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="400dp"
                     android:scaleType="centerCrop"
                     tools:src="@tools:sample/backgrounds/scenic" />

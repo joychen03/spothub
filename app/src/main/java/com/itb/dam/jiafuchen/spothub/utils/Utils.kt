@@ -6,12 +6,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.itb.dam.jiafuchen.spothub.R
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.util.*
 
 class Utils {
@@ -59,6 +61,21 @@ class Utils {
         suspend fun getByteArrayFromDrawable(context: Context ,drawable: Int): ByteArray {
             val drawable = ContextCompat.getDrawable(context, drawable)
             val bitmap = (drawable as BitmapDrawable).bitmap
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            return outputStream.toByteArray()
+        }
+
+        fun getOutputDirectory(requireContext: Context): File {
+            val mediaDir = requireContext.externalMediaDirs.firstOrNull()?.let {
+                File(it, requireContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
+            return if (mediaDir != null && mediaDir.exists())
+                mediaDir else requireContext.filesDir
+        }
+
+        fun uriToByteArray(requireContext: Context, value: Uri): ByteArray {
+            val inputStream = requireContext.contentResolver.openInputStream(value)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
             val outputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
             return outputStream.toByteArray()

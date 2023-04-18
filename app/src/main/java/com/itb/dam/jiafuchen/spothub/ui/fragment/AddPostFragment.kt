@@ -1,28 +1,40 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.PopupMenu
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentAddPostBinding
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.AddPostViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 
 
@@ -30,6 +42,13 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
     lateinit var binding : FragmentAddPostBinding
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
+    private val viewModel by activityViewModels<AddPostViewModel>()
+    private val args : AddPostFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.image = arguments?.getString("image")?.toUri() ?: Uri.EMPTY
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,18 +73,29 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
                 false
             }
         }
+        val popupMenu = PopupMenu(requireContext(), binding.AddPostImage)
+        popupMenu.menuInflater.inflate(R.menu.add_post_menu, popupMenu.menu)
 
-        binding.AddPostTakePhotoBtn.setOnClickListener {
-            //val direction = AddPostFragmentDirections.actionAddPostFragmentToCameraFragment()
-            //findNavController().navigate(direction)
-
-
+        binding.AddPostImage.setOnClickListener {
+            popupMenu.show()
         }
 
-        binding.AddPostopenGalleryButton.setOnClickListener {
-            pickImageFromGallery()
+        popupMenu.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.add_post_nav_takePhoto -> {
+                    val direction = AddPostFragmentDirections.actionAddPostFragmentToCameraFragment()
+                    findNavController().navigate(direction)
+                    true
+                }
+                R.id.add_post_nav_openGallery -> {
+                    pickImageFromGallery()
+                    println("JJEEEEEEY")
+                    println(viewModel.image)
+                    true
+                }
+                else -> false
+            }
         }
-
 
 
         binding.mapButton.setOnClickListener {
@@ -76,12 +106,14 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         return binding.root
     }
 
-    private fun pickImageFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        imagePickerLauncher.launch(intent)
+
+    override fun onDestroy() {
+        viewModel.title = binding.title.text.toString()
+        viewModel.description = binding.desc.text.toString()
+        viewModel.image = Uri.EMPTY
+        viewModel.location = LatLng(binding.latitude.text.toString().toDouble(), binding.longitude.text.toString().toDouble())
+        super.onDestroy()
     }
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -100,9 +132,27 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
                 val data: Intent? = result.data
                 val imageUri: Uri? = data?.data
                 imageUri?.let {
-
+                    binding.AddPostImage.setImageURI(it)
                 }
             }
+        }
+
+        setup()
+    }
+
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        imagePickerLauncher.launch(intent)
+    }
+
+
+    private fun setup(){
+        binding.title.setText(viewModel.title)
+        binding.desc.setText(viewModel.description)
+        binding.latitude.setText(viewModel.location.latitude.toString())
+        binding.longitude.setText(viewModel.location.longitude.toString())
+        if (viewModel.image != null && viewModel.image != Uri.EMPTY){
+            binding.AddPostImage.setImageURI(viewModel.image)
         }
     }
 

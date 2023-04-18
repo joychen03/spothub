@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/add_post_nav_takePhoto"
+        android:title="@string/add_post_context_menu_take_photo" />
+    <item
+        android:id="@+id/add_post_nav_openGallery"
+        android:title="@string/add_post_context_menu_open_gallery" />
+</menu>

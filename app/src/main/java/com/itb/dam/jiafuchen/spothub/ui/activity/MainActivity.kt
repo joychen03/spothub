@@ -1,44 +1,28 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
-import android.app.Activity
-import android.content.Context
-import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.NavDirections
+import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationBarItemView
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.TAG
 import com.itb.dam.jiafuchen.spothub.app
-import com.itb.dam.jiafuchen.spothub.data.mongodb.AuthRepository
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
-import com.itb.dam.jiafuchen.spothub.domain.model.User
 import com.itb.dam.jiafuchen.spothub.ui.fragment.*
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import io.realm.kotlin.mongodb.ext.customDataAsBsonDocument
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,6 +40,11 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         R.id.loginFragment,
         R.id.registerFragment,
         R.id.cameraFragment,
+        R.id.mapLocatingFragment,
+        R.id.settingFragment,
+        R.id.postDetailFragment,
+        R.id.profileEditFragment,
+        R.id.editPostFragment
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +91,8 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.floatingActionButton.setOnClickListener {
             val currentFragment = navHostFragment.childFragmentManager.fragments[0]
             if(currentFragment !is AddPostFragment){
-                navController.navigate(R.id.toAddPost)
+
+                navController.navigate(R.id.toAddPost, bundleOf("image" to null))
             }
 
         }
