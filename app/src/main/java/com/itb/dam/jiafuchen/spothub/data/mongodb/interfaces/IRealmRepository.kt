@@ -22,7 +22,7 @@ interface IRealmRepository {
 
     fun getPosts(limit : Int = POST_DEFAULT_LIMITS) : Flow<List<Post>>
     fun getPostsBeforeDate(datetime : Date, limit: Int = POST_DEFAULT_LIMITS) : Flow<List<Post>>
-    suspend fun addPost(post : Post)
+    suspend fun addPost(post : Post): Post?
     suspend fun updatePost(post : Post)
     suspend fun deletePost(post : Post)
     fun getFollowingPosts(limit : Int = 100) : Flow<List<Post>>

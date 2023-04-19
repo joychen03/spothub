@@ -152,8 +152,36 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         binding.AddPostPublishBtn.setOnClickListener { view ->
 //            viewModel.publishPost()
 //            view.findNavController().navigateUp()
+            checkValidPost()
         }
 
+
+    }
+
+    private fun checkValidPost() {
+        if(binding.title.text.toString().isEmpty() && binding.desc.text.toString().isEmpty()){
+            Utils.makeSimpleAlert(requireContext(), "Please fill all the fields")
+            return
+        }
+
+        if(binding.AddPostImage.drawable == null){
+            Utils.makeSimpleAlert(requireContext(), "Please add an image")
+            return
+        }
+
+        try {
+            val lat = binding.latitude.text.toString().toDouble()
+            val long = binding.longitude.text.toString().toDouble()
+            if(lat == 0.0 && long == 0.0){
+                Utils.makeSimpleAlert(requireContext(), "Please add a location")
+                return
+            }
+        }catch (e: Exception) {
+            Utils.makeSimpleAlert(requireContext(), "Location is not valid")
+            return
+        }
+
+        viewModel.publishPost()
     }
 
 

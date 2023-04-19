@@ -122,8 +122,16 @@ object RealmRepository : IRealmRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun addPost(post: Post) {
-        TODO("Not yet implemented")
+    override suspend fun addPost(post: Post) : Post? {
+        try {
+            val post = realm.write {
+                copyToRealm(post)
+            }
+            return post
+        }catch (e: Exception){
+            Log.e("Realm", "Error adding user: ${e.message}")
+            throw Exception("Error adding post: ${e.message}")
+        }
     }
 
     override suspend fun updatePost(post: Post) {
