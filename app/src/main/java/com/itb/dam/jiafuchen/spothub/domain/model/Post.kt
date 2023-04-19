@@ -1,6 +1,7 @@
 package com.itb.dam.jiafuchen.spothub.domain.model
 
 import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.Index
@@ -19,7 +20,9 @@ class Post() : RealmObject {
     var image : ByteArray = byteArrayOf()
     var longitude : Double = 0.0
     var latitude : Double = 0.0
-    var likes : RealmList<User> = realmListOf()
+    var updateDataTime : RealmInstant = RealmInstant.now()
+    var createDateTime : RealmInstant = RealmInstant.now()
+    var likes : RealmList<ObjectId> = realmListOf()
 
     constructor(ownerId: String = "") : this() {
         owner_id = ownerId

@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
+import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -38,12 +40,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         (requireActivity() as MainActivity).setBottomNavigationVisibility(false)
 
         binding.signIn.setOnClickListener {
+            binding.signIn.focusSearch(View.FOCUS_UP).requestFocus()
+            Utils.hideSoftKeyboard(requireActivity())
+
             try {
                 viewModel.login(binding.email.text.toString(), binding.passwd.text.toString())
             }catch (e: Exception){
                 Utils.makeSimpleAlert(this.requireContext(), e.message.toString())
             }
         }
+
 
         binding.clickHere.setOnClickListener{
             val direction = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
@@ -53,8 +59,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         viewModel.loggedIn.observe(viewLifecycleOwner, Observer { loggedIn ->
             if(loggedIn){
                 sharedViewModel.getCurrentUser()
+                (requireActivity() as MainActivity).binding.bottomNav.menu.getItem(0).isChecked = true
                 val direction = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
                 findNavController().navigate(direction)
+
             }
         })
 
@@ -68,6 +76,5 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         Utils.hideSoftKeyboard(requireActivity())
         super.onDestroy()
     }
-
 
 }

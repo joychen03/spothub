@@ -2,8 +2,6 @@ package com.itb.dam.jiafuchen.spothub.data.mongodb
 
 import android.util.Log
 import com.itb.dam.jiafuchen.spothub.app
-import com.itb.dam.jiafuchen.spothub.data.mongodb.interfaces.IRealmRepository
-import com.itb.dam.jiafuchen.spothub.data.mongodb.interfaces.USER_DEFAULT_LIMITS
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import io.realm.kotlin.mongodb.User as RealmUser
@@ -17,14 +15,16 @@ import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.Sort
+import io.realm.kotlin.types.RealmList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.mongodb.kbson.ObjectId
 import java.util.*
 
-object RealmRepository : IRealmRepository {
+object RealmRepository {
     private val currentUser : RealmUser get() = app.currentUser ?: throw IllegalStateException("User must be logged in")
     private lateinit var realm : Realm
 
@@ -32,36 +32,26 @@ object RealmRepository : IRealmRepository {
         setup()
     }
 
-    override fun setup() {
-            val config = SyncConfiguration.Builder(
-                currentUser,
-                setOf(User::class, Post::class)
-            ).initialSubscriptions{ sub ->
-                add(query = sub.query<Post>())
-                add(query = sub.query<User>())
-            }
-                .waitForInitialRemoteData()
-                .build()
+    fun setup() {
+        val config = SyncConfiguration.Builder(
+            currentUser,
+            setOf(User::class, Post::class)
+        ).initialSubscriptions{ sub ->
+            add(query = sub.query<Post>())
+            add(query = sub.query<User>())
+        }
+            .waitForInitialRemoteData()
+            .build()
 
-            realm = Realm.open(config)
-            Log.v("Realm","Successfully opened realm: ${realm.configuration.name}")
+        realm = Realm.open(config)
+        Log.v("Realm","Successfully opened realm: ${realm.configuration.name}")
 
-            CoroutineScope(Dispatchers.Main).launch {
-                realm.subscriptions.waitForSynchronization()
-            }
-
-
+        CoroutineScope(Dispatchers.Main).launch {
+            realm.subscriptions.waitForSynchronization()
+        }
     }
 
-    override fun getUsers(limit: Int): Flow<List<User>> {
-
-        return realm.query<User>()
-            .sort(Pair("_id", Sort.DESCENDING))
-            .asFlow().map { it.list }
-    }
-
-    override suspend fun addUser(user: User) : User? {
-
+    suspend fun addUser(user: User) : User? {
         try{
             return realm.write {
                 return@write copyToRealm(user)
@@ -76,7 +66,7 @@ object RealmRepository : IRealmRepository {
         return realm.query<User>("owner_id == $0", currentUser.id).find().firstOrNull()
     }
 
-    override suspend fun updateUser(user: User) {
+    suspend fun updateUser(user: User) {
         try {
             realm.write {
                 copyToRealm(user)
@@ -86,72 +76,89 @@ object RealmRepository : IRealmRepository {
         }
     }
 
-    override suspend fun deleteUser(user: User) {
-        TODO("Not yet implemented")
+    fun getMyFollowers(myUser : User): List<User> {
+        return realm.query<User>("_id in {$0}", myUser.followers.joinToString(",")).find()
     }
 
-    override fun getFollowers(limit: Int): Flow<List<User>> {
-        TODO("Not yet implemented")
+    fun getMyFollowings(myUser : User): List<User> {
+        return realm.query<User>("_id in {$0}", myUser.followings.joinToString(",")).find()
     }
 
-    override fun getUsersByKeyword(keyword: String, limit: Int): Flow<List<User>> {
-        TODO("Not yet implemented")
+    fun getUsersByKeyword(keyword: String): List<User> {
+        return realm.query<User>("username contains $0", keyword).find()
     }
 
-    override fun getUsersByKeywordBeforeDate(
-        keyword: String,
-        date: Date,
-        limit: Int
-    ): Flow<List<User>> {
-        TODO("Not yet implemented")
+    fun getPosts(limit: Int): List<Post> {
+        return realm.query<Post>()
+            .sort(Pair("_id", Sort.DESCENDING))
+            .find()
     }
 
-    override fun getPosts(limit: Int): Flow<List<Post>> {
-        TODO("Not yet implemented")
+    fun getMyPostsAsFlow(): Flow<List<Post>> {
+        return realm.query<Post>("owner_id == $0", currentUser.id)
+            .sort(Pair("_id", Sort.DESCENDING))
+            .asFlow().map { it.list }
     }
 
-    override fun getPostsBeforeDate(datetime: Date, limit: Int): Flow<List<Post>> {
-        TODO("Not yet implemented")
+    fun getTotalPosts() : Flow<Long> {
+        return realm.query<Post>().count().asFlow()
     }
 
-    override suspend fun addPost(post: Post) : Post? {
-        try {
-            return realm.write {
+    suspend fun addPost(post: Post) : Post? {
+        return try {
+            realm.write {
                 copyToRealm(post)
             }
         }catch (e: Exception){
-            Log.e("Realm", "Error adding user: ${e.message}")
-            return null
+            Log.e("Realm", "Error adding post: ${e.message}")
+            null
         }
     }
 
-    override suspend fun updatePost(post: Post) {
-        TODO("Not yet implemented")
+    suspend fun updatePost(post: Post) : Post? {
+        return try {
+            realm.write {
+                val postToUpdate = realm.query<Post>("_id == $0", post._id).find().firstOrNull()
+                postToUpdate?.let {
+                    it.title = post.title
+                    it.description = post.description
+                    it.image = post.image
+                    it.latitude = post.latitude
+                    it.longitude = post.longitude
+                    it.updateDataTime = post.updateDataTime
+                }
+                postToUpdate
+            }
+        }catch (e: Exception){
+            Log.e("Realm", "Error updating post: ${e.message}")
+            null
+        }
     }
 
-    override suspend fun deletePost(post: Post) {
-        TODO("Not yet implemented")
+    suspend fun deletePost(post: Post) : Boolean{
+        return try {
+            realm.write {
+                val postToDelete = realm.query<Post>("_id == $0", post._id).find().firstOrNull()
+                postToDelete?.let {
+                    delete(it)
+                }
+                true
+            }
+        }catch (e: Exception){
+            Log.e("Realm", "Error deleting post: ${e.message}")
+            false
+        }
     }
 
-    override fun getFollowingPosts(limit: Int): Flow<List<Post>> {
-        TODO("Not yet implemented")
+    fun getFollowingPosts(following : RealmList<ObjectId>): List<Post> {
+        return realm.query<Post>("owner_id in {$0}", following.joinToString(",")).find()
     }
 
-    override fun getFollowingPostsBeforeDate(date: Date, limit: Int): Flow<List<Post>> {
-        TODO("Not yet implemented")
+
+    fun getPostsByKeyword(keyword: String): List<Post> {
+        return realm.query<Post>("title contains $0 or description ", keyword).find()
     }
 
-    override fun getPostsByKeyword(keyword: String, limit: Int): Flow<List<Post>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getPostsByKeywordBeforeDate(
-        keyword: String,
-        date: Date,
-        limit: Int
-    ): Flow<List<Post>> {
-        TODO("Not yet implemented")
-    }
 
 
 }

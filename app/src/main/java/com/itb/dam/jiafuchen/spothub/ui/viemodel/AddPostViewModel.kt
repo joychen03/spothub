@@ -11,9 +11,11 @@ import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.utils.Utils
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class AddPostViewModel @Inject constructor(): ViewModel() {
 
     var title : String = ""

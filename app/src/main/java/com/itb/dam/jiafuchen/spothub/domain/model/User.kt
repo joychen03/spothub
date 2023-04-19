@@ -19,9 +19,10 @@ class User() : RealmObject {
     var username : String = ""
     var description : String = ""
     var avatar : ByteArray = byteArrayOf()
+    var updateDataTime : RealmInstant = RealmInstant.now()
     var createDateTime : RealmInstant = RealmInstant.now()
-    var followers : RealmList<User> = realmListOf()
-    var followings : RealmList<User> = realmListOf()
+    var followers : RealmList<ObjectId> = realmListOf()
+    var followings : RealmList<ObjectId> = realmListOf()
 
     constructor(ownerId: String = "") : this() {
         owner_id = ownerId

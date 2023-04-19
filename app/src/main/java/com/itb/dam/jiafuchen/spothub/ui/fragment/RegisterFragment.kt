@@ -19,6 +19,7 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.AuthRepository
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentRegisterBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.User
+import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.RegisterViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
@@ -47,7 +48,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.signUp.setOnClickListener {
+            binding.signUp.focusSearch(View.FOCUS_UP).requestFocus()
+            Utils.hideSoftKeyboard(requireActivity())
+
             try {
+                if(binding.passwd.text.toString() != binding.confirmPasswd.text.toString()){
+                    throw Exception("Passwords don't match")
+                }
+
                 viewModel.register(binding.email.text.toString(), binding.passwd.text.toString())
             }catch (e: Exception){
                 Utils.makeSimpleAlert(this.requireContext(), e.message.toString())
@@ -84,29 +92,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         })
 
-//        sharedViewModel.currentUser.observe(viewLifecycleOwner, Observer { user ->
-//            if(user != null){
-//                println("IM TRYING TO GO TO HOME")
-//                val direction = RegisterFragmentDirections.actionRegisterFragmentToHomeFragment()
-//                findNavController().navigate(direction)
-//            }else{
-//                Utils.makeSimpleAlert(this.requireContext(), "Error al iniciar sesión")
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    runCatching {
-//                        app.currentUser?.logOut()
-//                    }.onSuccess {
-//                        val direction = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-//                        findNavController().navigate(direction)
-//                    }.onFailure {
-//                        it.message?.let { it1 -> Log.v("ERROR", it1) }
-//                    }
-//                }
-//            }
-//        })
 
         viewModel.appUserCreated.observe(viewLifecycleOwner, Observer { user ->
             if(user != null){
                 sharedViewModel.getCurrentUser()
+                (requireActivity() as MainActivity).binding.bottomNav.menu.getItem(0).isChecked = true
                 val direction = RegisterFragmentDirections.actionRegisterFragmentToHomeFragment()
                 findNavController().navigate(direction)
             }else{
@@ -120,6 +110,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
 
-
+    override fun onDestroy() {
+        Utils.hideSoftKeyboard(requireActivity())
+        super.onDestroy()
+    }
 
 }

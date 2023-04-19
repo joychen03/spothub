@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchBinding
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
+import com.itb.dam.jiafuchen.spothub.utils.Utils
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
@@ -47,7 +48,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.searchField.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val position = binding.searchTabs.selectedTabPosition
-                binding.searchField.clearFocus()
+
+                //remove search view focus
+                Utils.hideSoftKeyboard(requireActivity())
+                binding.searchField.focusSearch(View.FOCUS_DOWN).requestFocus()
 
                 val adapter = binding.searchPager.adapter as ViewPagerAdapter
                 when(adapter.fragmengList[position]){

@@ -91,6 +91,9 @@ dependencies {
     implementation 'androidx.camera:camera-lifecycle:1.2.2'
     implementation 'androidx.camera:camera-view:1.2.2'
 
+    //Swipe Refresh Layout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
+
 
 }
 
