@@ -1,8 +1,6 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.Manifest
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -17,20 +15,16 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentContainer
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentAddPostBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentCameraBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentLoginBinding
+import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.CameraViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
@@ -120,7 +114,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
         binding.PostCameraConfirmBtn.setOnClickListener {
 
-            val action = CameraFragmentDirections.actionCameraFragmentToAddPostFragment(viewModel.tookPhoto.value.toString())
+            val action = CameraFragmentDirections.actionCameraFragmentToAddPostFragment(AddEditPostArgs(image = viewModel.tookPhoto.value))
             findNavController().navigate(action, NavOptions.Builder().setPopUpTo(R.id.addPostFragment, true).build())
 
             //val bundle = Bundle()

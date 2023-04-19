@@ -15,6 +15,7 @@
     <color name="lightSection">#FFFFFF</color>
     <color name="primary_btn">#FF0266</color>
     <color name="secondary_btn">#EBA0FE</color>
+    <color name="disable_btn">#9C9C9C</color>
     <color name="primary_txt">#202225</color>
     <color name="secondary_txt">#A9ABAE</color>
 

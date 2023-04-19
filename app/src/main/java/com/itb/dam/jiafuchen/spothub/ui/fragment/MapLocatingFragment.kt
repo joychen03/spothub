@@ -2,13 +2,16 @@ package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -34,16 +39,12 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentAddPostBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentMapLocatingBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentPostDetailBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileEditBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileFavouritesBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfilePostsBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchPostsBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchUsersBinding
+import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.MapLocatingViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
+import io.realm.kotlin.internal.platform.appFilesDirectory
 
 
 class MapLocatingFragment :
@@ -56,6 +57,7 @@ class MapLocatingFragment :
 
     lateinit var binding : FragmentMapLocatingBinding
     private lateinit var map: GoogleMap
+    private val viewModel : MapLocatingViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,12 +86,44 @@ class MapLocatingFragment :
         (activity as MainActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
 
         initSearchBar()
+
+        binding.mapLocateConfirm.setOnClickListener {
+
+            //check last backstack fragment
+            val previousFragment =  findNavController().previousBackStackEntry?.destination?.label
+
+            when(previousFragment){
+                "fragment_add_post" -> {
+                    val directions = MapLocatingFragmentDirections.actionMapLocatingFragmentToAddPostFragment(AddEditPostArgs(location = map.cameraPosition.target))
+                    findNavController().navigate(directions, NavOptions.Builder().setPopUpTo(R.id.addPostFragment, true).build())
+                }
+                "fragment_edit_post" -> {
+                    val directions = MapLocatingFragmentDirections.actionMapLocatingFragmentToEditPostFragment(AddEditPostArgs(location = map.cameraPosition.target))
+                    findNavController().navigate(directions, NavOptions.Builder().setPopUpTo(R.id.editPostFragment, true).build())
+                }
+                else -> throw Exception("No previous fragment")
+            }
+        }
+
+
+        viewModel.lastMarker.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.mapLocateConfirm.visibility = View.VISIBLE
+            }else{
+                binding.mapLocateConfirm.visibility = View.GONE
+            }
+        }
+
+
     }
 
 
 
     override fun onMapClick(p0: LatLng) {
-
+        map.clear()
+        val marker = MarkerOptions().position(p0)
+        map.addMarker(marker)
+        viewModel.setMarker(marker)
     }
 
     override fun onMapLongClick(p0: LatLng) {
@@ -97,6 +131,8 @@ class MapLocatingFragment :
     }
 
     override fun onMarkerClick(p0: Marker): Boolean {
+        map.clear()
+        viewModel.setMarker(null)
         return true
     }
 
@@ -129,11 +165,17 @@ class MapLocatingFragment :
             ) == PackageManager.PERMISSION_GRANTED -> {
                 map.isMyLocationEnabled = true
 
-                val location = getLastKnownLocation()
-                if (location != null) {
-                    val latLng = LatLng(location.latitude, location.longitude)
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                if(viewModel.lastMarker.value != null){
+                    map.addMarker(viewModel.lastMarker.value!!)
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(viewModel.lastMarker.value!!.position, 15f))
+                }else{
+                    val location = getLastKnownLocation()
+                    if (location != null) {
+                        val latLng = LatLng(location.latitude, location.longitude)
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                    }
                 }
+
             }
             shouldShowRequestPermissionRationale(
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -145,6 +187,10 @@ class MapLocatingFragment :
             }
         }
 
+        if(viewModel.lastMarker.value != null){
+            map.addMarker(viewModel.lastMarker.value!!)
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(viewModel.lastMarker.value!!.position, 15f))
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -175,9 +221,11 @@ class MapLocatingFragment :
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 val latLng = place.latLng
+                val options = MarkerOptions().position(latLng!!)
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-                map.addMarker(MarkerOptions().position(latLng!!).title(place.name))
+                map.addMarker(options)
 
+                viewModel.setMarker(options)
             }
 
             override fun onError(status: Status) {

@@ -1,6 +1,5 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -8,18 +7,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
-import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import com.itb.dam.jiafuchen.spothub.MainNavDirections
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
+import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.ui.fragment.*
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
@@ -92,7 +89,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.floatingActionButton.setOnClickListener {
             val currentFragment = navHostFragment.childFragmentManager.fragments[0]
             if(currentFragment !is AddPostFragment){
-                val direction = MainNavDirections.toAddPost(null)
+                val direction = MainNavDirections.toAddPost(AddEditPostArgs())
                 navController.navigate(direction)
             }
 

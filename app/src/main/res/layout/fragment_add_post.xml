@@ -44,7 +44,7 @@
                         app:layout_constraintVertical_bias="0.0" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/publish"
+                        android:id="@+id/AddPostPublishBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_marginEnd="10dp"
@@ -131,6 +131,7 @@
                         android:gravity="center_vertical"
                         android:hint="@string/add_post_latitude"
                         android:inputType="numberDecimal"
+                        android:maxLines="1"
                         android:padding="10dp"
                         android:textColor="@color/primary_txt"
                         android:textColorHint="@color/secondary_txt" />

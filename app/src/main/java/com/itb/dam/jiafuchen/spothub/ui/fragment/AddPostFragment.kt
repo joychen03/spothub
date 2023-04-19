@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.service.autofill.OnClickAction
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -49,14 +50,14 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        if(!args.image.isNullOrEmpty()){
-            viewModel.image = args.image!!.toUri()
+        if(args.addPostArgs.image != null){
+            viewModel.image = args.addPostArgs.image
         }
+
+        if(args.addPostArgs.location != null){
+            viewModel.location = args.addPostArgs.location!!
+        }
+
     }
 
     override fun onCreateView(
@@ -71,17 +72,17 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             Utils.hideSoftKeyboard(requireActivity())
         }
 
-        val editText = binding.desc
-        editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                editText.clearFocus()
-                val inputMethodManager = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
-                true
-            } else {
-                false
-            }
-        }
+//        val editText = binding.desc
+//        editText.setOnEditorActionListener { _, actionId, _ ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                editText.clearFocus()
+//                val inputMethodManager = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//                inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
+//                true
+//            } else {
+//                false
+//            }
+//        }
         val popupMenu = PopupMenu(requireContext(), binding.AddPostImage)
         popupMenu.menuInflater.inflate(R.menu.add_post_menu, popupMenu.menu)
 
@@ -118,6 +119,8 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         viewModel.title = binding.title.text.toString()
         viewModel.description = binding.desc.text.toString()
         viewModel.location = LatLng(binding.latitude.text.toString().toDouble(), binding.longitude.text.toString().toDouble())
+
+        Utils.hideSoftKeyboard(requireActivity())
         super.onDestroy()
     }
 
@@ -146,7 +149,13 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
         setup()
 
+        binding.AddPostPublishBtn.setOnClickListener { view ->
+//            viewModel.publishPost()
+//            view.findNavController().navigateUp()
+        }
+
     }
+
 
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -162,6 +171,7 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         if (viewModel.image != null && viewModel.image != Uri.EMPTY){
             binding.AddPostImage.setImageURI(viewModel.image)
         }
+
     }
 
 

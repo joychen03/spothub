@@ -29,9 +29,8 @@
             android:id="@+id/action_addPostFragment_to_mapLocatingFragment"
             app:destination="@id/mapLocatingFragment" />
         <argument
-            android:name="image"
-            app:argType="string"
-            app:nullable="true" />
+            android:name="addPostArgs"
+            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -40,7 +39,18 @@
         tools:layout="@layout/fragment_camera" >
         <action
             android:id="@+id/action_cameraFragment_to_addPostFragment"
-            app:destination="@id/addPostFragment" />
+            app:destination="@id/addPostFragment" >
+            <argument
+                android:name="location"
+                android:defaultValue="@null" />
+        </action>
+        <action
+            android:id="@+id/action_cameraFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" >
+            <argument
+                android:name="location"
+                android:defaultValue="@null" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -99,6 +109,9 @@
         <argument
             android:name="image"
             android:defaultValue="@null" />
+        <argument
+            android:name="location"
+            android:defaultValue="@null" />
     </action>
     <action
         android:id="@+id/toProfile"
@@ -129,6 +142,12 @@
         <action
             android:id="@+id/action_editPostFragment2_to_mapLocatingFragment"
             app:destination="@id/mapLocatingFragment" />
+        <action
+            android:id="@+id/action_editPostFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+        <argument
+            android:name="editPostArgs"
+            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs" />
     </fragment>
     <fragment
         android:id="@+id/postDetailFragment"
@@ -139,7 +158,22 @@
         android:id="@+id/mapLocatingFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.MapLocatingFragment"
         android:label="fragment_map_locating"
-        tools:layout="@layout/fragment_map_locating" />
+        tools:layout="@layout/fragment_map_locating" >
+        <action
+            android:id="@+id/action_mapLocatingFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" >
+            <argument
+                android:name="image"
+                android:defaultValue="@null" />
+        </action>
+        <action
+            android:id="@+id/action_mapLocatingFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" >
+            <argument
+                android:name="image"
+                android:defaultValue="@null" />
+        </action>
+    </fragment>
     <fragment
         android:id="@+id/profileEditFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileEditFragment"
