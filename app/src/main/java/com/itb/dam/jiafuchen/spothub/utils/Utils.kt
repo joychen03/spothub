@@ -29,7 +29,7 @@ class Utils {
             alert.apply {
                 setMessage(message)
                 setCancelable(true)
-                setPositiveButton("Ok"){dialog, it ->
+                setPositiveButton("Ok"){_, _ ->
 
                 }
             }
@@ -58,8 +58,8 @@ class Utils {
             return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
         }
 
-        suspend fun getByteArrayFromDrawable(context: Context ,drawable: Int): ByteArray {
-            val drawable = ContextCompat.getDrawable(context, drawable)
+        fun getByteArrayFromDrawable(context: Context ,drawableID: Int): ByteArray {
+            val drawable = ContextCompat.getDrawable(context, drawableID)
             val bitmap = (drawable as BitmapDrawable).bitmap
             val outputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
@@ -68,9 +68,9 @@ class Utils {
 
         fun getOutputDirectory(requireContext: Context): File {
             val mediaDir = requireContext.externalMediaDirs.firstOrNull()?.let {
-                File(it, requireContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
-            return if (mediaDir != null && mediaDir.exists())
-                mediaDir else requireContext.filesDir
+                File(it, requireContext.resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+            return if (mediaDir != null && mediaDir.exists()) mediaDir else requireContext.filesDir
         }
 
         fun uriToByteArray(requireContext: Context, value: Uri): ByteArray {

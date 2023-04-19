@@ -46,9 +46,9 @@ object RealmRepository : IRealmRepository {
             realm = Realm.open(config)
             Log.v("Realm","Successfully opened realm: ${realm.configuration.name}")
 
-//            CoroutineScope(Dispatchers.Main).launch {
-//                realm.subscriptions.waitForSynchronization()
-//            }
+            CoroutineScope(Dispatchers.Main).launch {
+                realm.subscriptions.waitForSynchronization()
+            }
 
 
     }
@@ -61,30 +61,22 @@ object RealmRepository : IRealmRepository {
     }
 
     override suspend fun addUser(user: User) : User? {
-        if(currentUser == null) return null
 
         try{
-            println("HEY IM ADDING USERS")
-
-
-            val user = realm.write {
+            return realm.write {
                 return@write copyToRealm(user)
             }
-
-            return user
         }catch (e: Exception){
             Log.e("Realm", "Error adding user: ${e.message}")
             return null
         }
     }
 
-    suspend fun getMyUser() : User? {
-        println("caca")
+    fun getMyUser() : User? {
         return realm.query<User>("owner_id == $0", currentUser.id).find().firstOrNull()
     }
-    override suspend fun updateUser(user: User) {
-        if(currentUser == null) return
 
+    override suspend fun updateUser(user: User) {
         try {
             realm.write {
                 copyToRealm(user)
@@ -124,13 +116,12 @@ object RealmRepository : IRealmRepository {
 
     override suspend fun addPost(post: Post) : Post? {
         try {
-            val post = realm.write {
+            return realm.write {
                 copyToRealm(post)
             }
-            return post
         }catch (e: Exception){
             Log.e("Realm", "Error adding user: ${e.message}")
-            throw Exception("Error adding post: ${e.message}")
+            return null
         }
     }
 

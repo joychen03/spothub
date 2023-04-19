@@ -18,6 +18,7 @@ import com.itb.dam.jiafuchen.spothub.databinding.FragmentHomeBinding
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.HomeViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,8 +28,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val sharedViewModel : SharedViewModel by activityViewModels()
     private val viewModel : HomeViewModel by viewModels()
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this){
@@ -36,7 +35,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             intent.addCategory(Intent.CATEGORY_HOME)
             startActivity(intent)
         }
-
 
     }
     override fun onCreateView(
@@ -63,8 +61,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.navMenuBtn.setOnClickListener {
             (requireActivity() as MainActivity).openDrawer()
         }
-
-
 
     }
 

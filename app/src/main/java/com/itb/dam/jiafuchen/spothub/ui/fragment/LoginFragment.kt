@@ -64,7 +64,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     }
 
-
+    override fun onDestroy() {
+        Utils.hideSoftKeyboard(requireActivity())
+        super.onDestroy()
+    }
 
 
 }

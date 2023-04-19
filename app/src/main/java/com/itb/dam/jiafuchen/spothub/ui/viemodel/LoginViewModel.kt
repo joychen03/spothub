@@ -19,11 +19,13 @@ class LoginViewModel @Inject constructor(
 
 ) : ViewModel(){
 
-    private val _errorMsg = MutableLiveData<String>()
-    val errorMsg : LiveData<String> = _errorMsg
+    val errorMsg : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 
-    private val _loggedIn = MutableLiveData<Boolean>()
-    val loggedIn : LiveData<Boolean> = _loggedIn
+    val loggedIn : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
 
     fun login(email : String, password: String){
         viewModelScope.launch {
@@ -31,10 +33,10 @@ class LoginViewModel @Inject constructor(
                 AuthRepository.login(email,password)
                 RealmRepository.setup()
             }.onSuccess {
-                _loggedIn.postValue(true)
+                loggedIn.postValue(true)
                 Log.v(TAG(),"Successfully logged in${app.currentUser?.id}")
             }.onFailure {
-                _errorMsg.postValue(it.message)
+                errorMsg.postValue(it.message)
             }
         }
 

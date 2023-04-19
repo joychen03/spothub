@@ -22,7 +22,9 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavBackStackEntry
@@ -34,10 +36,13 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.itb.dam.jiafuchen.spothub.R
+import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentAddPostBinding
+import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.AddPostViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
+import io.realm.kotlin.ext.realmListOf
 
 
 class AddPostFragment : Fragment(R.layout.fragment_add_post) {
@@ -72,17 +77,6 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             Utils.hideSoftKeyboard(requireActivity())
         }
 
-//        val editText = binding.desc
-//        editText.setOnEditorActionListener { _, actionId, _ ->
-//            if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                editText.clearFocus()
-//                val inputMethodManager = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//                inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
-//                true
-//            } else {
-//                false
-//            }
-//        }
         val popupMenu = PopupMenu(requireContext(), binding.AddPostImage)
         popupMenu.menuInflater.inflate(R.menu.add_post_menu, popupMenu.menu)
 
@@ -118,7 +112,9 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
     override fun onDestroy() {
         viewModel.title = binding.title.text.toString()
         viewModel.description = binding.desc.text.toString()
-        viewModel.location = LatLng(binding.latitude.text.toString().toDouble(), binding.longitude.text.toString().toDouble())
+        if(binding.latitude.text.isNotEmpty() && binding.longitude.text.isNotEmpty()){
+            viewModel.location = LatLng(binding.latitude.text.toString().toDouble(), binding.longitude.text.toString().toDouble())
+        }
 
         Utils.hideSoftKeyboard(requireActivity())
         super.onDestroy()
@@ -126,6 +122,8 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setup()
 
         (activity as MainActivity).setSupportActionBar(binding.toolbar)
 
@@ -147,19 +145,30 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             }
         }
 
-        setup()
-
-        binding.AddPostPublishBtn.setOnClickListener { view ->
-//            viewModel.publishPost()
-//            view.findNavController().navigateUp()
-            checkValidPost()
+        binding.AddPostPublishBtn.setOnClickListener {
+            checkAndSavePost()
         }
 
+        viewModel.post.observe(viewLifecycleOwner){
+            if(it == null){
+                Utils.makeSimpleAlert(requireContext(), "ERROR : Can´t not add the post")
+            }else{
+                clearFields()
+            }
+        }
 
     }
 
-    private fun checkValidPost() {
-        if(binding.title.text.toString().isEmpty() && binding.desc.text.toString().isEmpty()){
+    private fun clearFields() {
+        binding.AddPostImage.setImageDrawable(null)
+        binding.title.setText("")
+        binding.desc.setText("")
+        binding.longitude.setText("0.0")
+        binding.latitude.setText("0.0")
+    }
+
+    private fun checkAndSavePost() {
+        if(binding.title.text.toString().isEmpty()){
             Utils.makeSimpleAlert(requireContext(), "Please fill all the fields")
             return
         }
@@ -181,7 +190,18 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             return
         }
 
-        viewModel.publishPost()
+        val post = Post().apply {
+            owner_id = app.currentUser!!.id
+            title = binding.title.text.toString()
+            description = binding.desc.text.toString()
+            image = Utils.uriToByteArray(requireContext(), viewModel.image!!)
+            latitude = binding.latitude.text.toString().toDouble()
+            latitude = binding.latitude.text.toString().toDouble()
+            likes = realmListOf()
+        }
+
+        viewModel.publishPost(post)
+
     }
 
 
@@ -192,6 +212,8 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
 
     private fun setup(){
+
+
         binding.title.setText(viewModel.title)
         binding.desc.setText(viewModel.description)
         binding.latitude.setText(viewModel.location.latitude.toString())
