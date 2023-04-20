@@ -27,6 +27,7 @@ import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,9 @@ import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.AddPostViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import io.realm.kotlin.ext.realmListOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class AddPostFragment : Fragment(R.layout.fragment_add_post) {
@@ -149,12 +153,8 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             checkAndSavePost()
         }
 
-        viewModel.post.observe(viewLifecycleOwner){
-            if(it == null){
-                Utils.makeSimpleAlert(requireContext(), "ERROR : Can´t not add the post")
-            }else{
-                clearFields()
-            }
+        binding.AddPostClearAllBtn.setOnClickListener {
+            clearFields()
         }
 
     }
@@ -165,6 +165,8 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         binding.desc.setText("")
         binding.longitude.setText("0.0")
         binding.latitude.setText("0.0")
+
+        viewModel.image = null
     }
 
     private fun checkAndSavePost() {
@@ -200,7 +202,14 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             likes = realmListOf()
         }
 
-        viewModel.publishPost(post)
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = viewModel.publishPost(post)
+            if(result != null){
+                clearFields()
+            }else{
+                Utils.makeSimpleAlert(requireContext(),"ERROR ADDING POST")
+            }
+        }
 
     }
 
@@ -212,7 +221,6 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
 
     private fun setup(){
-
 
         binding.title.setText(viewModel.title)
         binding.desc.setText(viewModel.description)

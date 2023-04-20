@@ -23,19 +23,12 @@ class AddPostViewModel @Inject constructor(): ViewModel() {
     var image : Uri? = null
     var location : LatLng = LatLng(0.0, 0.0)
 
-    private val _post = MutableLiveData<Post?>()
-    val post : LiveData<Post?> = _post
-
-
-    fun publishPost(post : Post) {
-        viewModelScope.launch {
-            try {
-                val newPost = RealmRepository.addPost(post)
-                _post.postValue(newPost)
-            }catch (e: Exception){
-                _post.postValue(null)
-                println(e)
-            }
+    suspend fun publishPost(post : Post) : Post? {
+        return try {
+            val newPost = RealmRepository.addPost(post)
+            newPost
+        }catch (e: Exception){
+            null
         }
     }
 

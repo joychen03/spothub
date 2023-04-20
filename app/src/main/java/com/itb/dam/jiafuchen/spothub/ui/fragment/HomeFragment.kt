@@ -50,6 +50,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.focusableLayout.requestFocus()
+
         if(app.currentUser!=null){
             (requireActivity() as MainActivity).setBottomNavigationVisibility(true)
             viewModel.getPosts()
@@ -61,6 +63,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.navMenuBtn.setOnClickListener {
             (requireActivity() as MainActivity).openDrawer()
         }
+
 
     }
 

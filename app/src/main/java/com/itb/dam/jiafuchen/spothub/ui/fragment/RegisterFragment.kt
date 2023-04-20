@@ -48,7 +48,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.signUp.setOnClickListener {
-            binding.signUp.focusSearch(View.FOCUS_UP).requestFocus()
+
+            binding.confirmPasswd.requestFocus()
             Utils.hideSoftKeyboard(requireActivity())
 
             try {
@@ -70,22 +71,20 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         viewModel.loggedIn.observe(viewLifecycleOwner, Observer { loggedIn ->
             if(loggedIn && app.currentUser != null){
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    val defaultAvatar = Utils.getByteArrayFromDrawable(requireContext(), R.drawable.user_default_avatar)
+                val defaultAvatar = Utils.getByteArrayFromDrawable(requireContext(), R.drawable.user_default_avatar)
 
-                    val user = User().apply {
-                        this.owner_id = app.currentUser!!.id
-                        this.email = app.currentUser?.profileAsBsonDocument()?.get("email")
-                            ?.asString()?.value.toString()
-                        this.username = Utils.getRandomUsername()
-                        this.description = "No description"
-                        this.avatar = defaultAvatar
-                        this.followers = realmListOf()
-                        this.followings = realmListOf()
-                    }
-
-                    viewModel.createAppUser(user)
+                val user = User().apply {
+                    this.owner_id = app.currentUser!!.id
+                    this.email = app.currentUser?.profileAsBsonDocument()?.get("email")
+                        ?.asString()?.value.toString()
+                    this.username = Utils.getRandomUsername()
+                    this.description = "No description"
+                    this.avatar = defaultAvatar
+                    this.followers = realmListOf()
+                    this.followings = realmListOf()
                 }
+
+                viewModel.createAppUser(user)
 
             }else{
                 Utils.makeSimpleAlert(this.requireContext(), "Error al iniciar sesión")

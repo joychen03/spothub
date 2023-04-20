@@ -5,9 +5,7 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.interfaces.IAuthRepository
 import io.realm.kotlin.mongodb.Credentials
 
 object AuthRepository : IAuthRepository {
-    init {
 
-    }
     override suspend fun createAccount(email: String, password: String) {
         app.emailPasswordAuth.registerUser(email, password)
     }

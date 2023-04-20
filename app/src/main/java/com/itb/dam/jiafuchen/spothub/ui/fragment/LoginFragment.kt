@@ -40,7 +40,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         (requireActivity() as MainActivity).setBottomNavigationVisibility(false)
 
         binding.signIn.setOnClickListener {
-            binding.signIn.focusSearch(View.FOCUS_UP).requestFocus()
+
+            binding.passwd.requestFocus()
             Utils.hideSoftKeyboard(requireActivity())
 
             try {

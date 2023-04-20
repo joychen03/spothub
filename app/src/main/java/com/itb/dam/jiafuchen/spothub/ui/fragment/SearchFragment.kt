@@ -51,7 +51,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
                 //remove search view focus
                 Utils.hideSoftKeyboard(requireActivity())
-                binding.searchField.focusSearch(View.FOCUS_DOWN).requestFocus()
+                binding.focusableLayout.requestFocus()
+
+
 
                 val adapter = binding.searchPager.adapter as ViewPagerAdapter
                 when(adapter.fragmengList[position]){
@@ -107,6 +109,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         })
 
 
+    }
+
+    override fun onDestroy() {
+        Utils.hideSoftKeyboard(requireActivity())
+        super.onDestroy()
     }
 
 
