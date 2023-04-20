@@ -111,6 +111,8 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
                 val avatar = binding.navigationView.getHeaderView(0).findViewById<ImageView>(R.id.nav_avatar)
                 avatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
+            }else{
+                Utils.makeSimpleAlert(this,"ERROR SYNC APP USER")
             }
         }
     }

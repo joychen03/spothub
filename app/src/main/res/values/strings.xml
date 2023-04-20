@@ -26,5 +26,6 @@
     <string name="add_post_open_gallery">Open gallery</string>
     <string name="add_post_context_menu_take_photo">Take photo</string>
     <string name="add_post_context_menu_open_gallery">Open gallery</string>
+    <string name="add_post_clear_all">Clear all</string>
 
 </resources>
