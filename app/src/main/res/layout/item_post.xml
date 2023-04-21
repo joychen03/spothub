@@ -11,67 +11,59 @@
         android:layout_margin="10dp"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/PostSubscribeBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:background="@drawable/custom_button"
-                android:text="@string/post_follow_btn"
-                android:drawableRight="@drawable/add_icon"
-                android:drawableTint="@color/white"
-                android:textColor="@color/white"
-                android:textFontWeight="900"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/nav_avatar3"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:id="@+id/PostUserAvatar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/c13"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
                 app:shapeAppearanceOverlay="@style/Circular" />
 
             <LinearLayout
                 android:id="@+id/linearLayout5"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/nav_avatar3"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/PostUsername"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/primary_txt"
                     android:textFontWeight="500"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     tools:text="Alex Huesca" />
 
                 <TextView
                     android:id="@+id/PostFollowers"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/secondary_txt"
                     android:textSize="12sp"
                     tools:text="100.000 followers" />
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatButton
+
+                android:id="@+id/PostSubscribeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/custom_button"
+                android:drawableEnd="@drawable/add_icon"
+                android:drawableTint="@color/white"
+                android:paddingHorizontal="10dp"
+                android:text="@string/post_follow_btn"
+                android:textColor="@color/white"
+                android:textFontWeight="900" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,7 +72,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/AddPostUpdateDatetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -107,7 +99,7 @@
 
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/image_view"
+                android:id="@+id/PostImage"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
