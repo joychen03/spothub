@@ -56,6 +56,8 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
     private val viewModel by activityViewModels<AddPostViewModel>()
     private val args : AddPostFragmentArgs by navArgs()
 
+    //region lifecycle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -77,52 +79,21 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
-        binding.root.setOnClickListener {
-            Utils.hideSoftKeyboard(requireActivity())
-        }
-
-        val popupMenu = PopupMenu(requireContext(), binding.AddPostImage)
-        popupMenu.menuInflater.inflate(R.menu.add_post_menu, popupMenu.menu)
-
-        binding.AddPostImage.setOnClickListener {
-            popupMenu.show()
-        }
-
-
-        popupMenu.setOnMenuItemClickListener {
-            when(it.itemId){
-                R.id.add_post_nav_takePhoto -> {
-                    val direction = AddPostFragmentDirections.actionAddPostFragmentToCameraFragment()
-                    findNavController().navigate(direction)
-                    true
+        viewModel.post.observe(viewLifecycleOwner) { it ->
+            if(it != null){
+                it.getContentIfNotHandled()?.let { _ ->
+                    viewModel.clearPost()
+                    clearFields()
                 }
-                R.id.add_post_nav_openGallery -> {
-                    pickImageFromGallery()
-                    true
-                }
-                else -> false
+            }else{
+                Utils.makeSimpleAlert(requireContext(), "Error al publicar el post")
             }
-        }
 
-
-        binding.mapButton.setOnClickListener {
-            val direction = AddPostFragmentDirections.actionAddPostFragmentToMapLocatingFragment()
-            findNavController().navigate(direction)
         }
 
         return binding.root
     }
 
-    override fun onDestroy() {
-        viewModel.title = binding.title.text.toString()
-        viewModel.description = binding.desc.text.toString()
-        if(binding.latitude.text.isNotEmpty() && binding.longitude.text.isNotEmpty()){
-            viewModel.location = LatLng(binding.latitude.text.toString().toDouble(), binding.longitude.text.toString().toDouble())
-        }
-
-        Utils.hideSoftKeyboard(requireActivity())
-        super.onDestroy()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -157,7 +128,57 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             clearFields()
         }
 
+        binding.root.setOnClickListener {
+            Utils.hideSoftKeyboard(requireActivity())
+        }
+
+        val popupMenu = PopupMenu(requireContext(), binding.AddPostImage)
+        popupMenu.menuInflater.inflate(R.menu.add_post_menu, popupMenu.menu)
+
+        binding.AddPostImage.setOnClickListener {
+            popupMenu.show()
+        }
+
+
+        popupMenu.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.add_post_nav_takePhoto -> {
+                    val direction = AddPostFragmentDirections.actionAddPostFragmentToCameraFragment()
+                    findNavController().navigate(direction)
+                    true
+                }
+                R.id.add_post_nav_openGallery -> {
+                    pickImageFromGallery()
+                    true
+                }
+                else -> false
+            }
+        }
+
+
+        binding.mapButton.setOnClickListener {
+            val direction = AddPostFragmentDirections.actionAddPostFragmentToMapLocatingFragment()
+            findNavController().navigate(direction)
+        }
+
     }
+
+    override fun onStop() {
+        viewModel.title = binding.title.text.toString()
+        viewModel.description = binding.desc.text.toString()
+        if(binding.latitude.text.isNotEmpty() && binding.longitude.text.isNotEmpty()){
+            viewModel.location = LatLng(binding.latitude.text.toString().toDouble(), binding.longitude.text.toString().toDouble())
+        }
+
+        binding.AddPostFocusableLayout.requestFocus()
+        Utils.hideSoftKeyboard(requireActivity())
+
+        super.onStop()
+    }
+
+    //endregion
+
+    //region Functions
 
     private fun clearFields() {
         binding.AddPostImage.setImageDrawable(null)
@@ -232,7 +253,7 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
     }
 
-
+    //endregion
 
 }
 

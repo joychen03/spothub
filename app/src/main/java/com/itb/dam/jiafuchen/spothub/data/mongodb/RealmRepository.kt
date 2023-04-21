@@ -101,8 +101,10 @@ object RealmRepository {
             .asFlow().map { it.list }
     }
 
-    fun getTotalPosts() : Flow<Long> {
-        return realm.query<Post>().count().asFlow()
+    fun gePostsAsFlow(): Flow<List<Post>> {
+        return realm.query<Post>()
+            .sort(Pair("_id", Sort.DESCENDING))
+            .asFlow().map { it.list }
     }
 
     suspend fun addPost(post: Post) : Post? {

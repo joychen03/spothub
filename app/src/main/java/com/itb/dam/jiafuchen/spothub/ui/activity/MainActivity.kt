@@ -1,8 +1,11 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -23,6 +26,9 @@ import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -45,6 +51,8 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         R.id.editPostFragment
     )
 
+    //region Lifecycle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
@@ -60,6 +68,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.nav_home -> {
                     navController.navigate(R.id.toHome)
+                    badgeRemove()
                 }
                 R.id.nav_search -> {
                     navController.navigate(R.id.toSearch)
@@ -115,28 +124,22 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
                 Utils.makeSimpleAlert(this,"ERROR SYNC APP USER")
             }
         }
+
+        sharedViewModel.getTotalPosts().onEach {
+            if(!sharedViewModel.appJustStarted){
+                badgeSet()
+            }else{
+                sharedViewModel.appJustStarted = false
+            }
+
+        }.launchIn(CoroutineScope(Dispatchers.Main))
+
+
     }
 
-    private fun init(){
-        navHostFragment = supportFragmentManager.findFragmentById(R.id.mainFragment) as NavHostFragment
-        navController = navHostFragment.navController
+    //endregion
 
-        binding.bottomNav.background = null
-        binding.bottomNav.menu.getItem(2).isEnabled = false
-
-        sharedViewModel.getCurrentUser()
-    }
-
-
-    fun setBottomNavigationVisibility(visible: Boolean) {
-        binding.bottomAppBar.isVisible = visible
-
-        if(visible){
-            binding.floatingActionButton.show()
-        }else{
-            binding.floatingActionButton.hide()
-        }
-    }
+    //region Callbacks
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
@@ -167,9 +170,45 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         return true
     }
 
+    //endregion
+
+    //region Functions
+
+    private fun init(){
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.mainFragment) as NavHostFragment
+        navController = navHostFragment.navController
+
+        binding.bottomNav.background = null
+        binding.bottomNav.menu.getItem(2).isEnabled = false
+
+        sharedViewModel.getCurrentUser()
+    }
+
+
+    fun setBottomNavigationVisibility(visible: Boolean) {
+        binding.bottomAppBar.isVisible = visible
+
+        if(visible){
+            binding.floatingActionButton.show()
+        }else{
+            binding.floatingActionButton.hide()
+        }
+    }
+
     fun openDrawer(){
         binding.drawerLayout.open()
     }
 
+    private fun badgeSet(){
+        val badge = binding.bottomNav.getOrCreateBadge(R.id.nav_home)
+        badge.isVisible = true
+    }
+
+    private fun badgeRemove(){
+        val badge = binding.bottomNav.getOrCreateBadge(R.id.nav_home)
+        badge.isVisible = false
+    }
+
+    //endregion
 
 }
