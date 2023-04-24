@@ -11,6 +11,8 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.realm.kotlin.notifications.ResultsChange
+import io.realm.kotlin.notifications.UpdatedResults
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -33,11 +35,36 @@ class HomeViewModel @Inject constructor() : ViewModel(){
     init {
         if(app.currentUser != null){
             currentUser = RealmRepository.getMyUser()
+
+            val job = viewModelScope.launch {
+                // create a Flow from that collection, then add a listener to the Flow
+                val flow = RealmRepository.getPostsAsFlowTest()
+                val subscription = flow.collect { changes: ResultsChange<Post> ->
+                    when (changes) {
+                        // UpdatedResults means this change represents an update/insert/delete operation
+                        is UpdatedResults -> {
+                            println("Insertion : ${changes.insertions}")
+                            println("Insertion range : ${changes.insertionRanges}")
+                            println("Change : ${changes.changes}")
+                            println("Change Range : ${changes.changeRanges}")
+                            println("Deleted : ${changes.deletions.size}")
+                            println("Deleted range : ${changes.deletionRanges}")
+                            println("All : ${changes.list}")
+                        }
+                        else -> {
+                            println("IGNORING")
+                            // types other than UpdatedResults are not changes -- ignore them
+                        }
+                    }
+                }
+            }
         }
 
         RealmRepository.getPostsAsFlow().onEach {
             newestPostList = it.toMutableList()
         }.launchIn(viewModelScope)
+
+
     }
 
     fun getPosts(update : Boolean) {
@@ -50,18 +77,6 @@ class HomeViewModel @Inject constructor() : ViewModel(){
     fun postListScrollTo(indexItemRV: Int, topViewRV: Int) {
         scrollPosition = indexItemRV
         scrollOffset = topViewRV
-    }
-
-    suspend fun postLikeClick(postID: ObjectId, checked: Boolean): Post? {
-        return RealmRepository.likePost(currentUser!!._id, postID, checked)
-    }
-
-    suspend fun followClicked(userID : ObjectId) : User? {
-        val userUpdated = RealmRepository.userAddFollower(userID, currentUser!!._id)
-        if(userUpdated != null){
-            RealmRepository.userAddFollowing(currentUser!!._id, userID)
-        }
-        return userUpdated
     }
 
 

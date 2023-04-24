@@ -40,10 +40,6 @@ class UserDetailViewModel @Inject constructor() : ViewModel() {
         userPosts.postValue(postsList)
     }
 
-    suspend fun postLikeClick(postID: ObjectId, checked: Boolean): Post? {
-        return RealmRepository.likePost(currentUser!!._id, postID, checked)
-    }
-
     fun updatePost(position: Int, updatedPost: Post) {
         userPosts.value?.set(position, updatedPost)
         userPosts.postValue(userPosts.value)
@@ -52,22 +48,6 @@ class UserDetailViewModel @Inject constructor() : ViewModel() {
     fun postListScrollTo(indexItemRV: Int, topViewRV: Int) {
         scrollPosition = indexItemRV
         scrollOffset = topViewRV
-    }
-
-    suspend fun unFollowUser(_id: ObjectId) : User? {
-        val updatedUser = RealmRepository.userRemoveFollower(_id, currentUser!!._id)
-        if(updatedUser != null){
-            RealmRepository.userRemoveFollowing(currentUser!!._id, _id)
-        }
-        return updatedUser
-    }
-
-    suspend fun followUser(_id: ObjectId): User? {
-        val updatedUser = RealmRepository.userAddFollower(_id, currentUser!!._id)
-        if(updatedUser != null){
-            RealmRepository.userAddFollowing(currentUser!!._id, _id)
-        }
-        return updatedUser
     }
 
 }

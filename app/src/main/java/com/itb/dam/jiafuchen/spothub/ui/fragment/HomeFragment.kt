@@ -59,6 +59,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         if(findNavController().previousBackStackEntry?.destination?.label == "fragment_home"){
+            println(findNavController().currentBackStackEntry?.destination?.label)
             shouldUpdate = true
         }
 
@@ -115,11 +116,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun onPostLikeClickListener(position : Int, post : Post, checked: Boolean){
         CoroutineScope(Dispatchers.Main).launch {
-            val updatedPost = viewModel.postLikeClick(post._id, checked)
+
+            val updatedPost = if(checked){
+                sharedViewModel.likePost(post._id)
+            }else{
+                sharedViewModel.unlikePost(post._id)
+            }
+
             if(updatedPost == null){
                 Utils.makeSimpleAlert(requireContext(), "Error al actualizar el post")
                 return@launch
             }
+
             viewModel.postList[position] = updatedPost
             rvAdapter.notifyItemChanged(position)
         }
@@ -128,7 +136,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun onPostFollowClickListener(user: User){
         CoroutineScope(Dispatchers.Main).launch {
-            val userUpdated = viewModel.followClicked(user._id)
+            val userUpdated = sharedViewModel.addFollow(user._id)
             val userPosition = viewModel.userList.indexOfFirst { it._id == user._id }
 
             if (userUpdated == null || userPosition == -1 ) {

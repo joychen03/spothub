@@ -12,6 +12,7 @@ import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.subscriptions
 
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
+import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.query.Sort
 import io.realm.kotlin.types.RealmList
 import kotlinx.coroutines.CoroutineScope
@@ -101,6 +102,10 @@ object RealmRepository {
             .find()
     }
 
+    fun getPostsAsFlowTest() : Flow<ResultsChange<Post>>{
+        return realm.query(Post::class).asFlow()
+    }
+
     fun getMyPostsAsFlow(): Flow<List<Post>> {
         return realm.query<Post>("owner_id == $0", currentUser.id)
             .sort(Pair("_id", Sort.DESCENDING))
@@ -127,7 +132,7 @@ object RealmRepository {
     suspend fun updatePost(post: Post) : Post? {
         return try {
             realm.write {
-                val postToUpdate = realm.query<Post>("_id == $0", post._id).find().firstOrNull()
+                val postToUpdate = this.query<Post>("_id == $0", post._id).find().firstOrNull()
                 postToUpdate?.let {
                     it.title = post.title
                     it.description = post.description
@@ -147,7 +152,7 @@ object RealmRepository {
     suspend fun deletePost(post: Post) : Boolean{
         return try {
             realm.write {
-                val postToDelete = realm.query<Post>("_id == $0", post._id).find().firstOrNull()
+                val postToDelete = this.query<Post>("_id == $0", post._id).find().firstOrNull()
                 postToDelete?.let {
                     delete(it)
                 }
@@ -172,18 +177,33 @@ object RealmRepository {
         return realm.query<User>().find()
     }
 
-    suspend fun likePost(currentUserID : ObjectId, postID : ObjectId, like : Boolean) : Post?{
+    suspend fun likePost(userID : ObjectId, postID : ObjectId) : Post?{
         return try {
             realm.write {
                  val postToUpdate = this.query<Post>("_id == $0", postID).first().find()
                  println(postToUpdate?._id)
                  postToUpdate?.let {
-                    if (like) {
-                        it.likes.add(currentUserID)
-                    } else{
-                        it.likes.remove(currentUserID)
+                    if(!it.likes.contains(userID)){
+                        it.likes.add(userID)
                     }
                  }
+                postToUpdate
+            }
+
+        }catch (e: Exception){
+            Log.e("Realm", "Error liking post: ${e.message}")
+            null
+        }
+    }
+
+    suspend fun unLikePost(userID : ObjectId, postID : ObjectId) : Post?{
+        return try {
+            realm.write {
+                val postToUpdate = this.query<Post>("_id == $0", postID).first().find()
+                println(postToUpdate?._id)
+                postToUpdate?.let {
+                    it.likes.remove(userID)
+                }
                 postToUpdate
             }
 

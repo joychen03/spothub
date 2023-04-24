@@ -28,6 +28,7 @@ import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.OwnPostListAdapter
 import com.itb.dam.jiafuchen.spothub.ui.adapter.PostListAdapter
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.HomeViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.UserDetailViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import io.realm.kotlin.internal.platform.fileExists
@@ -46,6 +47,7 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
 
     private val viewModel : UserDetailViewModel by viewModels()
     private val homeViewModel : HomeViewModel by activityViewModels()
+    private val sharedViewModel : SharedViewModel by activityViewModels()
     private val args : UserDetailFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,7 +122,7 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
         binding.UserDetailUnfollowBtn.setOnClickListener {
 
             CoroutineScope(Dispatchers.Main).launch {
-                val user = viewModel.unFollowUser(args.user._id)
+                val user = sharedViewModel.removeFollower(args.user._id)
 
                 homeViewModel.userList.indexOfFirst { it._id == user?._id }.let { index ->
                     if (index != -1) {
@@ -135,7 +137,7 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
 
         binding.UserDetailFollowBtn.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                val user = viewModel.followUser(args.user._id)
+                val user = sharedViewModel.addFollow(args.user._id)
 
                 homeViewModel.userList.indexOfFirst { it._id == user?._id }.let { index ->
                     if (index != -1) {
@@ -162,7 +164,7 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
         )
         rv.adapter = rvAdapter
 
-        scrollToPosition(viewModel.scrollPosition, viewModel.scrollOffset)
+        //scrollToPosition(viewModel.scrollPosition, viewModel.scrollOffset)
 
     }
 
@@ -171,9 +173,14 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
         findNavController().navigate(action)
     }
 
-    private fun onPostLikeClickListener(position : Int, post : Post, isLiked : Boolean){
+    private fun onPostLikeClickListener(position : Int, post : Post, checked : Boolean){
         CoroutineScope(Dispatchers.Main).launch {
-            val updatedPost = viewModel.postLikeClick(post._id, isLiked)
+
+            val updatedPost = if(checked){
+                sharedViewModel.likePost(post._id)
+            }else{
+                sharedViewModel.unlikePost(post._id)
+            }
 
             if(updatedPost == null){
                 Utils.makeSimpleAlert(requireContext(), "Error al actualizar el post")

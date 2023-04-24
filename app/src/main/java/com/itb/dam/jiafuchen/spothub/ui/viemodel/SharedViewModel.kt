@@ -15,6 +15,7 @@ import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.SingleQueryChange
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,6 +54,34 @@ class SharedViewModel @Inject constructor(
 
     fun removeCurrentUser(){
         _currentUser.postValue(null)
+    }
+
+    suspend fun likePost(postID: ObjectId): Post? {
+        if(currentUser.value == null) return null
+        return RealmRepository.likePost(currentUser.value!!._id, postID)
+    }
+
+    suspend fun unlikePost(postID: ObjectId): Post? {
+        if(currentUser.value == null) return null
+        return RealmRepository.unLikePost(currentUser.value!!._id, postID)
+    }
+
+    suspend fun addFollow(userID : ObjectId) : User? {
+        if(currentUser.value == null) return null
+        val userUpdated = RealmRepository.userAddFollower(userID, currentUser.value!!._id)
+        if(userUpdated != null){
+            RealmRepository.userAddFollowing(currentUser.value!!._id, userID)
+        }
+        return userUpdated
+    }
+
+    suspend fun removeFollower(userID: ObjectId) : User? {
+        if(currentUser.value == null) return null
+        val updatedUser = RealmRepository.userRemoveFollower(userID, currentUser.value!!._id)
+        if(updatedUser != null){
+            RealmRepository.userRemoveFollowing(currentUser.value!!._id, userID)
+        }
+        return updatedUser
     }
 
 

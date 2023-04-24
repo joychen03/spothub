@@ -9,18 +9,20 @@ import android.view.ViewGroup
 import android.widget.SearchView
 
 import androidx.activity.addCallback
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchBinding
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.SearchViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
     lateinit var binding : FragmentSearchBinding
-
+    private val viewModel : SearchViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this){
@@ -54,16 +56,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 binding.focusableLayout.requestFocus()
 
 
-
                 val adapter = binding.searchPager.adapter as ViewPagerAdapter
                 when(adapter.fragmengList[position]){
+                    /*
                     is SearchPostsFragment -> {
                         (adapter.fragmengList[position] as SearchPostsFragment).getPostsByQuery(query.toString())
                     }
                     is SearchUsersFragment -> {
                         (adapter.fragmengList[position] as SearchUsersFragment).getUsersByQuery(query.toString())
                     }
-
+*/
                 }
 
                 return true
