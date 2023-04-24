@@ -53,7 +53,8 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         R.id.settingFragment,
         R.id.postDetailFragment,
         R.id.profileEditFragment,
-        R.id.editPostFragment
+        R.id.editPostFragment,
+        R.id.userDetailFragment,
     )
 
     //region Lifecycle
