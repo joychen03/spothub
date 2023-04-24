@@ -6,15 +6,12 @@ import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import io.realm.kotlin.mongodb.User as RealmUser
 import io.realm.kotlin.Realm
+import io.realm.kotlin.ext.asFlow
 import io.realm.kotlin.ext.query
-import io.realm.kotlin.log.LogLevel
+
 import io.realm.kotlin.mongodb.subscriptions
-import io.realm.kotlin.mongodb.sync.DiscardUnsyncedChangesStrategy
-import io.realm.kotlin.mongodb.sync.SyncClientResetStrategy
 
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
-import io.realm.kotlin.notifications.ResultsChange
-import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.Sort
 import io.realm.kotlin.types.RealmList
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
+
 import java.util.*
 
 object RealmRepository {
@@ -67,6 +65,14 @@ object RealmRepository {
         return realm.query<User>("owner_id == $0", currentUser.id).find().firstOrNull()
     }
 
+    fun getUserById(id : ObjectId) : User? {
+        return realm.query<User>("_id == $0", id).find().firstOrNull()
+    }
+
+    fun getMyUserAsFlow() : Flow<User?> {
+        return realm.query<User>("owner_id == $0", currentUser.id).first().asFlow().map { it.obj }
+    }
+
     suspend fun updateUser(user: User) {
         try {
             realm.write {
@@ -89,7 +95,7 @@ object RealmRepository {
         return realm.query<User>("username contains $0", keyword).find()
     }
 
-    fun getPosts(limit: Int): List<Post> {
+    fun getPosts(): List<Post> {
         return realm.query<Post>()
             .sort(Pair("_id", Sort.DESCENDING))
             .find()
@@ -101,7 +107,7 @@ object RealmRepository {
             .asFlow().map { it.list }
     }
 
-    fun gePostsAsFlow(): Flow<List<Post>> {
+    fun getPostsAsFlow(): Flow<List<Post>> {
         return realm.query<Post>()
             .sort(Pair("_id", Sort.DESCENDING))
             .asFlow().map { it.list }
@@ -162,6 +168,102 @@ object RealmRepository {
         return realm.query<Post>("title contains $0 or description ", keyword).find()
     }
 
+    fun getAllUsers(): List<User> {
+        return realm.query<User>().find()
+    }
+
+    suspend fun likePost(currentUserID : ObjectId, postID : ObjectId, like : Boolean) : Post?{
+        return try {
+            realm.write {
+                 val postToUpdate = this.query<Post>("_id == $0", postID).first().find()
+                 println(postToUpdate?._id)
+                 postToUpdate?.let {
+                    if (like) {
+                        it.likes.add(currentUserID)
+                    } else{
+                        it.likes.remove(currentUserID)
+                    }
+                 }
+                postToUpdate
+            }
+
+        }catch (e: Exception){
+            Log.e("Realm", "Error liking post: ${e.message}")
+            null
+        }
+    }
+
+    suspend fun userAddFollower(userID : ObjectId, followerID: ObjectId) : User? {
+        return try {
+            realm.write {
+                val userToUpdate = this.query<User>("_id == $0", userID).first().find()
+                userToUpdate?.let {
+                    if(!it.followers.contains(followerID)){
+                        it.followers.add(followerID)
+                    }
+                }
+                userToUpdate
+            }
+        }catch (e: Exception){
+            Log.e("Realm", "Error adding follower user: ${e.message}")
+            null
+        }
+
+    }
+
+    suspend fun userAddFollowing(userID : ObjectId, followingID : ObjectId) : User?{
+        return try {
+            realm.write {
+                val userToUpdate = this.query<User>("_id == $0", userID).first().find()
+                userToUpdate?.let {
+                    if(!it.followings.contains(followingID)){
+                        it.followings.add(followingID)
+                    }
+                }
+                userToUpdate
+            }
+        }catch (e: Exception){
+            Log.e("Realm", "Error adding following user: ${e.message}")
+            null
+        }
+    }
+
+    suspend fun userRemoveFollower(userID : ObjectId, followerID: ObjectId) : User? {
+        return try {
+            realm.write {
+                val userToUpdate = this.query<User>("_id == $0", userID).first().find()
+                userToUpdate?.let {
+                    it.followers.remove(followerID)
+                }
+                userToUpdate
+            }
+        }catch (e: Exception){
+            Log.e("Realm", "Error adding follower user: ${e.message}")
+            null
+        }
+
+    }
+
+    suspend fun userRemoveFollowing(userID : ObjectId, followingID : ObjectId) : User?{
+        return try {
+            realm.write {
+                val userToUpdate = this.query<User>("_id == $0", userID).first().find()
+                userToUpdate?.let {
+                    it.followings.remove(followingID)
+                }
+                userToUpdate
+            }
+        }catch (e: Exception){
+            Log.e("Realm", "Error adding following user: ${e.message}")
+            null
+        }
+    }
+
+    fun getUserPosts(ownerID : String): List<Post> {
+        return realm.query<Post>("owner_id == $0", ownerID)
+            .sort(Pair("_id", Sort.DESCENDING))
+            .find()
+    }
 
 
 }

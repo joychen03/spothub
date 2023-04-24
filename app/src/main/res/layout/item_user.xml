@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:background="@color/lightSection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/UserAvatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/c13"
+            app:shapeAppearanceOverlay="@style/Circular" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_txt"
+                android:textFontWeight="500"
+                android:textSize="18sp"
+                tools:text="Alex Huesca" />
+
+            <TextView
+                android:id="@+id/Followers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary_txt"
+                android:textSize="12sp"
+                tools:text="100.000 followers" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+
+            android:id="@+id/FollowBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/custom_button"
+            android:drawableEnd="@drawable/add_icon"
+            android:drawableTint="@color/white"
+            android:paddingHorizontal="10dp"
+            android:text="@string/post_follow_btn"
+            android:textColor="@color/white"
+            android:textFontWeight="900"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/FollowingTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            android:text="@string/item_post_following"
+            android:textColor="@color/primary_btn"
+            android:textFontWeight="800"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

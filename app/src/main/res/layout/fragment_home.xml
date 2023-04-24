@@ -70,9 +70,11 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/HomeSwipeRefresh"
             android:layout_width="match_parent"
+            app:swipeRefreshLayoutProgressSpinnerBackgroundColor="@color/background"
             android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/HomePostsRV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

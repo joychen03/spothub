@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -24,8 +25,12 @@ import com.itb.dam.jiafuchen.spothub.ui.fragment.*
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
+import io.realm.kotlin.notifications.DeletedObject
+import io.realm.kotlin.notifications.InitialObject
+import io.realm.kotlin.notifications.UpdatedObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -104,36 +109,39 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
         }
 
-        sharedViewModel.currentUser.observe(this) { user ->
-            if(user != null) {
-                val name = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_nickname)
-                name.text = user.username
+        sharedViewModel.currentUser.observe(this){
+            if(it != null){
+                sharedViewModel.getCurrentUserAsFlow().onEach { user ->
+                    if(user != null) {
+                        val name = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_nickname)
+                        name.text = user.username
 
-                val email = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_email)
-                email.text = user.email
+                        val email = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_email)
+                        email.text = user.email
 
-                val followers = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_followers)
-                followers.text = user.followers.count().toString()
+                        val followers = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_followers)
+                        followers.text = user.followers.count().toString()
 
-                val following = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_following)
-                following.text = user.followings.count().toString()
+                        val following = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_following)
+                        following.text = user.followings.count().toString()
 
-                val avatar = binding.navigationView.getHeaderView(0).findViewById<ImageView>(R.id.nav_avatar)
-                avatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
-            }else{
-                Utils.makeSimpleAlert(this,"ERROR SYNC APP USER")
+                        val avatar = binding.navigationView.getHeaderView(0).findViewById<ImageView>(R.id.nav_avatar)
+                        avatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
+                    }
+                }.launchIn(CoroutineScope(Dispatchers.Main))
+
+                sharedViewModel.getTotalPosts().onEach {
+                    if(!sharedViewModel.appJustStarted){
+                        if(it.isNotEmpty() && sharedViewModel.lastTotalPostCount != it.count()) {
+                            badgeSet()
+                        }
+                    }else{
+                        sharedViewModel.lastTotalPostCount = it.count()
+                        sharedViewModel.appJustStarted = false
+                    }
+                }.launchIn(CoroutineScope(Dispatchers.Main))
             }
         }
-
-        sharedViewModel.getTotalPosts().onEach {
-            if(!sharedViewModel.appJustStarted){
-                badgeSet()
-            }else{
-                sharedViewModel.appJustStarted = false
-            }
-
-        }.launchIn(CoroutineScope(Dispatchers.Main))
-
 
     }
 
@@ -157,6 +165,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
                         app.currentUser?.logOut()
                         app.currentUser?.remove()
                     }.onSuccess {
+                        sharedViewModel.removeCurrentUser()
                         val currentFragment = navHostFragment.childFragmentManager.fragments[0]
                         if(currentFragment !is LoginFragment){
                             navController.navigate(R.id.toLogin)
@@ -209,6 +218,13 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         badge.isVisible = false
     }
 
+    fun homeNavRefreshAnimationStart(){
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.bottomNav.menu.getItem(0).icon = getDrawable(R.drawable.refresh_icon)
+            delay(1000)
+            binding.bottomNav.menu.getItem(0).icon = getDrawable(R.drawable.nav_home_icon)
+        }
+    }
     //endregion
 
 }

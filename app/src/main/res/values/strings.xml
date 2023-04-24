@@ -28,5 +28,7 @@
     <string name="add_post_context_menu_open_gallery">Open gallery</string>
     <string name="add_post_clear_all">Clear all</string>
     <string name="post_follow_btn">FOLLOW</string>
+    <string name="item_post_following">Following</string>
+    <string name="user_detail_unfollow">Unfollow</string>
 
 </resources>

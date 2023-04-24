@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"
@@ -84,6 +87,9 @@
         <action
             android:id="@+id/action_searchFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -153,7 +159,11 @@
         android:id="@+id/postDetailFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.PostDetailFragment"
         android:label="fragment_post_detail"
-        tools:layout="@layout/fragment_post_detail" />
+        tools:layout="@layout/fragment_post_detail" >
+        <action
+            android:id="@+id/action_postDetailFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mapLocatingFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.MapLocatingFragment"
@@ -179,5 +189,17 @@
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileEditFragment"
         android:label="fragment_profile_edit"
         tools:layout="@layout/fragment_profile_edit" />
+    <fragment
+        android:id="@+id/userDetailFragment"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.UserDetailFragment"
+        android:label="fragment_user_detail"
+        tools:layout="@layout/fragment_user_detail" >
+        <action
+            android:id="@+id/action_userDetailFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.User" />
+    </fragment>
 
 </navigation>

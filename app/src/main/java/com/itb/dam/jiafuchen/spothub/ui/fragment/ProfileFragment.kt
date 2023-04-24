@@ -25,8 +25,11 @@ import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.ProfileViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.util.Locale.Category
@@ -79,14 +82,20 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             findNavController().navigate(directions)
         }
 
-        sharedViewModel.currentUser.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                binding.ProfileUserName.text = user.username
-                binding.ProfileEmail.text = user.email
-                binding.ProfileAvatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
-                binding.ProfileDescription.text = user.description
-                binding.ProfileFollowers.text = user.followers.count().toString()
-                binding.ProfileFollowings.text = user.followings.count().toString()
+        sharedViewModel.currentUser.observe(viewLifecycleOwner) {
+            if (it != null) {
+
+                sharedViewModel.getCurrentUserAsFlow().onEach { user ->
+                    if(user != null) {
+                        binding.ProfileUserName.text = user.username
+                        binding.ProfileEmail.text = user.email
+                        binding.ProfileAvatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
+                        binding.ProfileDescription.text = user.description
+                        binding.ProfileFollowers.text = user.followers.count().toString()
+                        binding.ProfileFollowings.text = user.followings.count().toString()
+                    }
+                }.launchIn(CoroutineScope(Dispatchers.Main))
+
             }
         }
 

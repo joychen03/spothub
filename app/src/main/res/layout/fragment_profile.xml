@@ -216,6 +216,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:padding="0dp"
+                android:backgroundTint="@color/background"
                 app:tabBackground="@color/background"
                 app:tabIndicatorAnimationMode="elastic"
                 app:tabIndicatorColor="@color/primary_btn"

@@ -94,7 +94,6 @@ dependencies {
     //Swipe Refresh Layout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
 
-
 }
 
 // Allow references to generated code

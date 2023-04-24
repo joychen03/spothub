@@ -22,81 +22,24 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/PostUserAvatar"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/c13"
-                app:shapeAppearanceOverlay="@style/Circular" />
-
-            <LinearLayout
-                android:id="@+id/linearLayout5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/PostUsername"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary_txt"
-                    android:textFontWeight="500"
-                    android:textSize="18sp"
-                    tools:text="Alex Huesca" />
-
-                <TextView
-                    android:id="@+id/PostFollowers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/secondary_txt"
-                    android:textSize="12sp"
-                    tools:text="100.000 followers" />
-            </LinearLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/PostFollowBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:background="@drawable/custom_button"
-                android:drawableEnd="@drawable/add_icon"
-                android:drawableTint="@color/white"
-                android:paddingHorizontal="10dp"
-                android:text="@string/post_follow_btn"
-                android:textColor="@color/white"
-                android:textFontWeight="900"
-                tools:ignore="TouchTargetSizeCheck" />
-
             <TextView
-                android:visibility="gone"
-                android:id="@+id/PostFollowingTag"
-                android:paddingHorizontal="10dp"
-                android:layout_width="wrap_content"
+                android:id="@+id/OwnPostUpdateDatetime"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/primary_btn"
-                android:textStyle="italic"
-                android:textSize="14sp"
-                android:textFontWeight="800"
-                android:text="@string/item_post_following" />
+                android:layout_weight="1"
+                android:textColor="@color/secondary_txt"
+                tools:text="28/02/23 12:30" />
+
         </LinearLayout>
 
         <TextView
-            android:id="@+id/PostUpdateDatetime"
+            android:id="@+id/OwnPostTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondary_txt"
-            tools:text="28/02/23 12:30" />
-
-        <TextView
-            android:id="@+id/PostTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:textColor="@color/primary_txt"
             android:textFontWeight="900"
             android:textSize="20sp"
+            android:layout_marginBottom="10dp"
             tools:text="Barcelona oleoleole" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -107,7 +50,7 @@
 
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/PostImage"
+                android:id="@+id/OwnPostImage"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -127,7 +70,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/PostSearchLocation"
+                android:id="@+id/OwnPostSearchLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -137,7 +80,7 @@
                 app:tint="@color/blue" />
 
             <CheckBox
-                android:id="@+id/PostLikeBtn"
+                android:id="@+id/OwnPostLikeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/selector_favourite_item"
@@ -147,17 +90,18 @@
                 app:useMaterialThemeColors="false" />
 
             <TextView
-                android:id="@+id/PostLikesCount"
+                android:id="@+id/OwnPostLikesCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="1000"
-                android:textFontWeight="900"
-                android:textSize="18sp"
                 android:layout_marginEnd="5dp"
                 android:textColor="@color/primary_txt"
+                android:textFontWeight="900"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/PostLikeBtn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/OwnPostLikeBtn"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1000" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 

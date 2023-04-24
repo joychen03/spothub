@@ -10,6 +10,9 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.realm.kotlin.notifications.ObjectChange
+import io.realm.kotlin.notifications.ResultsChange
+import io.realm.kotlin.notifications.SingleQueryChange
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,12 +27,14 @@ class SharedViewModel @Inject constructor(
     private val _currentUser = MutableLiveData<User?>()
     val currentUser : LiveData<User?> = _currentUser
 
-    init {
-        getCurrentUser()
-    }
+    var lastTotalPostCount = -1
 
     fun getTotalPosts() : Flow<List<Post>>{
-        return RealmRepository.gePostsAsFlow()
+        return if(app.currentUser != null){
+            RealmRepository.getPostsAsFlow()
+        }else{
+            flowOf(emptyList())
+        }
     }
 
     fun getCurrentUser(){
@@ -42,8 +47,13 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    fun getCurrentUserAsFlow() : Flow<User?>{
+        return RealmRepository.getMyUserAsFlow()
+    }
 
-
+    fun removeCurrentUser(){
+        _currentUser.postValue(null)
+    }
 
 
 }

@@ -77,7 +77,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     this.owner_id = app.currentUser!!.id
                     this.email = app.currentUser?.profileAsBsonDocument()?.get("email")
                         ?.asString()?.value.toString()
-                    this.username = Utils.getRandomUsername()
+                    this.username = "Anonymous"
                     this.description = "No description"
                     this.avatar = defaultAvatar
                     this.followers = realmListOf()
