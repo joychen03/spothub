@@ -73,8 +73,10 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.nav_home -> {
+                    val currentFragment = navHostFragment.childFragmentManager.fragments[0]
+                    sharedViewModel.homeShouldUpdate = currentFragment is HomeFragment
                     navController.navigate(R.id.toHome)
-                    badgeRemove()
+
                 }
                 R.id.nav_search -> {
                     navController.navigate(R.id.toSearch)
@@ -130,18 +132,15 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
                         avatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
                     }
                 }.launchIn(CoroutineScope(Dispatchers.Main))
-
-                sharedViewModel.getTotalPosts().onEach {
-                    if(!sharedViewModel.appJustStarted){
-                        if(it.isNotEmpty() && sharedViewModel.lastTotalPostCount != it.count()) {
-                            badgeSet()
-                        }
-                    }else{
-                        sharedViewModel.lastTotalPostCount = it.count()
-                        sharedViewModel.appJustStarted = false
-                    }
-                }.launchIn(CoroutineScope(Dispatchers.Main))
             }
+        }
+
+        sharedViewModel.newPost.observe(this){
+            badgeSet()
+        }
+
+        sharedViewModel.homeUpdated.observe(this){
+            badgeRemove()
         }
 
     }
@@ -190,8 +189,6 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
         binding.bottomNav.background = null
         binding.bottomNav.menu.getItem(2).isEnabled = false
-
-        sharedViewModel.getCurrentUser()
     }
 
 
@@ -222,7 +219,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
     fun homeNavRefreshAnimationStart(){
         CoroutineScope(Dispatchers.Main).launch {
             binding.bottomNav.menu.getItem(0).icon = getDrawable(R.drawable.refresh_icon)
-            delay(1000)
+            delay(500)
             binding.bottomNav.menu.getItem(0).icon = getDrawable(R.drawable.nav_home_icon)
         }
     }

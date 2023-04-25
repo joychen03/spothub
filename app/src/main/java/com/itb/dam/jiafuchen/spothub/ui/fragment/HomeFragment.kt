@@ -1,5 +1,6 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
+import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,17 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.navigation.NavigationBarItemView
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.app
-import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentHomeBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
@@ -27,18 +24,13 @@ import com.itb.dam.jiafuchen.spothub.ui.viemodel.HomeViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import io.realm.kotlin.ext.realmListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    var shouldUpdate : Boolean = false
     lateinit var binding : FragmentHomeBinding
     private val sharedViewModel : SharedViewModel by activityViewModels()
     private val viewModel : HomeViewModel by activityViewModels()
@@ -47,23 +39,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if(app.currentUser == null){
+            val directions = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+            findNavController().navigate(directions)
+            return
+        }
+        sharedViewModel.getCurrentUser()
+
         requireActivity().onBackPressedDispatcher.addCallback(this){
             val intent = Intent(Intent.ACTION_MAIN)
             intent.addCategory(Intent.CATEGORY_HOME)
             startActivity(intent)
         }
 
-        if(app.currentUser == null){
-            val directions = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
-            findNavController().navigate(directions)
-        }
-
-        if(findNavController().previousBackStackEntry?.destination?.label == "fragment_home"){
-            println(findNavController().currentBackStackEntry?.destination?.label)
-            shouldUpdate = true
-        }
-
-        viewModel.getPosts(shouldUpdate)
+        viewModel.setup(sharedViewModel.homeShouldUpdate)
 
     }
 
@@ -74,7 +64,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        if(shouldUpdate){
+        if(sharedViewModel.homeShouldUpdate){
             (requireActivity() as MainActivity).homeNavRefreshAnimationStart()
         }
 
@@ -107,6 +97,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.postListScrollTo(indexItemRV, topViewRV)
             }
         })
+
+        viewModel.postUpdated.observe(viewLifecycleOwner){
+            rvAdapter.notifyItemChanged(it)
+        }
+
+        viewModel.datasetUpdated.observe(viewLifecycleOwner){
+            rvAdapter.notifyDataSetChanged()
+        }
+
+        viewModel.postAdded.observe(viewLifecycleOwner){
+            sharedViewModel.newPostAdded(it)
+        }
+
+        sharedViewModel.homeShouldUpdate = false
     }
 
     private fun onPostClickListener(post : Post){
@@ -116,7 +120,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun onPostLikeClickListener(position : Int, post : Post, checked: Boolean){
         CoroutineScope(Dispatchers.Main).launch {
-
             val updatedPost = if(checked){
                 sharedViewModel.likePost(post._id)
             }else{
@@ -125,14 +128,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             if(updatedPost == null){
                 Utils.makeSimpleAlert(requireContext(), "Error al actualizar el post")
-                return@launch
             }
 
-            viewModel.postList[position] = updatedPost
-            rvAdapter.notifyItemChanged(position)
         }
 
     }
+
 
     private fun onPostFollowClickListener(user: User){
         CoroutineScope(Dispatchers.Main).launch {
@@ -141,12 +142,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             if (userUpdated == null || userPosition == -1 ) {
                 Utils.makeSimpleAlert(requireContext(), "Error al actualizar el usuario")
-                return@launch
             }
-
-            viewModel.userList[userPosition] = userUpdated
-
-            rvAdapter.notifyDataSetChanged()
 
         }
 
@@ -192,7 +188,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = rvAdapter
 
-        if(!shouldUpdate){
+        if(!sharedViewModel.homeShouldUpdate){
             scrollToPosition(viewModel.scrollPosition, viewModel.scrollOffset)
         }
     }
@@ -202,10 +198,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.HomeSwipeRefresh.setColorSchemeColors(requireActivity().getColor(R.color.primary_btn))
 
         binding.HomeSwipeRefresh.setOnRefreshListener {
-            shouldUpdate = true
-            viewModel.getPosts(shouldUpdate)
+            sharedViewModel.homeShouldUpdate = true
             initPostRecyclerView()
             binding.HomeSwipeRefresh.isRefreshing = false
+            sharedViewModel.homeScreenUpdated()
         }
     }
 

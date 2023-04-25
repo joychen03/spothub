@@ -38,7 +38,6 @@ class PostListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         layout.PostUpdateDatetime.text = Utils.formatTime(post.updateDataTime.epochSeconds * 1000)
         layout.PostTitle.text = post.title
         layout.PostImage.setImageBitmap(Utils.byteArrayToImage(post.image))
-        println(post.likes)
         layout.PostLikesCount.text = post.likes.count().toString()
 
         if(lastOne){
@@ -57,7 +56,6 @@ class PostListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
             }
         }
 
-        println(post.likes.contains(currentUser._id))
         layout.PostLikeBtn.isChecked = post.likes.contains(currentUser._id)
 
         if(owner._id == currentUser._id){

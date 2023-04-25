@@ -11,8 +11,11 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.realm.kotlin.notifications.InitialResults
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,43 +29,86 @@ class HomeViewModel @Inject constructor() : ViewModel(){
     var currentUser : User? = null
     var scrollOffset: Int = 0
     var scrollPosition: Int = 0
+    var firstInit = true
+
+    var postList : MutableList<Post> = mutableListOf()
+    var userList : MutableList<User> = mutableListOf()
+    lateinit var job : Job
 
 
-    lateinit var newestPostList : MutableList<Post>
-    var postList : MutableList<Post> = RealmRepository.getPosts().toMutableList()
-    var userList : MutableList<User> = RealmRepository.getAllUsers().toMutableList()
+    val postAdded : MutableLiveData<Post> by lazy {
+        MutableLiveData<Post>()
+    }
 
-    init {
-        if(app.currentUser != null){
-            currentUser = RealmRepository.getMyUser()
+    val postUpdated : MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
 
-            val job = viewModelScope.launch {
-                // create a Flow from that collection, then add a listener to the Flow
-                val flow = RealmRepository.getPostsAsFlowTest()
-                val subscription = flow.collect { changes: ResultsChange<Post> ->
-                    when (changes) {
-                        // UpdatedResults means this change represents an update/insert/delete operation
-                        is UpdatedResults -> {
-                            println("Insertion : ${changes.insertions}")
-                            println("Insertion range : ${changes.insertionRanges}")
-                            println("Change : ${changes.changes}")
-                            println("Change Range : ${changes.changeRanges}")
-                            println("Deleted : ${changes.deletions.size}")
-                            println("Deleted range : ${changes.deletionRanges}")
-                            println("All : ${changes.list}")
+    val datasetUpdated : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+
+    fun setup(update: Boolean){
+        currentUser = RealmRepository.getMyUser()
+
+        if(currentUser == null){
+            return
+        }
+
+        if(!update && !firstInit){
+           return
+        }
+
+        postList = RealmRepository.getPosts().toMutableList()
+        userList = RealmRepository.getAllUsers().toMutableList()
+        firstInit = false
+
+        job = viewModelScope.launch {
+            RealmRepository.getPostsAsFlowTest().collect { changes: ResultsChange<Post> ->
+                when (changes) {
+                    is UpdatedResults -> {
+                        if(changes.insertions.isNotEmpty()){
+                            postAdded.postValue(changes.list[changes.insertions[0]])
+                        }else if(changes.changes.isNotEmpty()){
+                            for(index in changes.changes) {
+                                val updatedPost = changes.list[index]
+                                val indexToUpdate = postList.indexOfFirst { it._id == updatedPost._id }
+                                if(indexToUpdate != -1){
+                                    postList[indexToUpdate] = updatedPost
+                                    postUpdated.postValue(indexToUpdate)
+                                }
+                            }
                         }
-                        else -> {
-                            println("IGNORING")
-                            // types other than UpdatedResults are not changes -- ignore them
+                    }
+                    else -> {
+                        println("IGNORING")
+                    }
+                }
+            }
+
+            RealmRepository.getAllUsersAsFlow().collect { changes: ResultsChange<User> ->
+                when (changes) {
+                    is UpdatedResults -> {
+                        if(changes.insertions.isNotEmpty()){
+                            datasetUpdated.postValue(true)
+                        }else if(changes.changes.isNotEmpty()){
+                            for(index in changes.changes) {
+                                val updatedUser = changes.list[index]
+                                val indexToUpdate = userList.indexOfFirst { it._id == updatedUser._id }
+                                if(indexToUpdate != -1){
+                                    userList[indexToUpdate] = updatedUser
+                                    datasetUpdated.postValue(true)
+                                }
+                            }
                         }
+                    }
+                    else -> {
+                        println("IGNORING")
                     }
                 }
             }
         }
-
-        RealmRepository.getPostsAsFlow().onEach {
-            newestPostList = it.toMutableList()
-        }.launchIn(viewModelScope)
 
 
     }

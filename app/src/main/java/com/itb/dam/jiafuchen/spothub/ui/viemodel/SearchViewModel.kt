@@ -18,18 +18,38 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(): ViewModel() {
     var searchText : String = ""
-
-    val posts : MutableLiveData<List<Post>> by lazy {
-        MutableLiveData<List<Post>>()
-    }
-    val users : MutableLiveData<List<User>> by lazy {
-        MutableLiveData<List<User>>()
-    }
-
     var currentUser : User? = null
 
-    init {
-        currentUser = RealmRepository.getMyUser()
+    val postUpdated : MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
+    val userUpdated : MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
+    var posts = mutableListOf<Post>()
+    var users = mutableListOf<User>()
+
+
+    fun setup(){
+        if(app.currentUser != null){
+            currentUser = RealmRepository.getMyUser()
+        }
+    }
+
+    fun postFragmentSetup(){
+        val result = RealmRepository.getPostsByKeyword(searchText)
+        posts = result.toMutableList()
+    }
+
+    fun userFragmentSetup(){
+        val result = RealmRepository.getUsersByKeyword(searchText)
+        users = result.toMutableList()
+    }
+
+    fun getAllUsers(): List<User> {
+        return RealmRepository.getAllUsers()
     }
 
     var postRvScrollOffset: Int = 0
@@ -38,14 +58,16 @@ class SearchViewModel @Inject constructor(): ViewModel() {
     var userRvScrollOffset: Int = 0
     var userRvScrollPosition: Int = 0
 
-    fun getPostsByKeyword(keyword : String){
-        val result = RealmRepository.getPostsByKeyword(keyword)
-        posts.postValue(result)
-    }
+//    fun getPostsByKeyword(keyword : String){
+//        val result = RealmRepository.getPostsByKeyword(keyword)
+//        posts.postValue(result)
+//    }
+//
+//    fun getUsersByKeyword(keyword : String){
+//        val result = RealmRepository.getUsersByKeyword(keyword)
+//        users.postValue(result)
+//    }
 
-    fun getUsersByKeyword(keyword : String){
-        val result = RealmRepository.getUsersByKeyword(keyword)
-        users.postValue(result)
-    }
+
     
 }

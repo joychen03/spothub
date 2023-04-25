@@ -21,6 +21,7 @@ import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.PostListAdapter
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.HomeViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SearchViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,13 +32,14 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
 
     lateinit var binding : FragmentSearchPostsBinding
     private val viewModel: SearchViewModel by activityViewModels()
-    private val homeViewModel : HomeViewModel by activityViewModels()
+    private val sharedViewModel : SharedViewModel by activityViewModels()
 
     lateinit var rv : RecyclerView
     lateinit var rvAdapter : PostListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.postFragmentSetup()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,9 +54,7 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
 
         rv = binding.searchPostsRecyclerView
 
-        viewModel.posts.observe(viewLifecycleOwner){
-            initRecyclerView()
-        }
+        initRecyclerView()
     }
 
     override fun onResume() {
@@ -63,11 +63,44 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
     }
 
     fun initRecyclerView(){
+        rvAdapter = PostListAdapter(
+            viewModel.currentUser!!,
+            viewModel.posts,
+            viewModel.getAllUsers(),
+            ::onPostClickListener,
+            ::onFollowClickListener,
+            ::onPostLikeListener,
+            ::onPostSearchLocationClickListener,
+            ::onPostOwnerClickListener,
+        )
 
+        rv.adapter = rvAdapter
     }
+
+    private fun onFollowClickListener(user : User){
+        CoroutineScope(Dispatchers.Main).launch {
+            sharedViewModel.addFollow(user._id)
+        }
+    }
+
+    private fun onPostLikeListener(position : Int, post : Post, like : Boolean){
+        CoroutineScope(Dispatchers.Main).launch {
+            if(like){
+                sharedViewModel.likePost(post._id)
+            }else{
+                sharedViewModel.unlikePost(post._id)
+            }
+        }
+    }
+
 
     private fun onPostClickListener(post : Post){
         val directions = HomeFragmentDirections.actionHomeFragmentToPostDetailFragment()
+        findNavController().navigate(directions)
+    }
+
+    private fun onUserClickListener(user : User){
+        val directions = HomeFragmentDirections.actionHomeFragmentToUserDetailFragment(user)
         findNavController().navigate(directions)
     }
 

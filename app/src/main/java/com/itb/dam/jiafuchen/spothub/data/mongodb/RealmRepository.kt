@@ -106,6 +106,10 @@ object RealmRepository {
         return realm.query(Post::class).asFlow()
     }
 
+    fun getAllUsersAsFlow(): Flow<ResultsChange<User>> {
+        return realm.query(User::class).asFlow()
+    }
+
     fun getMyPostsAsFlow(): Flow<List<Post>> {
         return realm.query<Post>("owner_id == $0", currentUser.id)
             .sort(Pair("_id", Sort.DESCENDING))
@@ -181,7 +185,6 @@ object RealmRepository {
         return try {
             realm.write {
                  val postToUpdate = this.query<Post>("_id == $0", postID).first().find()
-                 println(postToUpdate?._id)
                  postToUpdate?.let {
                     if(!it.likes.contains(userID)){
                         it.likes.add(userID)
@@ -200,7 +203,6 @@ object RealmRepository {
         return try {
             realm.write {
                 val postToUpdate = this.query<Post>("_id == $0", postID).first().find()
-                println(postToUpdate?._id)
                 postToUpdate?.let {
                     it.likes.remove(userID)
                 }
@@ -284,6 +286,8 @@ object RealmRepository {
             .sort(Pair("_id", Sort.DESCENDING))
             .find()
     }
+
+
 
 
 }
