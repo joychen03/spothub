@@ -1,14 +1,18 @@
 package com.itb.dam.jiafuchen.spothub.domain.model
 
+import android.os.Parcelable
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.Index
 import io.realm.kotlin.types.annotations.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 import org.mongodb.kbson.ObjectId
 
-class Post() : RealmObject {
+@Parcelize
+class Post() : RealmObject , Parcelable {
+
     @PrimaryKey
     var _id : ObjectId = ObjectId()
 

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.itb.dam.jiafuchen.spothub.R
@@ -34,27 +35,51 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
     private val viewModel: SearchViewModel by activityViewModels()
     private val sharedViewModel : SharedViewModel by activityViewModels()
 
-    lateinit var rv : RecyclerView
-    lateinit var rvAdapter : PostListAdapter
+    private lateinit var rv : RecyclerView
+    private lateinit var rvAdapter : PostListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel.postFragmentSetup()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchPostsBinding.inflate(inflater, container, false)
+        rv = binding.searchPostsRecyclerView
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rv = binding.searchPostsRecyclerView
+        render()
 
-        initRecyclerView()
+        viewModel.postsChanged.observe(viewLifecycleOwner) {
+            rvAdapter.notifyItemChanged(it)
+        }
+
+        viewModel.allUserChanged.observe(viewLifecycleOwner) {
+            println("all user changed")
+            rvAdapter.notifyDataSetChanged()
+        }
+
+        //scroll observer
+        binding.searchPostsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val indexItemRV = (rv.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()!!
+                val v = (rv.layoutManager as? LinearLayoutManager)?.getChildAt(0)
+                val topViewRV = if(v == null) 0 else v.top - (rv.layoutManager as? LinearLayoutManager)?.paddingTop!!
+
+                viewModel.postListScrollTo(indexItemRV, topViewRV)
+            }
+        })
+
+        viewModel.onSearch.observe(viewLifecycleOwner) {
+            render()
+        }
     }
 
     override fun onResume() {
@@ -62,11 +87,13 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
         binding.root.requestLayout()
     }
 
-    fun initRecyclerView(){
+    private fun render() {
+        println(viewModel.posts)
+
         rvAdapter = PostListAdapter(
             viewModel.currentUser!!,
             viewModel.posts,
-            viewModel.getAllUsers(),
+            viewModel.allAppUsers,
             ::onPostClickListener,
             ::onFollowClickListener,
             ::onPostLikeListener,
@@ -74,7 +101,10 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
             ::onPostOwnerClickListener,
         )
 
+        rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = rvAdapter
+
+        scrollToPosition(viewModel.postRvScrollPosition, viewModel.postRvScrollOffset)
     }
 
     private fun onFollowClickListener(user : User){
@@ -93,24 +123,15 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
         }
     }
 
-
     private fun onPostClickListener(post : Post){
-        val directions = HomeFragmentDirections.actionHomeFragmentToPostDetailFragment()
-        findNavController().navigate(directions)
+        viewModel.goToPost(post)
     }
-
-    private fun onUserClickListener(user : User){
-        val directions = HomeFragmentDirections.actionHomeFragmentToUserDetailFragment(user)
-        findNavController().navigate(directions)
-    }
-
 
     private fun onPostOwnerClickListener(user : User){
         if(user._id == viewModel.currentUser?._id){
             (requireActivity() as MainActivity).binding.bottomNav.selectedItemId = R.id.nav_profile
         }else{
-            val directions = HomeFragmentDirections.actionHomeFragmentToUserDetailFragment(user)
-            findNavController().navigate(directions)
+            viewModel.goToUser(user)
         }
     }
 
@@ -123,10 +144,9 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
         startActivity(mapIntent)
 
     }
-
-    fun getPosts(query: String){
-
-
+    private fun scrollToPosition(position : Int, offset : Int = 0){
+        rv.stopScroll()
+        (rv.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(position,offset)
     }
 
 

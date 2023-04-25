@@ -169,7 +169,7 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
     }
 
     private fun onPostClickListener(post : Post){
-        val action = UserDetailFragmentDirections.actionUserDetailFragmentToPostDetailFragment()
+        val action = UserDetailFragmentDirections.actionUserDetailFragmentToPostDetailFragment(post)
         findNavController().navigate(action)
     }
 

@@ -10,6 +10,7 @@ import android.widget.SearchView
 
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.itb.dam.jiafuchen.spothub.R
@@ -30,7 +31,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             intent.addCategory(Intent.CATEGORY_HOME)
             startActivity(intent)
         }
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,13 +39,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         initTabLayout()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //on search view query text change print the query
+        viewModel.setup()
 
         binding.searchField.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -55,18 +56,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 Utils.hideSoftKeyboard(requireActivity())
                 binding.focusableLayout.requestFocus()
 
+                viewModel.search(query.toString())
 
                 val adapter = binding.searchPager.adapter as ViewPagerAdapter
-                when(adapter.fragmengList[position]){
-                    /*
-                    is SearchPostsFragment -> {
-                        (adapter.fragmengList[position] as SearchPostsFragment).getPostsByQuery(query.toString())
-                    }
-                    is SearchUsersFragment -> {
-                        (adapter.fragmengList[position] as SearchUsersFragment).getUsersByQuery(query.toString())
-                    }
-*/
-                }
 
                 return true
             }
@@ -83,6 +75,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 binding.searchTabs.selectTab(binding.searchTabs.getTabAt(position))
             }
         })
+
+        viewModel.userClick.observe(viewLifecycleOwner) {
+            if (it != null) {
+                val action = SearchFragmentDirections.actionSearchFragmentToUserDetailFragment(it)
+                findNavController().navigate(action)
+                viewModel.userClick.value = null
+            }
+        }
+
+        viewModel.postClick.observe(viewLifecycleOwner) {
+            if (it != null) {
+                val action = SearchFragmentDirections.actionSearchFragmentToPostDetailFragment(it)
+                findNavController().navigate(action)
+                viewModel.postClick.value = null
+            }
+        }
     }
 
     private fun initTabLayout() {

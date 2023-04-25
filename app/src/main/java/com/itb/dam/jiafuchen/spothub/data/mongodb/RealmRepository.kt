@@ -6,7 +6,6 @@ import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import io.realm.kotlin.mongodb.User as RealmUser
 import io.realm.kotlin.Realm
-import io.realm.kotlin.ext.asFlow
 import io.realm.kotlin.ext.query
 
 import io.realm.kotlin.mongodb.subscriptions
@@ -21,8 +20,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
-
-import java.util.*
 
 object RealmRepository {
     private val currentUser : RealmUser get() = app.currentUser ?: throw IllegalStateException("User must be logged in")
@@ -102,7 +99,7 @@ object RealmRepository {
             .find()
     }
 
-    fun getPostsAsFlowTest() : Flow<ResultsChange<Post>>{
+    fun getPostsAsFlow() : Flow<ResultsChange<Post>>{
         return realm.query(Post::class).asFlow()
     }
 
@@ -116,7 +113,7 @@ object RealmRepository {
             .asFlow().map { it.list }
     }
 
-    fun getPostsAsFlow(): Flow<List<Post>> {
+    fun getPostsAsFlowOLD(): Flow<List<Post>> {
         return realm.query<Post>()
             .sort(Pair("_id", Sort.DESCENDING))
             .asFlow().map { it.list }
@@ -174,7 +171,7 @@ object RealmRepository {
 
 
     fun getPostsByKeyword(keyword: String): List<Post> {
-        return realm.query<Post>("title contains $0 or description ", keyword).find()
+        return realm.query<Post>("title contains $0 or description contains $0", keyword).find()
     }
 
     fun getAllUsers(): List<User> {

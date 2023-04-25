@@ -163,6 +163,9 @@
         <action
             android:id="@+id/action_postDetailFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
+        <argument
+            android:name="post"
+            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.Post" />
     </fragment>
     <fragment
         android:id="@+id/mapLocatingFragment"

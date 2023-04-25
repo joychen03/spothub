@@ -114,7 +114,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onPostClickListener(post : Post){
-        val directions = HomeFragmentDirections.actionHomeFragmentToPostDetailFragment()
+        val directions = HomeFragmentDirections.actionHomeFragmentToPostDetailFragment(post)
         findNavController().navigate(directions)
     }
 

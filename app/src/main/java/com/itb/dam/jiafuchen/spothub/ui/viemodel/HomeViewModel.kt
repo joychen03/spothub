@@ -1,25 +1,16 @@
 package com.itb.dam.jiafuchen.spothub.ui.viemodel
 
-import android.widget.MultiAutoCompleteTextView
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.itb.dam.jiafuchen.spothub.app
-import com.itb.dam.jiafuchen.spothub.data.mongodb.AuthRepository
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.notifications.InitialResults
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.mongodb.kbson.ObjectId
 
 import javax.inject.Inject
 
@@ -33,8 +24,6 @@ class HomeViewModel @Inject constructor() : ViewModel(){
 
     var postList : MutableList<Post> = mutableListOf()
     var userList : MutableList<User> = mutableListOf()
-    lateinit var job : Job
-
 
     val postAdded : MutableLiveData<Post> by lazy {
         MutableLiveData<Post>()
@@ -64,17 +53,18 @@ class HomeViewModel @Inject constructor() : ViewModel(){
         userList = RealmRepository.getAllUsers().toMutableList()
         firstInit = false
 
-        job = viewModelScope.launch {
-            RealmRepository.getPostsAsFlowTest().collect { changes: ResultsChange<Post> ->
+        viewModelScope.launch {
+            RealmRepository.getPostsAsFlow().collect { changes: ResultsChange<Post> ->
                 when (changes) {
                     is UpdatedResults -> {
-                        if(changes.insertions.isNotEmpty()){
+                        if (changes.insertions.isNotEmpty()) {
                             postAdded.postValue(changes.list[changes.insertions[0]])
-                        }else if(changes.changes.isNotEmpty()){
-                            for(index in changes.changes) {
+                        } else if (changes.changes.isNotEmpty()) {
+                            for (index in changes.changes) {
                                 val updatedPost = changes.list[index]
-                                val indexToUpdate = postList.indexOfFirst { it._id == updatedPost._id }
-                                if(indexToUpdate != -1){
+                                val indexToUpdate =
+                                    postList.indexOfFirst { it._id == updatedPost._id }
+                                if (indexToUpdate != -1) {
                                     postList[indexToUpdate] = updatedPost
                                     postUpdated.postValue(indexToUpdate)
                                 }
@@ -86,7 +76,9 @@ class HomeViewModel @Inject constructor() : ViewModel(){
                     }
                 }
             }
+        }
 
+        viewModelScope.launch {
             RealmRepository.getAllUsersAsFlow().collect { changes: ResultsChange<User> ->
                 when (changes) {
                     is UpdatedResults -> {

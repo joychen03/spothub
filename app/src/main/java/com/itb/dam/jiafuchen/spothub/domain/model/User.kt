@@ -18,6 +18,7 @@ class User() : RealmObject, Parcelable {
 
     @Index
     var owner_id : String = ""
+
     var email : String = ""
     var username : String = ""
     var description : String = ""
