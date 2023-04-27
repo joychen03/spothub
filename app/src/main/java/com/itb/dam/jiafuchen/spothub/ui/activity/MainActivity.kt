@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.get
 import androidx.core.view.isVisible
@@ -166,10 +167,8 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
                         app.currentUser?.remove()
                     }.onSuccess {
                         sharedViewModel.removeCurrentUser()
-                        val currentFragment = navHostFragment.childFragmentManager.fragments[0]
-                        if(currentFragment !is LoginFragment){
-                            navController.navigate(R.id.toLogin)
-                        }
+                        finish();
+                        startActivity(intent);
                     }.onFailure {
                         it.message?.let { it1 -> Log.v("ERROR", it1) }
                     }
@@ -218,9 +217,9 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
     fun homeNavRefreshAnimationStart(){
         CoroutineScope(Dispatchers.Main).launch {
-            binding.bottomNav.menu.getItem(0).icon = getDrawable(R.drawable.refresh_icon)
+            binding.bottomNav.menu.getItem(0).icon = AppCompatResources.getDrawable(this@MainActivity, R.drawable.refresh_icon)
             delay(500)
-            binding.bottomNav.menu.getItem(0).icon = getDrawable(R.drawable.nav_home_icon)
+            binding.bottomNav.menu.getItem(0).icon = AppCompatResources.getDrawable(this@MainActivity, R.drawable.nav_home_icon)
         }
     }
     //endregion

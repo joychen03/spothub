@@ -3,6 +3,7 @@ package com.itb.dam.jiafuchen.spothub.ui.viemodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject
@@ -29,20 +31,20 @@ class HomeViewModel @Inject constructor() : ViewModel(){
         MutableLiveData<Post>()
     }
 
-    val postUpdated : MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
+    val postUpdated : MutableLiveData<List<Int>> by lazy {
+        MutableLiveData<List<Int>>()
     }
 
-    val datasetUpdated : MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    init {
+        if(app.currentUser != null){
+            subscribeChanges()
+        }
     }
-
 
     fun setup(update: Boolean){
-        currentUser = RealmRepository.getMyUser()
 
-        if(currentUser == null){
-            return
+        if(app.currentUser != null){
+            currentUser = RealmRepository.getMyUser()
         }
 
         if(!update && !firstInit){
@@ -51,7 +53,11 @@ class HomeViewModel @Inject constructor() : ViewModel(){
 
         postList = RealmRepository.getPosts().toMutableList()
         userList = RealmRepository.getAllUsers().toMutableList()
+
         firstInit = false
+    }
+
+    private fun subscribeChanges() {
 
         viewModelScope.launch {
             RealmRepository.getPostsAsFlow().collect { changes: ResultsChange<Post> ->
@@ -62,17 +68,16 @@ class HomeViewModel @Inject constructor() : ViewModel(){
                         } else if (changes.changes.isNotEmpty()) {
                             for (index in changes.changes) {
                                 val updatedPost = changes.list[index]
-                                val indexToUpdate =
-                                    postList.indexOfFirst { it._id == updatedPost._id }
+                                val indexToUpdate = postList.indexOfFirst { it._id == updatedPost._id }
                                 if (indexToUpdate != -1) {
                                     postList[indexToUpdate] = updatedPost
-                                    postUpdated.postValue(indexToUpdate)
+                                    postUpdated.postValue(listOf(indexToUpdate))
                                 }
                             }
                         }
                     }
                     else -> {
-                        println("IGNORING")
+
                     }
                 }
             }
@@ -83,26 +88,28 @@ class HomeViewModel @Inject constructor() : ViewModel(){
                 when (changes) {
                     is UpdatedResults -> {
                         if(changes.insertions.isNotEmpty()){
-                            datasetUpdated.postValue(true)
+                            for(i in changes.insertions){
+                                userList.add(changes.list[i])
+                            }
                         }else if(changes.changes.isNotEmpty()){
                             for(index in changes.changes) {
                                 val updatedUser = changes.list[index]
                                 val indexToUpdate = userList.indexOfFirst { it._id == updatedUser._id }
                                 if(indexToUpdate != -1){
                                     userList[indexToUpdate] = updatedUser
-                                    datasetUpdated.postValue(true)
+
+                                    val postIndexesToUpdate = postList.filter { it.owner_id == updatedUser.owner_id }.map { postList.indexOf(it) }
+                                    postUpdated.postValue(postIndexesToUpdate)
                                 }
                             }
                         }
                     }
                     else -> {
-                        println("IGNORING")
+
                     }
                 }
             }
         }
-
-
     }
 
     fun getPosts(update : Boolean) {

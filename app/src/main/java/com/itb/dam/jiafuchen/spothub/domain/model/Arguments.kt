@@ -5,4 +5,4 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class AddEditPostArgs(val image: Uri? = null, val location : LatLng? = null): Parcelable
+class AddEditPostArgs(val image: Uri? = null, val location : LatLng? = null, val post : Post? = null): Parcelable

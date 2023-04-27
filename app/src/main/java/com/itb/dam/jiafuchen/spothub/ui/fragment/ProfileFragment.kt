@@ -19,7 +19,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.itb.dam.jiafuchen.spothub.R
+import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileBinding
+import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.ProfileViewModel
@@ -50,7 +52,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             startActivity(intent)
         }
 
-
+        viewModel.setup()
 
     }
     override fun onCreateView(
@@ -65,10 +67,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.searchPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.ProfileSearchPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.searchTabs.selectTab(binding.searchTabs.getTabAt(position))
+                binding.ProfileSearchTabs.selectTab(binding.ProfileSearchTabs.getTabAt(position))
 
             }
         })
@@ -99,6 +101,35 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
 
+        viewModel.postClick.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if(it.owner_id == app.currentUser!!.id){
+                    val args = AddEditPostArgs(post = it)
+                    val directions = ProfileFragmentDirections.actionProfileFragmentToEditPostFragment(args)
+                    findNavController().navigate(directions)
+                    viewModel.postClick.value = null
+                }else{
+                    val directions = ProfileFragmentDirections.actionProfileFragmentToPostDetailFragment(it)
+                    findNavController().navigate(directions)
+                    viewModel.postClick.value = null
+                }
+            }
+        }
+
+        viewModel.userClick.observe(viewLifecycleOwner) {
+            if (it != null) {
+                val directions = ProfileFragmentDirections.actionProfileFragmentToUserDetailFragment(it)
+                findNavController().navigate(directions)
+                viewModel.userClick.value = null
+            }
+        }
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Utils.hideSoftKeyboard(requireActivity())
+        binding.ProfileSearchPager.adapter = null
     }
 
     private fun initTabLayout() {
@@ -108,15 +139,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             ProfileFavouritesFragment()
         )
 
-        binding.searchTabs.addTab(binding.searchTabs.newTab().setText("Posts"))
-        binding.searchTabs.addTab(binding.searchTabs.newTab().setText("Favourites"))
+        binding.ProfileSearchTabs.addTab(binding.ProfileSearchTabs.newTab().setText("Posts"))
+        binding.ProfileSearchTabs.addTab(binding.ProfileSearchTabs.newTab().setText("Favourites"))
 
-        binding.searchPager.adapter = ViewPagerAdapter(fragmentList, requireActivity().supportFragmentManager, lifecycle)
+        binding.ProfileSearchPager.adapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
+        binding.ProfileSearchTabs.isSaveEnabled = false
 
-        binding.searchTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.ProfileSearchTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                binding.searchPager.currentItem = tab.position
-
+                binding.ProfileSearchPager.currentItem = tab.position
+                viewModel.selectedTab = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -126,5 +158,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         })
 
+        binding.ProfileSearchTabs.selectTab(binding.ProfileSearchTabs.getTabAt(viewModel.selectedTab))
     }
+
+
 }

@@ -48,22 +48,23 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         viewModel.setup()
 
+        binding.searchField.setQuery(viewModel.searchText, false)
+
         binding.searchField.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                val position = binding.searchTabs.selectedTabPosition
-
                 //remove search view focus
                 Utils.hideSoftKeyboard(requireActivity())
                 binding.focusableLayout.requestFocus()
 
                 viewModel.search(query.toString())
 
-                val adapter = binding.searchPager.adapter as ViewPagerAdapter
-
-                return true
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if(newText.isNullOrEmpty()){
+                    viewModel.search("")
+                }
                 return true
             }
         })
@@ -95,7 +96,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun initTabLayout() {
 
-        val fragmentList = arrayListOf(
+        val fragmentList = listOf(
             SearchPostsFragment(),
             SearchUsersFragment()
         )
@@ -103,28 +104,34 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.searchTabs.addTab(binding.searchTabs.newTab().setText("Posts"))
         binding.searchTabs.addTab(binding.searchTabs.newTab().setText("Users"))
 
-        binding.searchPager.adapter = ViewPagerAdapter(fragmentList, requireActivity().supportFragmentManager, lifecycle)
+        binding.searchPager.adapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
+        binding.searchPager.isSaveEnabled = false
 
         binding.searchTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.searchPager.currentItem = tab.position
-
+                viewModel.selectedTab = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
+
             }
         })
 
+        binding.searchPager.currentItem = viewModel.selectedTab
+        binding.searchTabs.selectTab(binding.searchTabs.getTabAt(viewModel.selectedTab))
 
     }
 
-    override fun onDestroy() {
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         Utils.hideSoftKeyboard(requireActivity())
-        super.onDestroy()
+        binding.searchPager.adapter = null
     }
-
 
 }

@@ -32,7 +32,7 @@
             android:queryHint="Search for something" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/search_tabs"
+            android:id="@+id/searchTabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
@@ -56,15 +56,18 @@
         android:layout_height="match_parent"
         android:background="@color/darkBackground">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/search_pager"
+                android:id="@+id/searchPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

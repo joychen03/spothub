@@ -2,6 +2,9 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="10dp"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -30,7 +33,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/Username"
+                android:id="@+id/UserUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/primary_txt"
@@ -39,7 +42,7 @@
                 tools:text="Alex Huesca" />
 
             <TextView
-                android:id="@+id/Followers"
+                android:id="@+id/UserFollowers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondary_txt"
@@ -49,7 +52,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
 
-            android:id="@+id/FollowBtn"
+            android:id="@+id/UserFollowBtn"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:background="@drawable/custom_button"
@@ -62,7 +65,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
-            android:id="@+id/FollowingTag"
+            android:id="@+id/UserFollowingTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"

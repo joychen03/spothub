@@ -71,7 +71,7 @@ class SharedViewModel @Inject constructor(
         return RealmRepository.unLikePost(currentUser.value!!._id, postID)
     }
 
-    suspend fun addFollow(userID : ObjectId) : User? {
+    suspend fun addFollower(userID : ObjectId) : User? {
         val userUpdated = RealmRepository.userAddFollower(userID, currentUser.value!!._id)
         if(userUpdated != null){
             RealmRepository.userAddFollowing(currentUser.value!!._id, userID)

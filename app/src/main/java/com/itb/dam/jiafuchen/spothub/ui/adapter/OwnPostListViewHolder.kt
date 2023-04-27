@@ -28,7 +28,6 @@ class OwnPostListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         layout.OwnPostUpdateDatetime.text = Utils.formatTime(post.updateDataTime.epochSeconds * 1000)
         layout.OwnPostTitle.text = post.title
         layout.OwnPostImage.setImageBitmap(Utils.byteArrayToImage(post.image))
-        println(post.likes)
         layout.OwnPostLikesCount.text = post.likes.count().toString()
 
         if(lastOne){

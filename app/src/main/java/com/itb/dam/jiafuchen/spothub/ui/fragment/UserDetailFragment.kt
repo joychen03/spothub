@@ -17,26 +17,17 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentAddPostBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchPostsBinding
-import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchUsersBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentUserDetailBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
-import com.itb.dam.jiafuchen.spothub.domain.model.User
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.OwnPostListAdapter
-import com.itb.dam.jiafuchen.spothub.ui.adapter.PostListAdapter
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.HomeViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.UserDetailViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
-import io.realm.kotlin.internal.platform.fileExists
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.processNextEventInCurrentThread
-import org.mongodb.kbson.ObjectId
 
 
 class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
@@ -54,7 +45,6 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
         super.onCreate(savedInstanceState)
 
         viewModel.getUser(args.user._id)
-        println(homeViewModel.postList)
     }
 
     override fun onCreateView(
@@ -137,7 +127,7 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
 
         binding.UserDetailFollowBtn.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                val user = sharedViewModel.addFollow(args.user._id)
+                val user = sharedViewModel.addFollower(args.user._id)
 
                 homeViewModel.userList.indexOfFirst { it._id == user?._id }.let { index ->
                     if (index != -1) {

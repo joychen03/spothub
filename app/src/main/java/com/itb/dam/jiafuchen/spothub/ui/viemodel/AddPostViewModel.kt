@@ -29,7 +29,7 @@ class AddPostViewModel @Inject constructor(): ViewModel() {
     private val _post = MutableLiveData<Event<Post?>>()
     val post : LiveData<Event<Post?>> = _post
 
-    suspend fun publishPost(post : Post) {
+    fun publishPost(post : Post) {
         viewModelScope.launch {
             try {
                 val newPost = RealmRepository.addPost(post)

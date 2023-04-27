@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="30dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="10dp"
     android:layout_margin="10dp"
     >
@@ -67,6 +67,7 @@
                 android:text="@string/post_follow_btn"
                 android:textColor="@color/white"
                 android:textFontWeight="900"
+                android:focusable="false"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
@@ -138,6 +139,7 @@
 
             <CheckBox
                 android:id="@+id/PostLikeBtn"
+                android:focusable="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/selector_favourite_item"

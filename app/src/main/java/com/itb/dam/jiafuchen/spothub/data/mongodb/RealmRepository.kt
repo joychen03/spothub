@@ -90,7 +90,7 @@ object RealmRepository {
     }
 
     fun getUsersByKeyword(keyword: String): List<User> {
-        return realm.query<User>("username contains $0", keyword).find()
+        return realm.query<User>("username CONTAINS[c] $0", keyword).find()
     }
 
     fun getPosts(): List<Post> {
@@ -171,7 +171,9 @@ object RealmRepository {
 
 
     fun getPostsByKeyword(keyword: String): List<Post> {
-        return realm.query<Post>("title contains $0 or description contains $0", keyword).find()
+        return realm.query<Post>("title CONTAINS[c] $0", keyword)
+            .sort(Pair("_id", Sort.DESCENDING))
+            .find()
     }
 
     fun getAllUsers(): List<User> {
@@ -284,7 +286,17 @@ object RealmRepository {
             .find()
     }
 
+    fun getMyPosts(userID : String): List<Post> {
+        return realm.query<Post>("owner_id == $0", userID)
+            .sort(Pair("_id", Sort.DESCENDING))
+            .find()
+    }
 
+    fun getMyFavPosts(userID : ObjectId): List<Post> {
+        return realm.query<Post>("$0 in likes", userID)
+            .sort(Pair("_id", Sort.DESCENDING))
+            .find()
+    }
 
 
 }

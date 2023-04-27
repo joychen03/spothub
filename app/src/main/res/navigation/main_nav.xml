@@ -53,6 +53,9 @@
             <argument
                 android:name="location"
                 android:defaultValue="@null" />
+            <argument
+                android:name="post"
+                android:defaultValue="@null" />
         </action>
     </fragment>
     <fragment
@@ -66,6 +69,12 @@
         <action
             android:id="@+id/action_profileFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -177,6 +186,9 @@
             app:destination="@id/editPostFragment" >
             <argument
                 android:name="image"
+                android:defaultValue="@null" />
+            <argument
+                android:name="post"
                 android:defaultValue="@null" />
         </action>
         <action

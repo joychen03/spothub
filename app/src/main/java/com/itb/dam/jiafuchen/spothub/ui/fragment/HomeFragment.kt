@@ -1,6 +1,5 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
-import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -95,15 +94,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 val topViewRV = if(v == null) 0 else v.top - (rv.layoutManager as? LinearLayoutManager)?.paddingTop!!
 
                 viewModel.postListScrollTo(indexItemRV, topViewRV)
+
             }
         })
 
-        viewModel.postUpdated.observe(viewLifecycleOwner){
-            rvAdapter.notifyItemChanged(it)
-        }
-
-        viewModel.datasetUpdated.observe(viewLifecycleOwner){
-            rvAdapter.notifyDataSetChanged()
+        viewModel.postUpdated.observe(viewLifecycleOwner){ positions ->
+            if(positions.isNotEmpty()){
+                positions.forEach {
+                    rvAdapter.notifyItemChanged(it)
+                }
+                viewModel.postUpdated.postValue(listOf())
+            }
         }
 
         viewModel.postAdded.observe(viewLifecycleOwner){
@@ -137,7 +138,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun onPostFollowClickListener(user: User){
         CoroutineScope(Dispatchers.Main).launch {
-            val userUpdated = sharedViewModel.addFollow(user._id)
+            val userUpdated = sharedViewModel.addFollower(user._id)
             val userPosition = viewModel.userList.indexOfFirst { it._id == user._id }
 
             if (userUpdated == null || userPosition == -1 ) {
