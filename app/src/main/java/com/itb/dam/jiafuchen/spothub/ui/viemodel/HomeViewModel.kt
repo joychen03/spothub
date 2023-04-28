@@ -27,8 +27,8 @@ class HomeViewModel @Inject constructor() : ViewModel(){
     var postList : MutableList<Post> = mutableListOf()
     var userList : MutableList<User> = mutableListOf()
 
-    val postAdded : MutableLiveData<Post> by lazy {
-        MutableLiveData<Post>()
+    val postAdded : MutableLiveData<Post?> by lazy {
+        MutableLiveData<Post?>()
     }
 
     val postUpdated : MutableLiveData<List<Int>> by lazy {
@@ -110,13 +110,6 @@ class HomeViewModel @Inject constructor() : ViewModel(){
                 }
             }
         }
-    }
-
-    fun getPosts(update : Boolean) {
-        if(update){
-            postList = RealmRepository.getPosts().toMutableList()
-        }
-        userList = RealmRepository.getAllUsers().toMutableList()
     }
 
     fun postListScrollTo(indexItemRV: Int, topViewRV: Int) {

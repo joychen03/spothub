@@ -59,23 +59,13 @@ class ProfileFavouritesFragment : Fragment(R.layout.fragment_profile_favourites)
         }
 
         viewModel.favPostsAdded.observe(viewLifecycleOwner){ position ->
-
-            if(viewModel.favPosts.size < 3){
-                rvAdapter.notifyDataSetChanged()
-            }else{
-                rvAdapter.notifyItemInserted(position)
-                rvAdapter.notifyItemInserted(viewModel.favPosts.size - 1)
-            }
+            rvAdapter.notifyItemInserted(position)
+            rvAdapter.notifyItemChanged(position - 1)
         }
 
         viewModel.favPostsRemoved.observe(viewLifecycleOwner){ position ->
-
-            if(viewModel.favPosts.size < 2){
-                rvAdapter.notifyDataSetChanged()
-            }else{
-                rvAdapter.notifyItemRemoved(position)
-                rvAdapter.notifyItemInserted(viewModel.favPosts.size - 1)
-            }
+            rvAdapter.notifyItemRemoved(position)
+            rvAdapter.notifyItemChanged(position - 1)
         }
     }
 
@@ -98,7 +88,6 @@ class ProfileFavouritesFragment : Fragment(R.layout.fragment_profile_favourites)
 
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.itemAnimator = null
-        rv.layoutAnimation = null
         rv.adapter = rvAdapter
 
     }

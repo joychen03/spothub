@@ -1,10 +1,8 @@
 package com.itb.dam.jiafuchen.spothub.ui.viemodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
-import com.itb.dam.jiafuchen.spothub.domain.model.Event
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel

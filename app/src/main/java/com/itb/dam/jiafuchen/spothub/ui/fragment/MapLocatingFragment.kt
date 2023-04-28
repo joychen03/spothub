@@ -2,16 +2,12 @@ package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -44,7 +40,6 @@ import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.MapLocatingViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
-import io.realm.kotlin.internal.platform.appFilesDirectory
 
 
 class MapLocatingFragment :

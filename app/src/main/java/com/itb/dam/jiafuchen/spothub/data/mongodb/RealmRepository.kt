@@ -13,6 +13,7 @@ import io.realm.kotlin.mongodb.subscriptions
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.query.Sort
+import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,17 +68,35 @@ object RealmRepository {
         return realm.query<User>("_id == $0", id).find().firstOrNull()
     }
 
-    fun getMyUserAsFlow() : Flow<User?> {
-        return realm.query<User>("owner_id == $0", currentUser.id).first().asFlow().map { it.obj }
+    fun getUserByOwnerIdAsFlow(ownerID : String) : Flow<User?> {
+        return realm.query<User>("owner_id == $0", ownerID).first().asFlow().map { it.obj }
     }
 
-    suspend fun updateUser(user: User) {
-        try {
+    fun getUserByIdAsFlow(userID : ObjectId) : Flow<User?> {
+        return realm.query<User>("_id == $0", userID).first().asFlow().map { it.obj }
+    }
+
+    suspend fun updateUser(userID : ObjectId, user: User) : User?{
+        return try {
             realm.write {
-                copyToRealm(user)
+                val userToUpdate = this.query<User>("_id == $0", userID).first().find() ?: return@write null
+
+                if(user.username.isNotEmpty()){
+                    userToUpdate.username = user.username
+                }
+                userToUpdate.description = user.description
+                if(user.avatar.isNotEmpty()){
+                    userToUpdate.avatar = user.avatar
+                }
+
+                userToUpdate.updateDataTime = RealmInstant.now()
+
+                userToUpdate
             }
+
         }catch (e: Exception){
             Log.e("Realm", "Error adding user: ${e.message}")
+            null
         }
     }
 
@@ -130,18 +149,18 @@ object RealmRepository {
         }
     }
 
-    suspend fun updatePost(post: Post) : Post? {
+    suspend fun updatePost(postID : ObjectId, post: Post) : Post? {
         return try {
             realm.write {
-                val postToUpdate = this.query<Post>("_id == $0", post._id).find().firstOrNull()
-                postToUpdate?.let {
-                    it.title = post.title
-                    it.description = post.description
-                    it.image = post.image
-                    it.latitude = post.latitude
-                    it.longitude = post.longitude
-                    it.updateDataTime = post.updateDataTime
-                }
+                val postToUpdate = this.query<Post>("_id == $0", postID).first().find() ?: return@write null
+
+                postToUpdate.title = post.title
+                postToUpdate.description = post.description
+                postToUpdate.image = post.image
+                postToUpdate.latitude = post.latitude
+                postToUpdate.longitude = post.longitude
+                postToUpdate.updateDataTime = RealmInstant.now()
+
                 postToUpdate
             }
         }catch (e: Exception){
@@ -150,13 +169,11 @@ object RealmRepository {
         }
     }
 
-    suspend fun deletePost(post: Post) : Boolean{
+    suspend fun deletePost(postID : ObjectId) : Boolean{
         return try {
             realm.write {
-                val postToDelete = this.query<Post>("_id == $0", post._id).find().firstOrNull()
-                postToDelete?.let {
-                    delete(it)
-                }
+                val postToDelete = this.query<Post>("_id == $0", postID).first().find() ?: return@write false
+                delete(postToDelete)
                 true
             }
         }catch (e: Exception){
@@ -168,7 +185,6 @@ object RealmRepository {
     fun getFollowingPosts(following : RealmList<ObjectId>): List<Post> {
         return realm.query<Post>("owner_id in {$0}", following.joinToString(",")).find()
     }
-
 
     fun getPostsByKeyword(keyword: String): List<Post> {
         return realm.query<Post>("title CONTAINS[c] $0", keyword)
@@ -293,9 +309,11 @@ object RealmRepository {
     }
 
     fun getMyFavPosts(userID : ObjectId): List<Post> {
-        return realm.query<Post>("$0 in likes", userID)
-            .sort(Pair("_id", Sort.DESCENDING))
-            .find()
+        return realm.query<Post>("$0 in likes", userID).find()
+    }
+
+    fun getPostByIdAsFlow(postId: ObjectId): Flow<Post?> {
+        return realm.query<Post>("_id == $0", postId).first().asFlow().map { it.obj }
     }
 
 

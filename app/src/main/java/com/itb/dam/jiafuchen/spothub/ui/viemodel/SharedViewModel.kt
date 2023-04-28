@@ -48,7 +48,7 @@ class SharedViewModel @Inject constructor(
     }
 
     fun getCurrentUserAsFlow() : Flow<User?>{
-        return RealmRepository.getMyUserAsFlow()
+        return RealmRepository.getUserByOwnerIdAsFlow(app.currentUser!!.id)
     }
 
     fun removeCurrentUser(){

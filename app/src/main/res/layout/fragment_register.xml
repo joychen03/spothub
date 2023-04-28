@@ -36,6 +36,7 @@
             android:drawablePadding="10dp"
             android:hint="@string/auth_email_input_hint"
             android:inputType="textEmailAddress"
+            android:singleLine="true"
             android:padding="10dp"
             android:textColor="@color/primary_txt"
             android:textColorHint="@color/secondary_txt" />
@@ -49,6 +50,7 @@
             android:drawableStart="@drawable/lock_fill_edit_text_icon"
             android:drawablePadding="10dp"
             android:hint="@string/auth_passwd_input_hint"
+            android:singleLine="true"
             android:inputType="textPassword"
             android:padding="10dp"
             android:textColor="@color/primary_txt"
@@ -64,6 +66,7 @@
             android:drawablePadding="10dp"
             android:hint="@string/auth_confirm_passwd_input_hint"
             android:inputType="textPassword"
+            android:singleLine="true"
             android:padding="10dp"
             android:textColor="@color/primary_txt"
             android:textColorHint="@color/secondary_txt" />

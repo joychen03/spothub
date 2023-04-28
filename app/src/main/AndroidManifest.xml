@@ -29,6 +29,7 @@
             android:name=".ui.activity.MainActivity"
             android:theme="@style/Theme.Spothub.Splash"
             android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

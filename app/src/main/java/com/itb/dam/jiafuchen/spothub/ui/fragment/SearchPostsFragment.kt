@@ -82,8 +82,9 @@ class SearchPostsFragment : Fragment(R.layout.fragment_search_posts) {
         )
 
         rv.layoutManager = LinearLayoutManager(requireContext())
-        rv.adapter = rvAdapter
         rv.itemAnimator = null
+        rv.layoutAnimation = null
+        rv.adapter = rvAdapter
 
     }
 

@@ -10,6 +10,7 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.itb.dam.jiafuchen.spothub.R
@@ -108,7 +109,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         viewModel.postAdded.observe(viewLifecycleOwner){
-            sharedViewModel.newPostAdded(it)
+            if(it != null){
+                sharedViewModel.newPostAdded(it)
+                viewModel.postAdded.postValue(null)
+            }
         }
 
         sharedViewModel.homeShouldUpdate = false
@@ -159,13 +163,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onPostSearchLocationClickListener(post : Post){
-        //OPEN GOOGLE MAP
         val label = "${post.latitude}, ${post.longitude}"
         val gmmIntentUri = Uri.parse("geo:${post.latitude},${post.longitude}?q=${post.latitude},${post.longitude}($label)")
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
         mapIntent.setPackage("com.google.android.apps.maps")
         startActivity(mapIntent)
-
     }
 
     private fun scrollToPosition(position : Int, offset : Int = 0){
@@ -200,7 +202,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.HomeSwipeRefresh.setOnRefreshListener {
             sharedViewModel.homeShouldUpdate = true
-            initPostRecyclerView()
+            (requireActivity() as MainActivity).navController.navigate(R.id.homeFragment)
             binding.HomeSwipeRefresh.isRefreshing = false
             sharedViewModel.homeScreenUpdated()
         }

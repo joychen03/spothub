@@ -1,20 +1,13 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -22,6 +15,7 @@ import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
+import com.itb.dam.jiafuchen.spothub.domain.model.ProfileEditArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.ProfileViewModel
@@ -29,12 +23,8 @@ import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
-import java.util.Locale.Category
 
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -61,6 +51,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         initTabLayout()
+        configSwipeLayout()
         return binding.root
     }
 
@@ -80,7 +71,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         binding.ProfileEditBtn.setOnClickListener {
-            val directions = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
+            val directions = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(null)
             findNavController().navigate(directions)
         }
 
@@ -160,6 +151,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         binding.ProfileSearchTabs.selectTab(binding.ProfileSearchTabs.getTabAt(viewModel.selectedTab))
     }
+
+    private fun configSwipeLayout(){
+
+        binding.ProfileSwipeRefreshLayout.setColorSchemeColors(requireActivity().getColor(R.color.primary_btn))
+
+        binding.ProfileSwipeRefreshLayout.setOnRefreshListener {
+            binding.ProfileSwipeRefreshLayout.isRefreshing = false
+            (requireActivity() as MainActivity).navController.navigate(R.id.profileFragment)
+        }
+    }
+
 
 
 }

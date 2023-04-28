@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchBinding
+import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SearchViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
@@ -39,6 +40,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         initTabLayout()
+        configSwipeLayout()
 
         return binding.root
     }
@@ -132,6 +134,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onDestroyView()
         Utils.hideSoftKeyboard(requireActivity())
         binding.searchPager.adapter = null
+    }
+
+    private fun configSwipeLayout(){
+
+        binding.SearchSwipeRefresh.setColorSchemeColors(requireActivity().getColor(R.color.primary_btn))
+
+        binding.SearchSwipeRefresh.setOnRefreshListener {
+            binding.SearchSwipeRefresh.isRefreshing = false
+            (requireActivity() as MainActivity).navController.navigate(R.id.searchFragment)
+        }
     }
 
 }

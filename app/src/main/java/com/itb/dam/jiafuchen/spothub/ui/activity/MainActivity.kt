@@ -1,18 +1,14 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -26,13 +22,9 @@ import com.itb.dam.jiafuchen.spothub.ui.fragment.*
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import io.realm.kotlin.notifications.DeletedObject
-import io.realm.kotlin.notifications.InitialObject
-import io.realm.kotlin.notifications.UpdatedObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -107,7 +99,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.floatingActionButton.setOnClickListener {
             val currentFragment = navHostFragment.childFragmentManager.fragments[0]
             if(currentFragment !is AddPostFragment){
-                val direction = MainNavDirections.toAddPost(AddEditPostArgs())
+                val direction = MainNavDirections.toAddPost(null)
                 navController.navigate(direction)
             }
 
@@ -137,11 +129,17 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
         }
 
         sharedViewModel.newPost.observe(this){
-            badgeSet()
+            if(it != null){
+                badgeSet()
+                sharedViewModel.newPost.postValue(null)
+            }
         }
 
         sharedViewModel.homeUpdated.observe(this){
-            badgeRemove()
+            if(it){
+                badgeRemove()
+                sharedViewModel.homeUpdated.postValue(false)
+            }
         }
 
     }

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"
@@ -33,7 +36,8 @@
             app:destination="@id/mapLocatingFragment" />
         <argument
             android:name="addPostArgs"
-            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs" />
+            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -57,15 +61,15 @@
                 android:name="post"
                 android:defaultValue="@null" />
         </action>
+        <action
+            android:id="@+id/action_cameraFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_profileFragment_to_profileEditFragment"
-            app:destination="@id/profileEditFragment" />
         <action
             android:id="@+id/action_profileFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment" />
@@ -75,6 +79,9 @@
         <action
             android:id="@+id/action_profileFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -155,14 +162,15 @@
         android:label="fragment_edit_post"
         tools:layout="@layout/fragment_edit_post" >
         <action
-            android:id="@+id/action_editPostFragment2_to_mapLocatingFragment"
+            android:id="@+id/action_editPostFragment_to_mapLocatingFragment"
             app:destination="@id/mapLocatingFragment" />
         <action
             android:id="@+id/action_editPostFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
         <argument
             android:name="editPostArgs"
-            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs" />
+            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/postDetailFragment"
@@ -200,11 +208,6 @@
         </action>
     </fragment>
     <fragment
-        android:id="@+id/profileEditFragment"
-        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileEditFragment"
-        android:label="fragment_profile_edit"
-        tools:layout="@layout/fragment_profile_edit" />
-    <fragment
         android:id="@+id/userDetailFragment"
         android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.UserDetailFragment"
         android:label="fragment_user_detail"
@@ -215,6 +218,19 @@
         <argument
             android:name="user"
             app:argType="com.itb.dam.jiafuchen.spothub.domain.model.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.itb.dam.jiafuchen.spothub.ui.fragment.ProfileEditFragment"
+        android:label="fragment_profile_edit"
+        tools:layout="@layout/fragment_profile_edit" >
+        <action
+            android:id="@+id/action_profileEditFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+        <argument
+            android:name="profileEditArgs"
+            app:argType="com.itb.dam.jiafuchen.spothub.domain.model.ProfileEditArgs"
+            app:nullable="true" />
     </fragment>
 
 </navigation>

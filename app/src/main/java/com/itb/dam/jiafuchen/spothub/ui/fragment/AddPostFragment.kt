@@ -44,6 +44,7 @@ import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.AddPostViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,12 +62,12 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(args.addPostArgs.image != null){
-            viewModel.image = args.addPostArgs.image
+        if(args.addPostArgs?.image != null){
+            viewModel.image = args.addPostArgs?.image
         }
 
-        if(args.addPostArgs.location != null){
-            viewModel.location = args.addPostArgs.location!!
+        if(args.addPostArgs?.location != null){
+            viewModel.location = args.addPostArgs?.location!!
         }
 
     }
@@ -79,16 +80,19 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
-        viewModel.post.observe(viewLifecycleOwner) { it ->
+        viewModel.posted.observe(viewLifecycleOwner) {
             if(it != null){
-                it.getContentIfNotHandled()?.let { _ ->
-                    viewModel.clearPost()
-                    clearFields()
-                }
-            }else{
-                Utils.makeSimpleAlert(requireContext(), "Error al publicar el post")
+                viewModel.clearPost()
+                clearFields()
+                viewModel.posted.postValue(null)
             }
+        }
 
+        viewModel.errorMessage.observe(viewLifecycleOwner) {
+            if (it != null) {
+                Utils.makeSimpleAlert(requireContext(), "Error al publicar el post: \n\n $it")
+                viewModel.errorMessage.postValue(null)
+            }
         }
 
         return binding.root
@@ -225,11 +229,9 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
 
         CoroutineScope(Dispatchers.Main).launch {
             val result = viewModel.publishPost(post)
-            if(result != null){
-                clearFields()
-            }else{
-                Utils.makeSimpleAlert(requireContext(),"ERROR ADDING POST")
-            }
+            clearFields()
+            Utils.makeToast(requireContext(), "Post published")
+            findNavController().popBackStack()
         }
 
     }

@@ -14,27 +14,37 @@
         android:background="@color/background"
         android:backgroundTint="@color/background">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/profileEditConfirmBtn"
-            android:layout_gravity="end"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/custom_button"
-            android:text="@string/map_locating_confirm"
-            android:textColor="@color/white"
-            android:textFontWeight="900"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TouchTargetSizeCheck" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:minHeight="?attr/actionBarSize" />
+            android:layout_height="match_parent">
 
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:minHeight="?attr/actionBarSize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/profileEditConfirmBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_margin="10dp"
+                android:background="@drawable/custom_button"
+                android:text="@string/map_locating_confirm"
+                android:textColor="@color/white"
+                android:textFontWeight="900"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,37 +53,38 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/takePhotoBtn"
+            android:id="@+id/ProfileEditTakePhotoBtn"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@drawable/custom_rounded_button"
             android:padding="15dp"
             android:src="@drawable/photo_camera_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/nav_avatar2"
-            app:layout_constraintEnd_toStartOf="@+id/nav_avatar2"
+            app:layout_constraintBottom_toBottomOf="@+id/ProfileEditAvatar"
+            app:layout_constraintEnd_toStartOf="@+id/ProfileEditAvatar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nav_avatar2"
+            app:layout_constraintTop_toTopOf="@+id/ProfileEditAvatar"
             app:tint="@color/white" />
 
         <ImageView
-            android:id="@+id/galleryBtn"
+            android:id="@+id/ProfileEditOpenGallery"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@drawable/custom_rounded_button"
             android:padding="15dp"
             android:src="@drawable/gallery_thumbnail_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/nav_avatar2"
+            app:layout_constraintBottom_toBottomOf="@+id/ProfileEditAvatar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/nav_avatar2"
-            app:layout_constraintTop_toTopOf="@+id/nav_avatar2"
+            app:layout_constraintStart_toEndOf="@+id/ProfileEditAvatar"
+            app:layout_constraintTop_toTopOf="@+id/ProfileEditAvatar"
             app:tint="@color/white" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/nav_avatar2"
+            android:id="@+id/ProfileEditAvatar"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="50dp"
-            android:src="@drawable/c13"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/user_default_avatar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -87,7 +98,7 @@
             android:layout_marginHorizontal="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_avatar2">
+            app:layout_constraintTop_toBottomOf="@+id/ProfileEditAvatar">
 
             <EditText
                 android:id="@+id/profileEditUsername"
@@ -97,6 +108,7 @@
                 android:gravity="center_vertical"
                 android:hint="@string/profile_edit_username"
                 android:inputType="text"
+                android:singleLine="true"
                 android:padding="10dp"
                 android:textColor="@color/primary_txt"
                 android:textColorHint="@color/secondary_txt" />

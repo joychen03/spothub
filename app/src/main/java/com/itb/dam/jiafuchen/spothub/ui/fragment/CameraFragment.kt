@@ -2,8 +2,10 @@ package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Path.Direction
 import android.net.Uri
 import android.os.Bundle
+import android.text.Layout.Directions
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +27,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentCameraBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
+import com.itb.dam.jiafuchen.spothub.domain.model.ProfileEditArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.CameraViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
@@ -113,17 +116,22 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         }
 
         binding.PostCameraConfirmBtn.setOnClickListener {
+            val previousFragment = findNavController().previousBackStackEntry?.destination?.label
+            when(previousFragment) {
+                "fragment_add_post" -> {
+                    val action = CameraFragmentDirections.actionCameraFragmentToAddPostFragment(AddEditPostArgs(image = viewModel.tookPhoto.value))
+                    findNavController().navigate(action, NavOptions.Builder().setPopUpTo(R.id.addPostFragment, true).build())
+                }
+                "fragment_edit_post" -> {
+                    val action = CameraFragmentDirections.actionCameraFragmentToEditPostFragment(AddEditPostArgs(image = viewModel.tookPhoto.value))
+                    findNavController().navigate(action, NavOptions.Builder().setPopUpTo(R.id.editPostFragment, true).build())
+                }
+                "fragment_profile_edit" -> {
+                    val action = CameraFragmentDirections.actionCameraFragmentToProfileEditFragment(ProfileEditArgs(image = viewModel.tookPhoto.value))
+                    findNavController().navigate(action, NavOptions.Builder().setPopUpTo(R.id.profileEditFragment, true).build())
+                }
+            }
 
-            val action = CameraFragmentDirections.actionCameraFragmentToAddPostFragment(AddEditPostArgs(image = viewModel.tookPhoto.value))
-            findNavController().navigate(action, NavOptions.Builder().setPopUpTo(R.id.addPostFragment, true).build())
-
-            //val bundle = Bundle()
-            //bundle.putString("image", viewModel.tookPhoto.value.toString())
-            //parentFragmentManager.setFragmentResult("image", bundle)
-            //navController.popBackStack()
-
-            //findNavController().previousBackStackEntry?.savedStateHandle?.set("image", "JIAFU")
-            //navigation.popBackStack()
         }
 
     }
