@@ -22,11 +22,8 @@ class UserListAdapter(
     override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
         val item = userList[position]
 
-        val isLast = position == userList.size - 1
-
         holder.render(
             position,
-            isLast,
             item,
             currentUser,
             onClickListener,

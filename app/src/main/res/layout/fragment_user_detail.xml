@@ -102,7 +102,7 @@
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/user_default_avatar"
+                            tools:src="@drawable/user_default_avatar"
                             app:shapeAppearanceOverlay="@style/Circular"
                             app:strokeColor="@color/background" />
 
@@ -197,7 +197,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textColor="@color/secondary_txt"
-                            android:textSize="10sp"
+                            tools:textSize="10sp"
                             tools:text="cjf110120130@gmail.com" />
 
                         <TextView
@@ -206,7 +206,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/primary_btn"
                             android:textFontWeight="800"
-                            android:textSize="15sp"
+                            tools:textSize="15sp"
                             tools:text="Juan Perezsdasdasdasdasdasdasdas" />
 
 
@@ -214,7 +214,7 @@
                             android:id="@+id/UserDetailDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl sit amet aliquam luctus, nunc nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl. Sed euismod, nisl sit amet aliquam luctus, nunc nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl."
+                            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl sit amet aliquam luctus, nunc nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl. Sed euismod, nisl sit amet aliquam luctus, nunc nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl."
                             android:textColor="@color/primary_txt" />
                     </LinearLayout>
 
@@ -222,6 +222,8 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/UserDetailPosts"
+                    android:paddingBottom="60dp"
+                    android:clipToPadding="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>

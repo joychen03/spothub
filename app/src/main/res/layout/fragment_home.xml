@@ -75,6 +75,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/HomePostsRV"
+                android:paddingBottom="60dp"
+                android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

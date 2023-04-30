@@ -2,6 +2,7 @@ package com.itb.dam.jiafuchen.spothub
 
 import android.app.Application
 import android.util.Log
+import androidx.datastore.preferences.preferencesDataStore
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.HiltAndroidApp

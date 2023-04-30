@@ -27,11 +27,9 @@ class PostListAdapter(
         val item = postList[position]
 
         val owner = userList.find { it.owner_id == item.owner_id } ?: return
-        val isLastPost = position == postList.size - 1
 
         holder.render(
             position,
-            isLastPost,
             currentUser,
             item,
             owner,

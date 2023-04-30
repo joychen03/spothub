@@ -126,10 +126,8 @@ object RealmRepository {
         return realm.query(User::class).asFlow()
     }
 
-    fun getMyPostsAsFlow(): Flow<List<Post>> {
-        return realm.query<Post>("owner_id == $0", currentUser.id)
-            .sort(Pair("_id", Sort.DESCENDING))
-            .asFlow().map { it.list }
+    fun getMyPostsAsFlow(): Flow<ResultsChange<Post>> {
+        return realm.query<Post>("owner_id == $0", currentUser.id).asFlow()
     }
 
     fun getPostsAsFlowOLD(): Flow<List<Post>> {
@@ -154,9 +152,9 @@ object RealmRepository {
             realm.write {
                 val postToUpdate = this.query<Post>("_id == $0", postID).first().find() ?: return@write null
 
-                postToUpdate.title = post.title
+                if(post.title.isNotEmpty()) postToUpdate.title = post.title
                 postToUpdate.description = post.description
-                postToUpdate.image = post.image
+                if (post.image.isNotEmpty()) postToUpdate.image = post.image
                 postToUpdate.latitude = post.latitude
                 postToUpdate.longitude = post.longitude
                 postToUpdate.updateDataTime = RealmInstant.now()
@@ -302,8 +300,8 @@ object RealmRepository {
             .find()
     }
 
-    fun getMyPosts(userID : String): List<Post> {
-        return realm.query<Post>("owner_id == $0", userID)
+    fun getMyPosts(ownerID : String): List<Post> {
+        return realm.query<Post>("owner_id == $0", ownerID)
             .sort(Pair("_id", Sort.DESCENDING))
             .find()
     }

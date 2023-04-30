@@ -1,5 +1,6 @@
 package com.itb.dam.jiafuchen.spothub.ui.viemodel
 
+import android.text.BoringLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.realm.kotlin.internal.interop.trackingRealmValueAllocator
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
 import kotlinx.coroutines.*
@@ -35,6 +37,9 @@ class ProfileViewModel @Inject constructor(): ViewModel() {
     val myPostsChanged : MutableLiveData<List<Int>> by lazy {
         MutableLiveData<List<Int>>()
     }
+    val myPostDeleted : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
     val userClick : MutableLiveData<User> by lazy {
         MutableLiveData<User>()
     }
@@ -51,7 +56,7 @@ class ProfileViewModel @Inject constructor(): ViewModel() {
     }
 
     fun setup(){
-        favPosts = RealmRepository.getMyFavPosts(currentUser!!._id).toMutableList()
+        favPosts = RealmRepository.getMyFavPosts(currentUser!!._id).toMutableList().asReversed()
         users = RealmRepository.getAllUsers().toMutableList()
         myPosts = RealmRepository.getMyPosts(app.currentUser!!.id).toMutableList()
     }
@@ -68,7 +73,7 @@ class ProfileViewModel @Inject constructor(): ViewModel() {
     private fun subscribeChanges(){
         viewModelScope.launch {
             RealmRepository.getPostsAsFlow().collect { changes: ResultsChange<Post> ->
-                if (changes is UpdatedResults && changes.changes.isNotEmpty()) {
+                if (changes is UpdatedResults) {
                     for (i in changes.changes) {
                         val updatedPost = changes.list[i]
                         val indexToUpdate = favPosts.indexOfFirst { it._id == updatedPost._id }
@@ -78,8 +83,8 @@ class ProfileViewModel @Inject constructor(): ViewModel() {
                                 favPosts[indexToUpdate] = updatedPost
                                 favPostsChanged.postValue(listOf(indexToUpdate))
                             }else{
-                                favPosts.add(updatedPost)
-                                favPostsAdded.postValue(favPosts.size-1)
+                                favPosts.add(0, updatedPost)
+                                favPostsAdded.postValue(0)
                             }
                         }else{
                             if (indexToUpdate != -1) {
@@ -88,13 +93,31 @@ class ProfileViewModel @Inject constructor(): ViewModel() {
                             }
                         }
 
+                    }
+                }
+            }
+        }
 
-                        if(updatedPost.owner_id == app.currentUser!!.id){
-                            val ownIndexToUpdate = myPosts.indexOfFirst { it._id == updatedPost._id }
-                            if (ownIndexToUpdate != -1) {
-                                myPosts[ownIndexToUpdate] = updatedPost
-                                myPostsChanged.postValue(listOf(ownIndexToUpdate))
-                            }
+        viewModelScope.launch {
+            RealmRepository.getMyPostsAsFlow().collect{ changes: ResultsChange<Post> ->
+                if (changes is UpdatedResults) {
+                    for (i in changes.insertions) {
+                        val addedPost = changes.list[i]
+                        myPosts.add(0, addedPost)
+                        myPostsChanged.postValue(listOf(0))
+                    }
+
+                    for (i in changes.deletions) {
+                        myPosts = changes.list.toMutableList()
+                        myPostDeleted.postValue(true)
+
+                    }
+                    for (i in changes.changes) {
+                        val updatedPost = changes.list[i]
+                        val indexToUpdate = myPosts.indexOfFirst { it._id == updatedPost._id }
+                        if (indexToUpdate != -1) {
+                            myPosts[indexToUpdate] = updatedPost
+                            myPostsChanged.postValue(listOf(indexToUpdate))
                         }
                     }
                 }

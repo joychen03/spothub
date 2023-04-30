@@ -77,7 +77,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         sharedViewModel.currentUser.observe(viewLifecycleOwner) {
             if (it != null) {
-
                 sharedViewModel.getCurrentUserAsFlow().onEach { user ->
                     if(user != null) {
                         binding.ProfileUserName.text = user.username
@@ -88,7 +87,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         binding.ProfileFollowings.text = user.followings.count().toString()
                     }
                 }.launchIn(CoroutineScope(Dispatchers.Main))
-
             }
         }
 

@@ -77,6 +77,7 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
                 binding.UserDetailDescription.text = it.description
                 binding.UserDetailFollowers.text = it.followers.size.toString()
                 binding.UserDetailFollowing.text = it.followings.size.toString()
+                binding.UserDetailAvatar.setImageBitmap(Utils.byteArrayToImage(it.avatar))
 
                 if(it.followers.contains(viewModel.currentUser?._id)) {
                     binding.UserDetailFollowBtn.visibility = View.GONE

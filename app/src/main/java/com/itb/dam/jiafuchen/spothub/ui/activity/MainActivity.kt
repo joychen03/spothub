@@ -1,5 +1,6 @@
 package com.itb.dam.jiafuchen.spothub.ui.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -7,9 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
@@ -18,6 +24,7 @@ import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
+import com.itb.dam.jiafuchen.spothub.domain.model.Setting
 import com.itb.dam.jiafuchen.spothub.ui.fragment.*
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
@@ -25,9 +32,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+
+val Context.dataStore by preferencesDataStore(name = "settings")
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
@@ -68,8 +76,10 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
                 R.id.nav_home -> {
                     val currentFragment = navHostFragment.childFragmentManager.fragments[0]
                     sharedViewModel.homeShouldUpdate = currentFragment is HomeFragment
+                    if(sharedViewModel.homeShouldUpdate){
+                        badgeRemove()
+                    }
                     navController.navigate(R.id.toHome)
-
                 }
                 R.id.nav_search -> {
                     navController.navigate(R.id.toSearch)
@@ -125,6 +135,9 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
                         avatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
                     }
                 }.launchIn(CoroutineScope(Dispatchers.Main))
+
+                sharedViewModel.watchForNewPosts()
+
             }
         }
 
@@ -142,6 +155,13 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
             }
         }
 
+        lifecycleScope.launch(Dispatchers.Main) {
+            getSettings().collect {
+                if(it.darkMode){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+            }
+        }
     }
 
     //endregion
@@ -219,6 +239,13 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
             delay(500)
             binding.bottomNav.menu.getItem(0).icon = AppCompatResources.getDrawable(this@MainActivity, R.drawable.nav_home_icon)
         }
+    }
+
+    private fun getSettings() = dataStore.data.map { setting ->
+        Setting(
+            setting[booleanPreferencesKey("dark_mode")] ?: false,
+            setting[stringPreferencesKey("language")].orEmpty()
+        )
     }
     //endregion
 

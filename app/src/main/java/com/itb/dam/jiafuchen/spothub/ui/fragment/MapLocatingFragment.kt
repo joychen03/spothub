@@ -53,6 +53,7 @@ class MapLocatingFragment :
     lateinit var binding : FragmentMapLocatingBinding
     private lateinit var map: GoogleMap
     private val viewModel : MapLocatingViewModel by activityViewModels()
+    private var marker : Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,11 +90,11 @@ class MapLocatingFragment :
 
             when(previousFragment){
                 "fragment_add_post" -> {
-                    val directions = MapLocatingFragmentDirections.actionMapLocatingFragmentToAddPostFragment(AddEditPostArgs(location = map.cameraPosition.target))
+                    val directions = MapLocatingFragmentDirections.actionMapLocatingFragmentToAddPostFragment(AddEditPostArgs(location = viewModel.lastMarker.value?.position))
                     findNavController().navigate(directions, NavOptions.Builder().setPopUpTo(R.id.addPostFragment, true).build())
                 }
                 "fragment_edit_post" -> {
-                    val directions = MapLocatingFragmentDirections.actionMapLocatingFragmentToEditPostFragment(AddEditPostArgs(location = map.cameraPosition.target))
+                    val directions = MapLocatingFragmentDirections.actionMapLocatingFragmentToEditPostFragment(AddEditPostArgs(location = viewModel.lastMarker.value?.position))
                     findNavController().navigate(directions, NavOptions.Builder().setPopUpTo(R.id.editPostFragment, true).build())
                 }
                 else -> throw Exception("No previous fragment")
@@ -101,7 +102,7 @@ class MapLocatingFragment :
         }
 
 
-        viewModel.lastMarker.observe(viewLifecycleOwner) {
+         viewModel.lastMarker.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.mapLocateConfirm.visibility = View.VISIBLE
             }else{
@@ -262,6 +263,7 @@ class MapLocatingFragment :
         }
         return null
     }
+
 
 
 }

@@ -131,8 +131,7 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
         }
 
         binding.ProfileEditTakePhotoBtn.setOnClickListener {
-            viewModel.username = binding.profileEditUsername.text.toString()
-            viewModel.description = binding.profileEditDesc.text.toString()
+            saveCurrentData()
             val directions = ProfileEditFragmentDirections.actionProfileEditFragmentToCameraFragment()
             navController.navigate(directions)
         }
@@ -142,6 +141,11 @@ class ProfileEditFragment : Fragment(R.layout.fragment_profile_edit) {
     override fun onStop() {
         Utils.hideSoftKeyboard(requireActivity())
         super.onStop()
+    }
+
+    private fun saveCurrentData(){
+        viewModel.username = binding.profileEditUsername.text.toString()
+        viewModel.description = binding.profileEditDesc.text.toString()
     }
 
     private fun render(){

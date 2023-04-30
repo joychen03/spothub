@@ -16,7 +16,6 @@ class UserListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
 
     fun render(
         position : Int,
-        lastOne: Boolean,
         user : User,
         currentUser: User,
         onClickListener: (Int) -> Unit,
@@ -25,22 +24,6 @@ class UserListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         layout.UserAvatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
         layout.UserUsername.text = user.username
         layout.UserFollowers.text = "${user.followers.size} followers"
-
-        if(lastOne) {
-            layout.root.layoutParams = RecyclerView.LayoutParams(
-                RecyclerView.LayoutParams.MATCH_PARENT,
-                RecyclerView.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(30, 30, 30, 300)
-            }
-        }else{
-            layout.root.layoutParams = RecyclerView.LayoutParams(
-                RecyclerView.LayoutParams.MATCH_PARENT,
-                RecyclerView.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(30, 30, 30, 0)
-            }
-        }
 
         if(user._id == currentUser._id){
             layout.UserFollowBtn.visibility = View.GONE

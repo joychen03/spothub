@@ -42,6 +42,7 @@ import com.itb.dam.jiafuchen.spothub.databinding.FragmentAddPostBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.viemodel.AddPostViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viemodel.MapLocatingViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
@@ -55,6 +56,7 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
     lateinit var binding : FragmentAddPostBinding
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
     private val viewModel by activityViewModels<AddPostViewModel>()
+    private val mapViewModel by activityViewModels<MapLocatingViewModel>()
     private val args : AddPostFragmentArgs by navArgs()
 
     //region lifecycle
@@ -132,10 +134,6 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             clearFields()
         }
 
-        binding.root.setOnClickListener {
-            Utils.hideSoftKeyboard(requireActivity())
-        }
-
         val popupMenu = PopupMenu(requireContext(), binding.AddPostImage)
         popupMenu.menuInflater.inflate(R.menu.add_post_menu, popupMenu.menu)
 
@@ -191,6 +189,7 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
         binding.longitude.setText("0.0")
         binding.latitude.setText("0.0")
 
+        mapViewModel.clearMarker()
         viewModel.image = null
     }
 
@@ -223,7 +222,7 @@ class AddPostFragment : Fragment(R.layout.fragment_add_post) {
             description = binding.desc.text.toString()
             image = Utils.uriToByteArray(requireContext(), viewModel.image!!)
             latitude = binding.latitude.text.toString().toDouble()
-            latitude = binding.latitude.text.toString().toDouble()
+            longitude = binding.longitude.text.toString().toDouble()
             likes = realmListOf()
         }
 

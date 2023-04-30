@@ -133,8 +133,14 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
         }
 
         binding.PostDetailUserAvatar.setOnClickListener {
-            val action = PostDetailFragmentDirections.actionPostDetailFragmentToUserDetailFragment(viewModel.userUpdated.value!!)
-            findNavController().navigate(action)
+
+            if(viewModel.userUpdated.value?._id != viewModel.currentUser?._id) {
+                val action = PostDetailFragmentDirections.actionPostDetailFragmentToUserDetailFragment(viewModel.userUpdated.value!!)
+                findNavController().navigate(action)
+            }else{
+                (requireActivity() as MainActivity).binding.bottomNav.selectedItemId = R.id.nav_profile
+            }
+
         }
 
     }

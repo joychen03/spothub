@@ -60,12 +60,10 @@ class ProfileFavouritesFragment : Fragment(R.layout.fragment_profile_favourites)
 
         viewModel.favPostsAdded.observe(viewLifecycleOwner){ position ->
             rvAdapter.notifyItemInserted(position)
-            rvAdapter.notifyItemChanged(position - 1)
         }
 
         viewModel.favPostsRemoved.observe(viewLifecycleOwner){ position ->
             rvAdapter.notifyItemRemoved(position)
-            rvAdapter.notifyItemChanged(position - 1)
         }
     }
 
@@ -125,10 +123,9 @@ class ProfileFavouritesFragment : Fragment(R.layout.fragment_profile_favourites)
 
     private fun onPostOwnerClickListener(user : User){
         if(user._id == viewModel.currentUser?._id){
-            (requireActivity() as MainActivity).binding.bottomNav.selectedItemId = R.id.nav_profile
+            (requireActivity() as MainActivity).navController.navigate(R.id.profileFragment)
         }else{
-            val directions = HomeFragmentDirections.actionHomeFragmentToUserDetailFragment(user)
-            findNavController().navigate(directions)
+            viewModel.goToUser(user)
         }
     }
 

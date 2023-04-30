@@ -18,4 +18,8 @@ class MapLocatingViewModel @Inject constructor() : ViewModel() {
     fun setMarker(marker : MarkerOptions?){
         _lastMarker.postValue(marker)
     }
+
+    fun clearMarker(){
+        _lastMarker.postValue(null)
+    }
 }

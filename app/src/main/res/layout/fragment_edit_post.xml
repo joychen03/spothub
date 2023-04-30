@@ -84,24 +84,39 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="300dp"
-                        android:layout_height="300dp"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="20dp"
-
-                        tools:src="@tools:sample/avatars" />
-
-                    <ImageView
-                        android:id="@+id/editPostPhotoBtn"
-                        android:layout_width="300dp"
-                        android:layout_height="300dp"
-                        android:layout_gravity="center"
                         android:background="@drawable/custom_add_post_camera"
-                        android:padding="100dp"
-                        android:src="@drawable/photo_camera_icon"
-                        app:tint="@color/primary_btn" />
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/editPostTakePhotoBtn"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:src="@drawable/photo_camera_icon"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/primary_btn" />
+
+                        <ImageView
+                            android:id="@+id/editPostImage"
+                            android:layout_width="300dp"
+                            android:layout_height="300dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:src="@tools:sample/avatars" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </FrameLayout>
 

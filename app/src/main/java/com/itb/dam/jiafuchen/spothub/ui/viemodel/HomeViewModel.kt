@@ -7,10 +7,12 @@ import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
+import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 
@@ -65,6 +67,7 @@ class HomeViewModel @Inject constructor() : ViewModel(){
                     is UpdatedResults -> {
                         if (changes.insertions.isNotEmpty()) {
                             postAdded.postValue(changes.list[changes.insertions[0]])
+
                         } else if (changes.changes.isNotEmpty()) {
                             for (index in changes.changes) {
                                 val updatedPost = changes.list[index]

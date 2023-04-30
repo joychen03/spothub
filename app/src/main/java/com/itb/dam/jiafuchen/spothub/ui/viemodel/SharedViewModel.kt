@@ -1,5 +1,6 @@
 package com.itb.dam.jiafuchen.spothub.ui.viemodel
 
+import androidx.datastore.dataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,8 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.realm.kotlin.notifications.ResultsChange
+import io.realm.kotlin.notifications.UpdatedResults
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
@@ -36,6 +39,7 @@ class SharedViewModel @Inject constructor(
         getCurrentUser()
     }
 
+
     fun getCurrentUser(){
         if(app.currentUser != null){
             viewModelScope.launch {
@@ -57,10 +61,6 @@ class SharedViewModel @Inject constructor(
 
     fun homeScreenUpdated(){
         homeUpdated.postValue(true)
-    }
-
-    fun newPostAdded(post: Post){
-        newPost.postValue(post)
     }
 
     suspend fun likePost(postID: ObjectId): Post? {
@@ -87,6 +87,21 @@ class SharedViewModel @Inject constructor(
         return updatedUser
     }
 
+    fun watchForNewPosts(){
+        viewModelScope.launch {
+            RealmRepository.getPostsAsFlow().collect { changes: ResultsChange<Post> ->
+                when (changes) {
+                    is UpdatedResults -> {
+                        if (changes.insertions.isNotEmpty()) {
+                            val post = changes.list[changes.insertions[0]]
+                            newPost.postValue(post)
+                        }
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
 
 
 }

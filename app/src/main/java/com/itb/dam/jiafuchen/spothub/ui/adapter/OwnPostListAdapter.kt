@@ -23,11 +23,8 @@ class OwnPostListAdapter(
     override fun onBindViewHolder(holder: OwnPostListViewHolder, position: Int) {
         val item = postList[position]
 
-        val isLastPost = position == postList.size - 1
-
         holder.render(
             position,
-            isLastPost,
             currentUser,
             item,
             onClickListener,

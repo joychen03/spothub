@@ -108,12 +108,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
-        viewModel.postAdded.observe(viewLifecycleOwner){
-            if(it != null){
-                sharedViewModel.newPostAdded(it)
-                viewModel.postAdded.postValue(null)
-            }
-        }
+//        viewModel.postAdded.observe(viewLifecycleOwner){
+//            if(it != null){
+//                sharedViewModel.newPostAdded(it)
+//                viewModel.postAdded.postValue(null)
+//            }
+//        }
 
         sharedViewModel.homeShouldUpdate = false
     }

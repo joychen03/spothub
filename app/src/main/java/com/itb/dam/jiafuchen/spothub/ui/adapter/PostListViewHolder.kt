@@ -15,7 +15,6 @@ class PostListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
 
     fun render(
         position : Int,
-        lastOne: Boolean,
         currentUser: User,
         post: Post,
         owner: User,
@@ -39,22 +38,6 @@ class PostListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         layout.PostTitle.text = post.title
         layout.PostImage.setImageBitmap(Utils.byteArrayToImage(post.image))
         layout.PostLikesCount.text = post.likes.count().toString()
-
-        if(lastOne){
-            layout.root.layoutParams = RecyclerView.LayoutParams(
-                RecyclerView.LayoutParams.MATCH_PARENT,
-                RecyclerView.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(30,30,30,300)
-            }
-        }else{
-            layout.root.layoutParams = RecyclerView.LayoutParams(
-                RecyclerView.LayoutParams.MATCH_PARENT,
-                RecyclerView.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(30,30,30,0)
-            }
-        }
 
         layout.PostLikeBtn.isChecked = post.likes.contains(currentUser._id)
 

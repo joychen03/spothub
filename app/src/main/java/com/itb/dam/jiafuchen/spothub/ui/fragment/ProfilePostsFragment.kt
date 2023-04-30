@@ -60,6 +60,14 @@ class ProfilePostsFragment : Fragment(R.layout.fragment_profile_posts) {
                 rvAdapter.notifyItemChanged(it)
             }
         }
+
+        viewModel.myPostDeleted.observe(viewLifecycleOwner){
+            if(it){
+                rvAdapter.notifyDataSetChanged()
+                viewModel.myPostDeleted.postValue(false)
+            }
+
+        }
     }
 
     override fun onResume() {
