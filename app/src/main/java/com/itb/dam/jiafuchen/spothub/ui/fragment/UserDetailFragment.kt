@@ -3,10 +3,10 @@ package com.itb.dam.jiafuchen.spothub.ui.fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -21,9 +21,9 @@ import com.itb.dam.jiafuchen.spothub.databinding.FragmentUserDetailBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.OwnPostListAdapter
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.HomeViewModel
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.UserDetailViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.HomeViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.UserDetailViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

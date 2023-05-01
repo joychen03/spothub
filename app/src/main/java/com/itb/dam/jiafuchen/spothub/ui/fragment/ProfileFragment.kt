@@ -15,11 +15,10 @@ import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
-import com.itb.dam.jiafuchen.spothub.domain.model.ProfileEditArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.ProfileViewModel
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.ProfileViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

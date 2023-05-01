@@ -1,4 +1,4 @@
-package com.itb.dam.jiafuchen.spothub.ui.viemodel
+package com.itb.dam.jiafuchen.spothub.ui.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.LiveData

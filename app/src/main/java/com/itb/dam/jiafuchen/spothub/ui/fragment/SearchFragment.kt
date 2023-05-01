@@ -2,13 +2,12 @@ package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-
 import androidx.activity.addCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -17,7 +16,7 @@ import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchBinding
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.ViewPagerAdapter
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.SearchViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SearchViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 
 

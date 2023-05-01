@@ -2,11 +2,8 @@ package com.itb.dam.jiafuchen.spothub.ui.fragment
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Path.Direction
 import android.net.Uri
 import android.os.Bundle
-import android.text.Layout.Directions
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +14,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -29,7 +27,7 @@ import com.itb.dam.jiafuchen.spothub.databinding.FragmentCameraBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.domain.model.ProfileEditArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.CameraViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.CameraViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File

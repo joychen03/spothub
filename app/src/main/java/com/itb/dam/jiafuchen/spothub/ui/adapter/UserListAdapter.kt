@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 
 class UserListAdapter(

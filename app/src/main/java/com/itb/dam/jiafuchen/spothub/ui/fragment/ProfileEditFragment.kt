@@ -5,29 +5,24 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
-import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.maps.model.LatLng
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileEditBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.ProfileEditViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.ProfileEditViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 
 

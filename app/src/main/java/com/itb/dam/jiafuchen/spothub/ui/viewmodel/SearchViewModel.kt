@@ -1,4 +1,4 @@
-package com.itb.dam.jiafuchen.spothub.ui.viemodel
+package com.itb.dam.jiafuchen.spothub.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +10,7 @@ import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

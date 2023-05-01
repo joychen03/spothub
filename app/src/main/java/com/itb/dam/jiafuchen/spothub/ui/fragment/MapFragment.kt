@@ -3,15 +3,10 @@ package com.itb.dam.jiafuchen.spothub.ui.fragment
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -19,17 +14,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.SearchView
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
-import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -52,15 +39,12 @@ import com.itb.dam.jiafuchen.spothub.databinding.FragmentMapBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.ui.adapter.MapPostListAdapter
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.MapViewModel
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.MapViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
-import io.realm.kotlin.internal.platform.freeze
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.mongodb.kbson.ObjectId
-import java.io.IOException
 import kotlin.math.abs
 
 class MapFragment :

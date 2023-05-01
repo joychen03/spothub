@@ -10,7 +10,6 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.itb.dam.jiafuchen.spothub.R
@@ -20,8 +19,8 @@ import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.PostListAdapter
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.HomeViewModel
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.HomeViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.itb.dam.jiafuchen.spothub.ui.viemodel
+package com.itb.dam.jiafuchen.spothub.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,13 +7,9 @@ import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
-import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject

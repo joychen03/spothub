@@ -1,26 +1,15 @@
-package com.itb.dam.jiafuchen.spothub.ui.viemodel
+package com.itb.dam.jiafuchen.spothub.ui.viewmodel
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.util.Util
-import com.itb.dam.jiafuchen.spothub.R
-import com.itb.dam.jiafuchen.spothub.TAG
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.data.mongodb.AuthRepository
 import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.User
-import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.ext.realmListOf
-import io.realm.kotlin.mongodb.ext.customDataAsBsonDocument
-import io.realm.kotlin.mongodb.ext.profileAsBsonDocument
-import kotlinx.coroutines.*
-import java.io.ByteArrayOutputStream
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 

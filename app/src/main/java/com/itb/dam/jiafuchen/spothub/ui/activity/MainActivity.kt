@@ -23,16 +23,19 @@ import com.itb.dam.jiafuchen.spothub.MainNavDirections
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.databinding.ActivityMainBinding
-import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.domain.model.Setting
-import com.itb.dam.jiafuchen.spothub.ui.fragment.*
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.ui.fragment.AddPostFragment
+import com.itb.dam.jiafuchen.spothub.ui.fragment.HomeFragment
+import com.itb.dam.jiafuchen.spothub.ui.fragment.SettingFragment
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 val Context.dataStore by preferencesDataStore(name = "settings")

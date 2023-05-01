@@ -1,12 +1,8 @@
 package com.itb.dam.jiafuchen.spothub.ui.adapter
 
 import android.view.View
-import androidx.core.view.marginBottom
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
-import com.itb.dam.jiafuchen.spothub.databinding.ItemPostBinding
 import com.itb.dam.jiafuchen.spothub.databinding.ItemUserBinding
-import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 

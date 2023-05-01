@@ -9,12 +9,12 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -38,7 +38,7 @@ import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentMapLocatingBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.AddEditPostArgs
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.MapLocatingViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.MapLocatingViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 
 

@@ -1,7 +1,6 @@
 package com.itb.dam.jiafuchen.spothub.domain.model
 
 import android.os.Parcelable
-import com.itb.dam.jiafuchen.spothub.utils.Utils
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList

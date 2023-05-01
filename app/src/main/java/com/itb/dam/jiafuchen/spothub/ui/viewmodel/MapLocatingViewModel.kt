@@ -1,10 +1,8 @@
-package com.itb.dam.jiafuchen.spothub.ui.viemodel
+package com.itb.dam.jiafuchen.spothub.ui.viewmodel
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

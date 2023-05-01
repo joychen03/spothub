@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import android.widget.PopupMenu
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -25,7 +25,7 @@ import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentEditPostBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.EditPostViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.EditPostViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 
 

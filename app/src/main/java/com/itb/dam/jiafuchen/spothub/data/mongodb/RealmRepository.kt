@@ -4,12 +4,9 @@ import android.util.Log
 import com.itb.dam.jiafuchen.spothub.app
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
-import io.realm.kotlin.mongodb.User as RealmUser
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
-
 import io.realm.kotlin.mongodb.subscriptions
-
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.query.Sort
@@ -21,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
+import io.realm.kotlin.mongodb.User as RealmUser
 
 object RealmRepository {
     private val currentUser : RealmUser get() = app.currentUser ?: throw IllegalStateException("User must be logged in")

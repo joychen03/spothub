@@ -1,6 +1,5 @@
-package com.itb.dam.jiafuchen.spothub.ui.viemodel
+package com.itb.dam.jiafuchen.spothub.ui.viewmodel
 
-import android.text.BoringLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,10 +8,9 @@ import com.itb.dam.jiafuchen.spothub.data.mongodb.RealmRepository
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.internal.interop.trackingRealmValueAllocator
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

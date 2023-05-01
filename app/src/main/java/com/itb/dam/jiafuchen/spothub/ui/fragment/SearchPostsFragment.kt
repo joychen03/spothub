@@ -10,15 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchPostsBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.Post
 import com.itb.dam.jiafuchen.spothub.domain.model.User
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.adapter.PostListAdapter
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.SearchViewModel
-import com.itb.dam.jiafuchen.spothub.ui.viemodel.SharedViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SearchViewModel
+import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
