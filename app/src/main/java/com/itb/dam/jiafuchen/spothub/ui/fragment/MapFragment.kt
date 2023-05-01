@@ -45,6 +45,7 @@ import com.itb.dam.jiafuchen.spothub.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 class MapFragment :
@@ -116,13 +117,6 @@ class MapFragment :
                 )
             )
         }
-    }
-
-    override fun onPause() {
-        childFragmentManager.findFragmentById(R.id.map)?.let {
-            childFragmentManager.beginTransaction().remove(it).commit()
-        }
-        super.onPause()
     }
 
     override fun onMapReady(p0: GoogleMap) {
@@ -282,7 +276,7 @@ class MapFragment :
     }
 
     private fun onPostLikeClick(position : Int, checked : Boolean){
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val post = if(checked){
                 sharedViewModel.likePost(viewModel.postList[position]._id)
             }else{
@@ -290,7 +284,9 @@ class MapFragment :
             }
 
             if(post == null){
-                Utils.makeSimpleAlert(requireContext(), "Error liking post")
+                withContext(Dispatchers.Main){
+                    Utils.makeSimpleAlert(requireContext(), "Error liking post")
+                }
             }
         }
     }
@@ -354,6 +350,9 @@ class MapFragment :
         builder.setMessage("Do you want to add a post here? \n\n lat: ${location.latitude} \n long: ${location.longitude}")
             .setCancelable(false)
             .setPositiveButton("Yes") { _, _ ->
+                childFragmentManager.findFragmentById(R.id.map)?.let {
+                    childFragmentManager.beginTransaction().remove(it).commit()
+                }
                 val directions = MapFragmentDirections.actionMapFragmentToAddPostFragment(
                     AddEditPostArgs(
                         location = location

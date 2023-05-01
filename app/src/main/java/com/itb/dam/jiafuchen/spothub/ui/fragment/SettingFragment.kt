@@ -1,28 +1,46 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
+import android.annotation.SuppressLint
+import android.app.UiModeManager
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.EditTextPreference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreference
 import com.itb.dam.jiafuchen.spothub.R
+import com.itb.dam.jiafuchen.spothub.databinding.FragmentHomeBinding
+import com.itb.dam.jiafuchen.spothub.databinding.FragmentProfileBinding
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentSettingBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.Setting
 import com.itb.dam.jiafuchen.spothub.ui.activity.MainActivity
 import com.itb.dam.jiafuchen.spothub.ui.activity.dataStore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.util.*
 
 @AndroidEntryPoint
 class SettingFragment : Fragment(R.layout.fragment_setting) {

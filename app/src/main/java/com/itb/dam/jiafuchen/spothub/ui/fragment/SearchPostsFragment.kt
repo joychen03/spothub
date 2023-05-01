@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.itb.dam.jiafuchen.spothub.R
 import com.itb.dam.jiafuchen.spothub.databinding.FragmentSearchPostsBinding
 import com.itb.dam.jiafuchen.spothub.domain.model.Post

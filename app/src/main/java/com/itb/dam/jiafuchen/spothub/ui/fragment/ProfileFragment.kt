@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -74,20 +75,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             findNavController().navigate(directions)
         }
 
-        sharedViewModel.currentUser.observe(viewLifecycleOwner) {
-            if (it != null) {
-                sharedViewModel.getCurrentUserAsFlow().onEach { user ->
-                    if(user != null) {
-                        binding.ProfileUserName.text = user.username
-                        binding.ProfileEmail.text = user.email
-                        binding.ProfileAvatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
-                        binding.ProfileDescription.text = user.description
-                        binding.ProfileFollowers.text = user.followers.count().toString()
-                        binding.ProfileFollowings.text = user.followings.count().toString()
-                    }
-                }.launchIn(CoroutineScope(Dispatchers.Main))
+        sharedViewModel.getCurrentUserAsFlow().onEach { user ->
+            if(user != null) {
+                withContext(Dispatchers.Main){
+                    binding.ProfileUserName.text = user.username
+                    binding.ProfileEmail.text = user.email
+                    binding.ProfileAvatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
+                    binding.ProfileDescription.text = user.description
+                    binding.ProfileFollowers.text = user.followers.count().toString()
+                    binding.ProfileFollowings.text = user.followings.count().toString()
+                }
             }
-        }
+        }.launchIn(CoroutineScope(Dispatchers.IO))
 
         viewModel.postClick.observe(viewLifecycleOwner) {
             if (it != null) {

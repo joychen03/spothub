@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.Spothub.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="windowSplashScreenAnimatedIcon" size="20dp">@drawable/logo_white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.Spothub</item>
     </style>
 </resources>

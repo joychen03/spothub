@@ -1,9 +1,11 @@
 package com.itb.dam.jiafuchen.spothub.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -23,6 +25,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val sharedViewModel : SharedViewModel by activityViewModels()
     private val viewModel : LoginViewModel by viewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this){
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addCategory(Intent.CATEGORY_HOME)
+            startActivity(intent)
+        }
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,7 +71,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 (requireActivity() as MainActivity).binding.bottomNav.menu.getItem(0).isChecked = true
                 val direction = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
                 findNavController().navigate(direction)
-
+                requireActivity().recreate()
             }
         })
 

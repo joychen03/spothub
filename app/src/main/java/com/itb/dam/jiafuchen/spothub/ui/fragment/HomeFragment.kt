@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -123,7 +124,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun onPostLikeClickListener(position : Int, post : Post, checked: Boolean){
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val updatedPost = if(checked){
                 sharedViewModel.likePost(post._id)
             }else{
@@ -131,7 +132,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
 
             if(updatedPost == null){
-                Utils.makeSimpleAlert(requireContext(), "Error al actualizar el post")
+                withContext(Dispatchers.Main){
+                    Utils.makeSimpleAlert(requireContext(), "Error al actualizar el post")
+                }
             }
 
         }
@@ -140,12 +143,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
     private fun onPostFollowClickListener(user: User){
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val userUpdated = sharedViewModel.addFollower(user._id)
             val userPosition = viewModel.userList.indexOfFirst { it._id == user._id }
 
             if (userUpdated == null || userPosition == -1 ) {
-                Utils.makeSimpleAlert(requireContext(), "Error al actualizar el usuario")
+                withContext(Dispatchers.Main) {
+                    Utils.makeSimpleAlert(requireContext(), "Error al actualizar el usuario")
+                }
             }
 
         }
@@ -201,7 +206,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.HomeSwipeRefresh.setOnRefreshListener {
             sharedViewModel.homeShouldUpdate = true
-            (requireActivity() as MainActivity).navController.navigate(R.id.homeFragment)
+            (requireActivity() as MainActivity)
             binding.HomeSwipeRefresh.isRefreshing = false
             sharedViewModel.homeScreenUpdated()
         }

@@ -30,13 +30,10 @@ import com.itb.dam.jiafuchen.spothub.ui.fragment.SettingFragment
 import com.itb.dam.jiafuchen.spothub.ui.viewmodel.SharedViewModel
 import com.itb.dam.jiafuchen.spothub.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 
@@ -117,32 +114,28 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
             }
 
         }
+        sharedViewModel.getCurrentUserAsFlow().onEach { user ->
+            if(user != null) {
+                withContext(Dispatchers.Main){
+                    val name = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_nickname)
+                    name.text = user.username
 
-        sharedViewModel.currentUser.observe(this){
-            if(it != null){
-                sharedViewModel.getCurrentUserAsFlow().onEach { user ->
-                    if(user != null) {
-                        val name = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_nickname)
-                        name.text = user.username
+                    val email = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_email)
+                    email.text = user.email
 
-                        val email = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_email)
-                        email.text = user.email
+                    val followers = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_followers)
+                    followers.text = user.followers.count().toString()
 
-                        val followers = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_followers)
-                        followers.text = user.followers.count().toString()
+                    val following = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_following)
+                    following.text = user.followings.count().toString()
 
-                        val following = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.nav_following)
-                        following.text = user.followings.count().toString()
-
-                        val avatar = binding.navigationView.getHeaderView(0).findViewById<ImageView>(R.id.nav_avatar)
-                        avatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
-                    }
-                }.launchIn(CoroutineScope(Dispatchers.Main))
-
-                sharedViewModel.watchForNewPosts()
-
+                    val avatar = binding.navigationView.getHeaderView(0).findViewById<ImageView>(R.id.nav_avatar)
+                    avatar.setImageBitmap(Utils.byteArrayToImage(user.avatar))
+                }
             }
-        }
+        }.launchIn(CoroutineScope(Dispatchers.IO))
+
+        sharedViewModel.watchForNewPosts()
 
         sharedViewModel.newPost.observe(this){
             if(it != null){

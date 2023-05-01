@@ -10,6 +10,7 @@ import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject
@@ -56,55 +57,55 @@ class HomeViewModel @Inject constructor() : ViewModel(){
     }
 
     private fun subscribeChanges() {
+        viewModelScope.launch(Dispatchers.IO) {
+            launch {
+                RealmRepository.getPostsAsFlow().collect { changes: ResultsChange<Post> ->
+                    when (changes) {
+                        is UpdatedResults -> {
+                            if (changes.insertions.isNotEmpty()) {
+                                postAdded.postValue(changes.list[changes.insertions[0]])
 
-        viewModelScope.launch {
-            RealmRepository.getPostsAsFlow().collect { changes: ResultsChange<Post> ->
-                when (changes) {
-                    is UpdatedResults -> {
-                        if (changes.insertions.isNotEmpty()) {
-                            postAdded.postValue(changes.list[changes.insertions[0]])
-
-                        } else if (changes.changes.isNotEmpty()) {
-                            for (index in changes.changes) {
-                                val updatedPost = changes.list[index]
-                                val indexToUpdate = postList.indexOfFirst { it._id == updatedPost._id }
-                                if (indexToUpdate != -1) {
-                                    postList[indexToUpdate] = updatedPost
-                                    postUpdated.postValue(listOf(indexToUpdate))
+                            } else if (changes.changes.isNotEmpty()) {
+                                for (index in changes.changes) {
+                                    val updatedPost = changes.list[index]
+                                    val indexToUpdate = postList.indexOfFirst { it._id == updatedPost._id }
+                                    if (indexToUpdate != -1) {
+                                        postList[indexToUpdate] = updatedPost
+                                        postUpdated.postValue(listOf(indexToUpdate))
+                                    }
                                 }
                             }
                         }
-                    }
-                    else -> {
+                        else -> {
 
+                        }
                     }
                 }
             }
-        }
+            launch {
+                RealmRepository.getAllUsersAsFlow().collect { changes: ResultsChange<User> ->
+                    when (changes) {
+                        is UpdatedResults -> {
+                            if(changes.insertions.isNotEmpty()){
+                                for(i in changes.insertions){
+                                    userList.add(changes.list[i])
+                                }
+                            }else if(changes.changes.isNotEmpty()){
+                                for(index in changes.changes) {
+                                    val updatedUser = changes.list[index]
+                                    val indexToUpdate = userList.indexOfFirst { it._id == updatedUser._id }
+                                    if(indexToUpdate != -1){
+                                        userList[indexToUpdate] = updatedUser
 
-        viewModelScope.launch {
-            RealmRepository.getAllUsersAsFlow().collect { changes: ResultsChange<User> ->
-                when (changes) {
-                    is UpdatedResults -> {
-                        if(changes.insertions.isNotEmpty()){
-                            for(i in changes.insertions){
-                                userList.add(changes.list[i])
-                            }
-                        }else if(changes.changes.isNotEmpty()){
-                            for(index in changes.changes) {
-                                val updatedUser = changes.list[index]
-                                val indexToUpdate = userList.indexOfFirst { it._id == updatedUser._id }
-                                if(indexToUpdate != -1){
-                                    userList[indexToUpdate] = updatedUser
-
-                                    val postIndexesToUpdate = postList.filter { it.owner_id == updatedUser.owner_id }.map { postList.indexOf(it) }
-                                    postUpdated.postValue(postIndexesToUpdate)
+                                        val postIndexesToUpdate = postList.filter { it.owner_id == updatedUser.owner_id }.map { postList.indexOf(it) }
+                                        postUpdated.postValue(postIndexesToUpdate)
+                                    }
                                 }
                             }
                         }
-                    }
-                    else -> {
+                        else -> {
 
+                        }
                     }
                 }
             }

@@ -11,7 +11,9 @@ import com.itb.dam.jiafuchen.spothub.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.notifications.UpdatedResults
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
@@ -51,6 +53,9 @@ class SharedViewModel @Inject constructor(
     }
 
     fun getCurrentUserAsFlow() : Flow<User?>{
+        if(app.currentUser == null){
+            return flowOf(null)
+        }
         return RealmRepository.getUserByOwnerIdAsFlow(app.currentUser!!.id)
     }
 
@@ -87,7 +92,11 @@ class SharedViewModel @Inject constructor(
     }
 
     fun watchForNewPosts(){
-        viewModelScope.launch {
+        if(app.currentUser == null){
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
             RealmRepository.getPostsAsFlow().collect { changes: ResultsChange<Post> ->
                 when (changes) {
                     is UpdatedResults -> {

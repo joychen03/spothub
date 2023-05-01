@@ -41,10 +41,6 @@ object RealmRepository {
 
         realm = Realm.open(config)
         Log.v("Realm","Successfully opened realm: ${realm.configuration.name}")
-
-        CoroutineScope(Dispatchers.Main).launch {
-            realm.subscriptions.waitForSynchronization()
-        }
     }
 
     suspend fun addUser(user: User) : User? {
